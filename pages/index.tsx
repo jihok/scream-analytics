@@ -1,9 +1,117 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import type { NextPage } from "next";
+import Head from "next/head";
+import Image from "next/image";
+import styles from "../styles/Home.module.css";
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  useQuery,
+  gql,
+} from "@apollo/client";
+import { BigNumber } from "ethers";
+import {
+  BarChart,
+  Bar,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
+
+interface QueryData {
+  markets: Array<{
+    totalSupply: string; // in tokens
+    totalBorrows: string; // in tokens
+    cash: string; // LIQUIDITY
+    id: string;
+    symbol: string;
+    underlyingPrice: string;
+    underlyingSymbol: string;
+    exchangeRate: string;
+  }>;
+  _meta: {
+    block: {
+      number: number;
+    };
+  };
+}
+
+const BLOCK_TIME = 1000; // we assume blocks are 1s
+const BLOCKS_IN_A_DAY = (24 * 60 * 60 * 1000) / BLOCK_TIME;
+
+const QUERY = gql`
+  query {
+    markets {
+      totalSupply
+      totalBorrows
+      cash
+      id
+      symbol
+      underlyingPrice
+      underlyingSymbol
+      exchangeRate
+    }
+    _meta {
+      block {
+        number
+      }
+    }
+  }
+`;
 
 const Home: NextPage = () => {
+  const { loading, error, data } = useQuery<QueryData>(QUERY);
+
+  if (loading || !data) return <p>Loading...</p>;
+  if (error) return <p>Error :(</p>;
+
+  console.log(data);
+  console.log(
+    data._meta.block.number,
+    data._meta.block.number - BLOCKS_IN_A_DAY
+  );
+
+  const { markets } = data;
+  const globalTotalSupply = markets.reduce(
+    (prev, { totalSupply, exchangeRate, underlyingPrice }) =>
+      +exchangeRate * +totalSupply * +underlyingPrice + prev,
+    0
+  );
+
+  const globalTotalBorrow = markets.reduce(
+    (prev, { totalBorrows, underlyingPrice }) =>
+      +totalBorrows * +underlyingPrice + prev,
+    0
+  );
+
+  console.log(globalTotalSupply, globalTotalBorrow);
+
+  const supplyData = markets.map(
+    ({ underlyingSymbol, exchangeRate, totalSupply, underlyingPrice }) => ({
+      symbol: underlyingSymbol,
+      supplyUSD: +exchangeRate * +totalSupply * +underlyingPrice,
+    })
+  );
+  console.log(supplyData);
+
+  const topTokensSupplied = supplyData
+    .sort((a, b) => b.supplyUSD - a.supplyUSD)
+    .slice(0, 3)
+    .map((market) => ({
+      symbol: market.symbol,
+      percentage: (market.supplyUSD / globalTotalSupply) * 100,
+    }));
+  topTokensSupplied.push({
+    symbol: "Others",
+    percentage:
+      100 - topTokensSupplied.reduce((prev, curr) => curr.percentage + prev, 0),
+  });
+  console.log(topTokensSupplied);
+
   return (
     <div className={styles.container}>
       <Head>
@@ -18,7 +126,7 @@ const Home: NextPage = () => {
         </h1>
 
         <p className={styles.description}>
-          Get started by editing{' '}
+          Get started by editing{" "}
           <code className={styles.code}>pages/index.tsx</code>
         </p>
 
@@ -59,14 +167,14 @@ const Home: NextPage = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
+          Powered by{" "}
           <span className={styles.logo}>
             <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
           </span>
         </a>
       </footer>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
