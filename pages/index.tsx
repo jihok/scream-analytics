@@ -35,7 +35,7 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        {/* <MarketsOverview currentMarkets={data.markets} currentBlock={data._meta.block.number} /> */}
+        <MarketsOverview yesterday={yesterday} today={today} />
       </main>
     </div>
   );

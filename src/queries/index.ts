@@ -18,7 +18,7 @@ export const LATEST_BLOCK_QUERY = gql`
   }
 `;
 
-interface MarketBase {
+export interface MarketBase {
   totalSupply: string; // in tokens
   totalBorrows: string; // in tokens
   underlyingPrice: string;

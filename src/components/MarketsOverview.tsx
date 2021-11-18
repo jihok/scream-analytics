@@ -1,130 +1,95 @@
-import { useQuery } from '@apollo/client';
-import { YESTERDAY_MARKET_QUERY } from '../queries';
+import { MarketBase } from '../queries';
 
 type MarketType = 'SUPPLY' | 'BORROW';
 
-interface Market {
-  totalSupply: string; // in tokens
-  totalBorrows: string; // in tokens
-  cash: string; // LIQUIDITY
-  id: string;
-  symbol: string;
-  underlyingPrice: string;
-  underlyingSymbol: string;
-  exchangeRate: string;
-}
-
-interface QueryData {
-  markets: Market[];
-}
-
 interface Props {
-  currentMarkets: Market[];
-  currentBlock: number;
+  yesterday: MarketBase[];
+  today: MarketBase[];
 }
 
-const BLOCK_TIME = 1000; // we assume blocks are 1s
-const BLOCKS_IN_A_DAY = (24 * 60 * 60 * 1000) / BLOCK_TIME;
+interface MarketRatio {
+  symbol: string;
+  percentage: number;
+  valUSD?: number;
+}
 
-const getTotalMarketUSD = (markets: Market[], type: MarketType) =>
+const getTotalMarketUSD = (markets: MarketBase[], type: MarketType) =>
   markets.reduce(
     (prev, { totalSupply, totalBorrows, exchangeRate, underlyingPrice }) =>
-      (type === 'SUPPLY' ? +exchangeRate * +totalSupply : +totalBorrows) *
-        +underlyingPrice +
-      prev,
+      (type === 'SUPPLY' ? +exchangeRate * +totalSupply : +totalBorrows) * +underlyingPrice + prev,
     0
   );
 
+/**
+ * Transforms given markets into an array of the market's underlying symbols with their USD value.
+ * The top 3 markets by USD value are then returned with their respective ratio of all markets.
+ * @param markets markets to include in the top markets calculation.
+ * @param totalUSD USD value of all markets.
+ * @param type indicates whether the markets are supply or borrow to inform the USD value calculation.
+ */
 const getTopMarketRatios = (
-  markets: Market[],
+  markets: MarketBase[],
   totalUSD: number,
   type: MarketType
-) =>
+): MarketRatio[] =>
   markets
-    .map(
-      ({
-        underlyingSymbol,
-        exchangeRate,
-        totalSupply,
-        totalBorrows,
-        underlyingPrice,
-      }) => ({
-        symbol: underlyingSymbol,
-        valUSD:
-          (type === 'SUPPLY' ? +exchangeRate * +totalSupply : +totalBorrows) *
-          +underlyingPrice,
-      })
-    )
+    .map(({ underlyingSymbol, exchangeRate, totalSupply, totalBorrows, underlyingPrice }) => ({
+      symbol: underlyingSymbol,
+      valUSD: (type === 'SUPPLY' ? +exchangeRate * +totalSupply : +totalBorrows) * +underlyingPrice,
+    }))
     .sort((a, b) => b.valUSD - a.valUSD)
     .slice(0, 3)
     .map((market) => ({
-      symbol: market.symbol,
+      ...market,
       percentage: (market.valUSD / totalUSD) * 100,
     }));
 
-const MarketsOverview = ({ currentMarkets, currentBlock }: Props) => {
-  const yesterdayBlock = currentBlock - BLOCKS_IN_A_DAY;
-  console.log('yesterday', yesterdayBlock);
-  const { loading, error, data } = useQuery<QueryData>(YESTERDAY_MARKET_QUERY, {
-    variables: {
-      yesterdayBlock,
-      todayBlock: currentBlock,
-    },
-  });
-
-  if (loading || !data) return <p>Loading...</p>;
-  if (error) return <p>Error :(</p>;
-
-  const { yesterday, today } = data;
+export default function MarketsOverview({ yesterday, today }: Props) {
   const yesterdaySupplyUSD = getTotalMarketUSD(yesterday, 'SUPPLY');
-  const todaySupplyUSD = getTotalMarketUSD(currentMarkets, 'SUPPLY');
-  console.log(yesterdaySupplyUSD);
+  const yesterdayBorrowUSD = getTotalMarketUSD(yesterday, 'BORROW');
+  const todaySupplyUSD = getTotalMarketUSD(today, 'SUPPLY');
+  const todayBorrowUSD = getTotalMarketUSD(today, 'BORROW');
 
-  // const yesterdayBorrowUSD = getTotalMarketUSD(yesterday, 'BORROW');
-  const todayBorrowUSD = getTotalMarketUSD(currentMarkets, 'BORROW');
-
-  const todaySupplyRatios = getTopMarketRatios(
-    currentMarkets,
-    todaySupplyUSD,
-    'SUPPLY'
-  );
+  const todaySupplyRatios = getTopMarketRatios(today, todaySupplyUSD, 'SUPPLY');
   todaySupplyRatios.push({
     symbol: 'Others',
-    percentage:
-      100 - todaySupplyRatios.reduce((prev, curr) => curr.percentage + prev, 0),
+    percentage: 100 - todaySupplyRatios.reduce((prev, curr) => curr.percentage + prev, 0),
   });
 
-  const todayBorrowRatios = getTopMarketRatios(
-    currentMarkets,
-    todayBorrowUSD,
-    'BORROW'
-  );
+  const todayBorrowRatios = getTopMarketRatios(today, todayBorrowUSD, 'BORROW');
   todayBorrowRatios.push({
     symbol: 'Others',
-    percentage:
-      100 - todayBorrowRatios.reduce((prev, curr) => curr.percentage + prev, 0),
+    percentage: 100 - todayBorrowRatios.reduce((prev, curr) => curr.percentage + prev, 0),
   });
 
   return (
     <div style={{ display: 'flex' }}>
       <div>
         Total Supply: ${(+todaySupplyUSD.toFixed(2)).toLocaleString()}
-        {todaySupplyRatios.map((t) => (
-          <div key={t.symbol}>
-            {t.symbol} {t.percentage.toFixed(2)} %
-          </div>
-        ))}
+        <MarketRatioBar marketRatios={todaySupplyRatios} />
+        <br />
+        24h supply volume: {(+(todaySupplyUSD - yesterdaySupplyUSD).toFixed(2)).toLocaleString()}
       </div>
       <div>
         Total Borrow: ${(+todayBorrowUSD.toFixed(2)).toLocaleString()}
-        {todayBorrowRatios.map((t) => (
-          <div key={t.symbol}>
-            {t.symbol} {t.percentage.toFixed(2)} %
-          </div>
-        ))}
+        <MarketRatioBar marketRatios={todayBorrowRatios} />
+        <br />
+        24h borrow volume: {(+(todayBorrowUSD - yesterdayBorrowUSD).toFixed(2)).toLocaleString()}
       </div>
     </div>
   );
-};
+}
 
-export default MarketsOverview;
+const BAR_COLORS = ['red', 'orange', 'yellow', 'green'];
+const MarketRatioBar = (props: { marketRatios: MarketRatio[] }) => (
+  <div style={{ display: 'flex', width: '100%', height: 10 }}>
+    {props.marketRatios.map(({ percentage, symbol }, i) => (
+      <div key={symbol} style={{ width: `${percentage}%`, height: '100%' }}>
+        <div style={{ backgroundColor: BAR_COLORS[i], width: `100%`, height: '100%' }} />
+        <div style={{ position: 'absolute' }}>
+          {symbol} {percentage.toFixed(2)} %
+        </div>
+      </div>
+    ))}
+  </div>
+);
