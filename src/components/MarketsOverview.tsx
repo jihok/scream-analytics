@@ -1,10 +1,10 @@
-import { MarketBase } from '../queries';
+import { Market } from '../queries';
 
 type MarketType = 'SUPPLY' | 'BORROW';
 
 interface Props {
-  yesterday: MarketBase[];
-  today: MarketBase[];
+  yesterday: Market[];
+  today: Market[];
 }
 
 interface MarketRatio {
@@ -13,12 +13,13 @@ interface MarketRatio {
   valUSD?: number;
 }
 
-const getTotalMarketUSD = (markets: MarketBase[], type: MarketType) =>
-  markets.reduce(
-    (prev, { totalSupply, totalBorrows, exchangeRate, underlyingPrice }) =>
-      (type === 'SUPPLY' ? +exchangeRate * +totalSupply : +totalBorrows) * +underlyingPrice + prev,
-    0
-  );
+export const getMarketUSD = (
+  { totalSupply, totalBorrows, exchangeRate, underlyingPrice }: Market,
+  type: MarketType
+) => (type === 'SUPPLY' ? +exchangeRate * +totalSupply : +totalBorrows) * +underlyingPrice;
+
+const getTotalMarketUSD = (markets: Market[], type: MarketType) =>
+  markets.reduce((prev, market) => getMarketUSD(market, type) + prev, 0);
 
 /**
  * Transforms given markets into an array of the market's underlying symbols with their USD value.
@@ -27,15 +28,11 @@ const getTotalMarketUSD = (markets: MarketBase[], type: MarketType) =>
  * @param totalUSD USD value of all markets.
  * @param type indicates whether the markets are supply or borrow to inform the USD value calculation.
  */
-const getTopMarketRatios = (
-  markets: MarketBase[],
-  totalUSD: number,
-  type: MarketType
-): MarketRatio[] =>
+const getTopMarketRatios = (markets: Market[], totalUSD: number, type: MarketType): MarketRatio[] =>
   markets
-    .map(({ underlyingSymbol, exchangeRate, totalSupply, totalBorrows, underlyingPrice }) => ({
-      symbol: underlyingSymbol,
-      valUSD: (type === 'SUPPLY' ? +exchangeRate * +totalSupply : +totalBorrows) * +underlyingPrice,
+    .map((market) => ({
+      symbol: market.underlyingSymbol,
+      valUSD: getMarketUSD(market, type),
     }))
     .sort((a, b) => b.valUSD - a.valUSD)
     .slice(0, 3)

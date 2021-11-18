@@ -18,34 +18,43 @@ export const LATEST_BLOCK_QUERY = gql`
   }
 `;
 
-export interface MarketBase {
+export interface Market {
   totalSupply: string; // in tokens
   totalBorrows: string; // in tokens
   underlyingPrice: string;
   underlyingSymbol: string;
+  underlyingName: string;
   exchangeRate: string;
+  borrowRate: string;
+  supplyRate: string;
 }
 
 export interface YesterdayTodayMarketsQuery {
-  yesterday: MarketBase[];
-  today: MarketBase[];
+  yesterday: Market[];
+  today: Market[];
 }
 
-export const YESTERDAY_TODAY_MARKET_QUERY = gql`
+export const YESTERDAY_TODAY_MARKETS_QUERY = gql`
   query YesterdayTodayMarkets($yesterdayBlock: Int!, $todayBlock: Int!) {
     yesterday: markets(block: { number: $yesterdayBlock }) {
       totalSupply
       totalBorrows
       underlyingPrice
       underlyingSymbol
+      underlyingName
       exchangeRate
+      borrowRate
+      supplyRate
     }
     today: markets(block: { number: $todayBlock }) {
       totalSupply
       totalBorrows
       underlyingPrice
       underlyingSymbol
+      underlyingName
       exchangeRate
+      borrowRate
+      supplyRate
     }
   }
 `;
