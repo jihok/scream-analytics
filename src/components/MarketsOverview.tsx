@@ -1,75 +1,58 @@
-import { Market } from '../queries';
-
-type MarketType = 'SUPPLY' | 'BORROW';
+import { Market } from '../utils/Market';
 
 interface Props {
   yesterday: Market[];
   today: Market[];
 }
 
-interface MarketRatio {
-  symbol: string;
+interface MarketRatio extends Market {
   percentage: number;
-  valUSD?: number;
 }
 
-export const getMarketUSD = (
-  { totalSupply, totalBorrows, exchangeRate, underlyingPrice }: Market,
-  type: MarketType
-) => (type === 'SUPPLY' ? +exchangeRate * +totalSupply : +totalBorrows) * +underlyingPrice;
+export default function MarketsOverview({ yesterday, today }: Props) {
+  const yesterdaySupplyUSD = yesterday.reduce((prev, curr) => curr.totalSupplyUSD + prev, 0);
+  const yesterdayBorrowUSD = yesterday.reduce((prev, curr) => curr.totalBorrowsUSD + prev, 0);
+  const todaySupplyUSD = today.reduce((prev, curr) => curr.totalSupplyUSD + prev, 0);
+  const todayBorrowUSD = today.reduce((prev, curr) => curr.totalBorrowsUSD + prev, 0);
 
-const getTotalMarketUSD = (markets: Market[], type: MarketType) =>
-  markets.reduce((prev, market) => getMarketUSD(market, type) + prev, 0);
-
-/**
- * Transforms given markets into an array of the market's underlying symbols with their USD value.
- * The top 3 markets by USD value are then returned with their respective ratio of all markets.
- * @param markets markets to include in the top markets calculation.
- * @param totalUSD USD value of all markets.
- * @param type indicates whether the markets are supply or borrow to inform the USD value calculation.
- */
-const getTopMarketRatios = (markets: Market[], totalUSD: number, type: MarketType): MarketRatio[] =>
-  markets
-    .map((market) => ({
-      symbol: market.underlyingSymbol,
-      valUSD: getMarketUSD(market, type),
-    }))
-    .sort((a, b) => b.valUSD - a.valUSD)
+  const supplyRatios: MarketRatio[] = today
+    .sort((a, b) => b.totalSupplyUSD - a.totalSupplyUSD)
     .slice(0, 3)
     .map((market) => ({
       ...market,
-      percentage: (market.valUSD / totalUSD) * 100,
+      percentage:
+        (market.totalSupplyUSD / today.reduce((prev, curr) => curr.totalSupplyUSD + prev, 0)) * 100,
     }));
+  supplyRatios.push({
+    underlyingSymbol: 'Others',
+    percentage: 100 - supplyRatios.reduce((prev, curr) => curr.percentage + prev, 0),
+  } as MarketRatio);
 
-export default function MarketsOverview({ yesterday, today }: Props) {
-  const yesterdaySupplyUSD = getTotalMarketUSD(yesterday, 'SUPPLY');
-  const yesterdayBorrowUSD = getTotalMarketUSD(yesterday, 'BORROW');
-  const todaySupplyUSD = getTotalMarketUSD(today, 'SUPPLY');
-  const todayBorrowUSD = getTotalMarketUSD(today, 'BORROW');
-
-  const todaySupplyRatios = getTopMarketRatios(today, todaySupplyUSD, 'SUPPLY');
-  todaySupplyRatios.push({
-    symbol: 'Others',
-    percentage: 100 - todaySupplyRatios.reduce((prev, curr) => curr.percentage + prev, 0),
-  });
-
-  const todayBorrowRatios = getTopMarketRatios(today, todayBorrowUSD, 'BORROW');
-  todayBorrowRatios.push({
-    symbol: 'Others',
-    percentage: 100 - todayBorrowRatios.reduce((prev, curr) => curr.percentage + prev, 0),
-  });
+  const borrowRatios = today
+    .sort((a, b) => b.totalBorrowsUSD - a.totalBorrowsUSD)
+    .slice(0, 3)
+    .map((market) => ({
+      ...market,
+      percentage:
+        (market.totalBorrowsUSD / today.reduce((prev, curr) => curr.totalBorrowsUSD + prev, 0)) *
+        100,
+    }));
+  borrowRatios.push({
+    underlyingSymbol: 'Others',
+    percentage: 100 - borrowRatios.reduce((prev, curr) => curr.percentage + prev, 0),
+  } as MarketRatio);
 
   return (
     <div style={{ display: 'flex' }}>
       <div>
         Total Supply: ${(+todaySupplyUSD.toFixed(2)).toLocaleString()}
-        <MarketRatioBar marketRatios={todaySupplyRatios} />
+        <MarketRatioBar marketRatios={supplyRatios} />
         <br />
         24h supply volume: {(+(todaySupplyUSD - yesterdaySupplyUSD).toFixed(2)).toLocaleString()}
       </div>
       <div>
         Total Borrow: ${(+todayBorrowUSD.toFixed(2)).toLocaleString()}
-        <MarketRatioBar marketRatios={todayBorrowRatios} />
+        <MarketRatioBar marketRatios={borrowRatios} />
         <br />
         24h borrow volume: {(+(todayBorrowUSD - yesterdayBorrowUSD).toFixed(2)).toLocaleString()}
       </div>
@@ -80,11 +63,11 @@ export default function MarketsOverview({ yesterday, today }: Props) {
 const BAR_COLORS = ['red', 'orange', 'yellow', 'green'];
 const MarketRatioBar = (props: { marketRatios: MarketRatio[] }) => (
   <div style={{ display: 'flex', width: '100%', height: 10 }}>
-    {props.marketRatios.map(({ percentage, symbol }, i) => (
-      <div key={symbol} style={{ width: `${percentage}%`, height: '100%' }}>
+    {props.marketRatios.map(({ percentage, underlyingSymbol }, i) => (
+      <div key={underlyingSymbol} style={{ width: `${percentage}%`, height: '100%' }}>
         <div style={{ backgroundColor: BAR_COLORS[i], width: `100%`, height: '100%' }} />
         <div style={{ position: 'absolute' }}>
-          {symbol} {percentage.toFixed(2)} %
+          {underlyingSymbol} {percentage.toFixed(2)} %
         </div>
       </div>
     ))}

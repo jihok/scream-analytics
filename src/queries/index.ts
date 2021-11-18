@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client';
+import { RawMarket } from '../utils/Market';
 
 export interface LatestBlockQuery {
   _meta: {
@@ -18,20 +19,9 @@ export const LATEST_BLOCK_QUERY = gql`
   }
 `;
 
-export interface Market {
-  totalSupply: string; // in tokens
-  totalBorrows: string; // in tokens
-  underlyingPrice: string;
-  underlyingSymbol: string;
-  underlyingName: string;
-  exchangeRate: string;
-  borrowRate: string;
-  supplyRate: string;
-}
-
-export interface YesterdayTodayMarketsQuery {
-  yesterday: Market[];
-  today: Market[];
+export interface YesterdayTodayMarkets {
+  yesterday: RawMarket[];
+  today: RawMarket[];
 }
 
 export const YESTERDAY_TODAY_MARKETS_QUERY = gql`
