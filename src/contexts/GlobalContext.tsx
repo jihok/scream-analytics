@@ -1,31 +1,21 @@
 import { useQuery } from '@apollo/client';
 import { createContext, useContext } from 'react';
-import { LATEST_BLOCK_QUERY } from '../queries';
+import { LatestBlockQuery, LATEST_BLOCK_QUERY } from '../queries';
 
 interface GlobalContext {
-  latestSyncedBlock?: number;
+  latestSyncedBlock: number;
 }
 
-interface QueryData {
-  _meta: {
-    block: {
-      number: number;
-    };
-  };
-}
-
-const GlobalContext = createContext<GlobalContext>({});
+const GlobalContext = createContext<GlobalContext>({ latestSyncedBlock: 0 });
 
 const Provider = (props: { children: React.ReactNode }) => {
-  const { loading, error, data } = useQuery<QueryData>(LATEST_BLOCK_QUERY);
+  const { loading, error, data } = useQuery<LatestBlockQuery>(LATEST_BLOCK_QUERY);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 
   return (
-    <GlobalContext.Provider
-      value={{ latestSyncedBlock: data?._meta.block.number }}
-    >
+    <GlobalContext.Provider value={{ latestSyncedBlock: data?._meta.block.number ?? 0 }}>
       {props.children}
     </GlobalContext.Provider>
   );
