@@ -22,6 +22,8 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import MarketsOverview from '../src/components/MarketsOverview';
+import { useGlobalContext } from '../src/contexts/GlobalContext';
+import { YESTERDAY_TODAY_MARKET_QUERY } from '../src/queries';
 
 interface QueryData {
   markets: Array<{
@@ -65,11 +67,15 @@ const QUERY = gql`
 `;
 
 const Home: NextPage = () => {
-  const { loading, error, data } = useQuery<QueryData>(QUERY);
+  const { latestSyncedBlock } = useGlobalContext();
+  const { loading, error, data } = useQuery<QueryData>(
+    YESTERDAY_TODAY_MARKET_QUERY
+  );
 
   if (loading || !data) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 
+  const { yesterday, today } = data;
   console.log(data);
   console.log(
     data._meta.block.number,
@@ -79,8 +85,8 @@ const Home: NextPage = () => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>SCREAM Market Analytics</title>
-        <meta name="description" content="SCREAM Market Analytics" />
+        <title>SCREAM Analytics</title>
+        <meta name="description" content="SCREAM Analytics" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

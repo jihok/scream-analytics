@@ -68,14 +68,15 @@ const MarketsOverview = ({ currentMarkets, currentBlock }: Props) => {
   const { loading, error, data } = useQuery<QueryData>(YESTERDAY_MARKET_QUERY, {
     variables: {
       yesterdayBlock,
+      todayBlock: currentBlock,
     },
   });
 
   if (loading || !data) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 
-  const markets = data.yesterday;
-  const yesterdaySupplyUSD = getTotalMarketUSD(markets, 'SUPPLY');
+  const { yesterday, today } = data;
+  const yesterdaySupplyUSD = getTotalMarketUSD(yesterday, 'SUPPLY');
   const todaySupplyUSD = getTotalMarketUSD(currentMarkets, 'SUPPLY');
   console.log(yesterdaySupplyUSD);
 
