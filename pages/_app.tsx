@@ -1,12 +1,6 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  useQuery,
-  gql,
-} from "@apollo/client";
+import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 
 const client = new ApolloClient({
   uri: "https://api.thegraph.com/subgraphs/name/screamsh/scream-v1",
