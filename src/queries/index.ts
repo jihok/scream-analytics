@@ -10,24 +10,11 @@ export const CURRENT_BLOCK_QUERY = gql`
   }
 `;
 
-export const MARKET_QUERY = gql`
-  query market($yesterday: Int!) {
-    today: markets {
+export const YESTERDAY_MARKET_QUERY = gql`
+  query YesterdayTodayMarkets($yesterdayBlock: Int!) {
+    yesterday: markets(block: { number: $yesterdayBlock }) {
       totalSupply
       totalBorrows
-      cash
-      id
-      symbol
-      underlyingPrice
-      underlyingSymbol
-      exchangeRate
-    }
-    yesterday: markets(block: { number: $yesterday }) {
-      totalSupply
-      totalBorrows
-      cash
-      id
-      symbol
       underlyingPrice
       underlyingSymbol
       exchangeRate

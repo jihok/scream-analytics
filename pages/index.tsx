@@ -1,15 +1,15 @@
-import type { NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import Image from 'next/image';
+import styles from '../styles/Home.module.css';
 import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
   useQuery,
   gql,
-} from "@apollo/client";
-import { BigNumber } from "ethers";
+} from '@apollo/client';
+import { BigNumber } from 'ethers';
 import {
   BarChart,
   Bar,
@@ -20,8 +20,8 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-} from "recharts";
-import MarketsOverview from "../src/components/MarketsOverview";
+} from 'recharts';
+import MarketsOverview from '../src/components/MarketsOverview';
 
 interface QueryData {
   markets: Array<{
@@ -85,7 +85,10 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <MarketsOverview currentBlock={data._meta.block.number} />
+        <MarketsOverview
+          currentMarkets={data.markets}
+          currentBlock={data._meta.block.number}
+        />
       </main>
     </div>
   );

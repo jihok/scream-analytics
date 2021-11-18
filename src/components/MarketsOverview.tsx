@@ -1,6 +1,5 @@
-import type { NextPage } from 'next';
 import { useQuery } from '@apollo/client';
-import { MARKET_QUERY } from '../queries';
+import { YESTERDAY_MARKET_QUERY } from '../queries';
 
 type MarketType = 'SUPPLY' | 'BORROW';
 
@@ -17,10 +16,10 @@ interface Market {
 
 interface QueryData {
   markets: Market[];
-  today: Market[];
 }
 
 interface Props {
+  currentMarkets: Market[];
   currentBlock: number;
 }
 
@@ -63,33 +62,42 @@ const getTopMarketRatios = (
       percentage: (market.valUSD / totalUSD) * 100,
     }));
 
-const MarketsOverview = ({ currentBlock }: Props) => {
-  const { loading, error, data } = useQuery<QueryData>(MARKET_QUERY, {
-    variables: { yesterday: currentBlock - BLOCKS_IN_A_DAY },
+const MarketsOverview = ({ currentMarkets, currentBlock }: Props) => {
+  const yesterdayBlock = currentBlock - BLOCKS_IN_A_DAY;
+  console.log('yesterday', yesterdayBlock);
+  const { loading, error, data } = useQuery<QueryData>(YESTERDAY_MARKET_QUERY, {
+    variables: {
+      yesterdayBlock,
+    },
   });
 
   if (loading || !data) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
-  console.log('current block: ', currentBlock);
 
-  const { yesterday, today } = data;
-  console.log('data', data);
-  console.log('yesterday', yesterday);
-  console.log('today', today);
-  const yesterdaySupplyUSD = getTotalMarketUSD(yesterday, 'SUPPLY');
-  const todaySupplyUSD = getTotalMarketUSD(today, 'SUPPLY');
+  const markets = data.yesterday;
+  const yesterdaySupplyUSD = getTotalMarketUSD(markets, 'SUPPLY');
+  const todaySupplyUSD = getTotalMarketUSD(currentMarkets, 'SUPPLY');
+  console.log(yesterdaySupplyUSD);
 
-  const yesterdayBorrowUSD = getTotalMarketUSD(yesterday, 'BORROW');
-  const todayBorrowUSD = getTotalMarketUSD(today, 'BORROW');
+  // const yesterdayBorrowUSD = getTotalMarketUSD(yesterday, 'BORROW');
+  const todayBorrowUSD = getTotalMarketUSD(currentMarkets, 'BORROW');
 
-  const todaySupplyRatios = getTopMarketRatios(today, todaySupplyUSD, 'SUPPLY');
+  const todaySupplyRatios = getTopMarketRatios(
+    currentMarkets,
+    todaySupplyUSD,
+    'SUPPLY'
+  );
   todaySupplyRatios.push({
     symbol: 'Others',
     percentage:
       100 - todaySupplyRatios.reduce((prev, curr) => curr.percentage + prev, 0),
   });
 
-  const todayBorrowRatios = getTopMarketRatios(today, todayBorrowUSD, 'BORROW');
+  const todayBorrowRatios = getTopMarketRatios(
+    currentMarkets,
+    todayBorrowUSD,
+    'BORROW'
+  );
   todayBorrowRatios.push({
     symbol: 'Others',
     percentage:
