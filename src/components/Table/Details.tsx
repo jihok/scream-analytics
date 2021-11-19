@@ -18,14 +18,14 @@ import { formatDisplay, Market, RawMarket, transformData } from '../../utils/Mar
 import UtilizationChart from '../UtilizationChart';
 
 interface Props {
-  asset: any;
+  asset: Market;
 }
 
 export function Details({ asset }: Props) {
   const { latestSyncedBlock } = useGlobalContext();
   console.log('passed down info: ', latestSyncedBlock, asset);
 
-  const [data, setData] = useState<any>();
+  const [data, setData] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ export function Details({ asset }: Props) {
     <div>
       <UtilizationChart data={data} />
       <ComposedChart
-        width={800}
+        width={400}
         height={300}
         data={data}
         margin={{
