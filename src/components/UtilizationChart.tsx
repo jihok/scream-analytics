@@ -72,10 +72,17 @@ export default function UtilizationChart({ data }: Props) {
         {data.map((entry, i) => (
           <Cell key={entry.id} fill={focusedBar === i ? '#82ca9d' : 'rgba(43, 92, 231, 0.2)'} />
         ))}
+        {/* <LabelList dataKey="totalBorrowsUSD" position="top" /> */}
       </Bar>
+      {/* <Customized component={CustomLabelList}>asdf</Customized> */}
     </ComposedChart>
   );
 }
+
+// const CustomLabelList = (props) => {
+//   console.log(props);
+//   return <text>asdf</text>;
+// };
 
 const CustomToolTip = ({ payload, active }: TooltipProps<any, any>) => {
   if (!active || !payload) return null;
