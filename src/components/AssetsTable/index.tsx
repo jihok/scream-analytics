@@ -1,14 +1,9 @@
-import { Market } from '../../utils/Market';
+import { formatDisplay, Market } from '../../utils/Market';
 
 interface Props {
   yesterday: Market[];
   today: Market[];
 }
-
-const formatDisplay = (value: number) =>
-  Math.floor(value / 1_000_000) > 0
-    ? `${(+(value / 1_000_000).toFixed(2)).toLocaleString()} M`
-    : `${(value / 1_000).toFixed(2)} K`;
 
 export default function AssetsTable({ yesterday, today }: Props) {
   return (

@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Bar, BarChart, Tooltip, TooltipProps, YAxis } from 'recharts';
+import { NameType } from 'recharts/types/component/DefaultTooltipContent';
 import { BLOCKS_IN_A_DAY } from '../../../pages';
 import { screamClient } from '../../../pages/_app';
 import { useGlobalContext } from '../../contexts/GlobalContext';
 import { ASSET_BY_BLOCK_QUERY } from '../../queries';
-import { RawMarket, transformData } from '../../utils/Market';
+import { formatDisplay, Market, RawMarket, transformData } from '../../utils/Market';
 
 interface Props {
   asset: any;
@@ -12,13 +14,14 @@ interface Props {
 export function Details({ asset }: Props) {
   const { latestSyncedBlock } = useGlobalContext();
   console.log('passed down info: ', latestSyncedBlock, asset);
-  const blocksToQuery = [...Array(7)].map((_, i) => latestSyncedBlock - BLOCKS_IN_A_DAY * i);
-  console.log(blocksToQuery);
+
   const [data, setData] = useState<any>();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
+      const blocksToQuery = [...Array(7)].map((_, i) => latestSyncedBlock - BLOCKS_IN_A_DAY * i);
+      console.log(blocksToQuery);
       const a = await Promise.all(
         blocksToQuery.map((blockNumber) =>
           screamClient.query<{ markets: RawMarket[] }>({
@@ -33,7 +36,41 @@ export function Details({ asset }: Props) {
       setData(a.map((b) => transformData(b.data.markets)[0]));
       console.log(a.map((b) => transformData(b.data.markets)[0]));
     })();
-  }, [blocksToQuery, asset]);
+  }, [latestSyncedBlock, asset]);
 
-  return <div />;
+  return (
+    <div>
+      <BarChart
+        width={500}
+        height={300}
+        data={data}
+        margin={{
+          top: 20,
+          right: 30,
+          left: 20,
+          bottom: 5,
+        }}
+      >
+        <Tooltip
+          cursor
+          content={({ payload, active }) => <CustomToolTip payload={payload} active={active} />}
+        />
+        <Bar dataKey="totalBorrowsUSD" stackId="a" fill="#8884d8" />
+        <Bar dataKey="totalSupplyUSD" stackId="a" fill="#82ca9d" />
+      </BarChart>
+    </div>
+  );
 }
+
+const CustomToolTip = ({ payload, active }: TooltipProps<any, any>) => {
+  if (!active || !payload) return null;
+
+  return (
+    <div>
+      <p>Total Borrowed</p>
+      <p>{formatDisplay(payload[0].value)}</p>
+      <p>Total Supplied</p>
+      <p>{formatDisplay(payload[1].value)}</p>
+    </div>
+  );
+};

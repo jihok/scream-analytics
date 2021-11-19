@@ -30,3 +30,8 @@ export const transformData = (rawMarkets: RawMarket[]): Market[] => {
     supplyAPY: +rawMarket.supplyRate * 100,
   }));
 };
+
+export const formatDisplay = (value: number) =>
+  Math.floor(value / 1_000_000) > 0
+    ? `${(+(value / 1_000_000).toFixed(2)).toLocaleString()} M`
+    : `${(value / 1_000).toFixed(2)} K`;
