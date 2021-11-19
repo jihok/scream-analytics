@@ -26,7 +26,7 @@ export interface YesterdayTodayMarketsQuery {
 
 export const YESTERDAY_TODAY_MARKETS_QUERY = gql`
   query YesterdayTodayMarkets($yesterdayBlock: Int!, $todayBlock: Int!) {
-    yesterday: markets(block: { number: $yesterdayBlock }) {
+    yesterday: markets(block: { number: $yesterdayBlock }, where: { totalSupply_gt: 0 }) {
       totalSupply
       totalBorrows
       underlyingPrice
@@ -36,7 +36,7 @@ export const YESTERDAY_TODAY_MARKETS_QUERY = gql`
       borrowRate
       supplyRate
     }
-    today: markets(block: { number: $todayBlock }) {
+    today: markets(block: { number: $todayBlock }, where: { totalSupply_gt: 0 }) {
       totalSupply
       totalBorrows
       underlyingPrice

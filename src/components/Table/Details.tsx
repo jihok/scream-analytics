@@ -27,7 +27,7 @@ export function Details({ asset }: Props) {
   const { latestSyncedBlock } = useGlobalContext();
   console.log('passed down info: ', latestSyncedBlock, asset);
 
-  const [distributionAPY, setDistributionAPY] = useState<number>();
+  const [distributionAPY, setDistributionAPY] = useState({ supply: 0, borrow: 0 });
   const [historicalData, setHistoricalData] = useState<Market[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -37,9 +37,10 @@ export function Details({ asset }: Props) {
         getCompSpeeds(asset.id),
         getScreamPrice(),
       ]);
-      setDistributionAPY(
-        ((BLOCKS_IN_A_DAY * 365) / asset.totalSupplyUSD) * compSpeeds * screamPrice * 100
-      );
+      setDistributionAPY({
+        supply: ((BLOCKS_IN_A_DAY * 365) / asset.totalSupplyUSD) * compSpeeds * screamPrice * 100,
+        borrow: ((BLOCKS_IN_A_DAY * 365) / asset.totalBorrowsUSD) * compSpeeds * screamPrice * 100,
+      });
 
       const blocksToQuery = [...Array(7)].map((_, i) => latestSyncedBlock - BLOCKS_IN_A_DAY * i);
       console.log(blocksToQuery);
@@ -61,7 +62,8 @@ export function Details({ asset }: Props) {
 
   return (
     <div>
-      Distribution APY: {`${distributionAPY}%`}
+      Distribution APY (Supply): {`${distributionAPY.supply.toFixed(2)}%`}
+      Distribution APY (Borrow): {`${distributionAPY.borrow.toFixed(2)}%`}
       <UtilizationChart data={historicalData} />
     </div>
   );
