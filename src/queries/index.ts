@@ -19,7 +19,7 @@ export const LATEST_BLOCK_QUERY = gql`
   }
 `;
 
-export interface YesterdayTodayMarkets {
+export interface YesterdayTodayMarketsQuery {
   yesterday: RawMarket[];
   today: RawMarket[];
 }
@@ -45,6 +45,20 @@ export const YESTERDAY_TODAY_MARKETS_QUERY = gql`
       exchangeRate
       borrowRate
       supplyRate
+      id
+    }
+  }
+`;
+
+export const ASSET_BY_BLOCK_QUERY = gql`
+  query AssetQuery($id: String!, $blockNumber: Int!) {
+    markets(block: { number: $blockNumber }, where: { id: $id }) {
+      totalSupply
+      totalBorrows
+      borrowRate
+      supplyRate
+      exchangeRate
+      underlyingPrice
     }
   }
 `;

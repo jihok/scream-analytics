@@ -27,9 +27,9 @@ export default function AssetsTable({ yesterday, today }: Props) {
             {market.underlyingName}
           </td>
           <td>{formatDisplay(market.totalSupplyUSD)}</td>
-          <td>{`${(+market.supplyRate).toFixed(2)} %`}</td>
+          <td>{`${(+market.supplyAPY).toFixed(2)} %`}</td>
           <td>{formatDisplay(market.totalBorrowsUSD)}</td>
-          <td>{`${(+market.borrowRate).toFixed(2)} %`}</td>
+          <td>{`${(+market.borrowAPY).toFixed(2)} %`}</td>
         </tr>
       ))}
     </table>

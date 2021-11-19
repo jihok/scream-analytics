@@ -4,21 +4,25 @@ import styles from '../styles/Home.module.css';
 import { useQuery } from '@apollo/client';
 import MarketsOverview from '../src/components/MarketsOverview';
 import { useGlobalContext } from '../src/contexts/GlobalContext';
-import { YesterdayTodayMarkets, YESTERDAY_TODAY_MARKETS_QUERY } from '../src/queries';
+import { YesterdayTodayMarketsQuery, YESTERDAY_TODAY_MARKETS_QUERY } from '../src/queries';
 import AssetsTable from '../src/components/AssetsTable';
 import { transformData } from '../src/utils/Market';
+import { Details } from '../src/components/AssetsTable/Details';
 
 const BLOCK_TIME = 1000; // we assume blocks are 1s
-const BLOCKS_IN_A_DAY = (24 * 60 * 60 * 1000) / BLOCK_TIME;
+export const BLOCKS_IN_A_DAY = (24 * 60 * 60 * 1000) / BLOCK_TIME;
 
 const Home: NextPage = () => {
   const { latestSyncedBlock } = useGlobalContext();
-  const { loading, error, data } = useQuery<YesterdayTodayMarkets>(YESTERDAY_TODAY_MARKETS_QUERY, {
-    variables: {
-      yesterdayBlock: latestSyncedBlock - BLOCKS_IN_A_DAY,
-      todayBlock: latestSyncedBlock,
-    },
-  });
+  const { loading, error, data } = useQuery<YesterdayTodayMarketsQuery>(
+    YESTERDAY_TODAY_MARKETS_QUERY,
+    {
+      variables: {
+        yesterdayBlock: latestSyncedBlock - BLOCKS_IN_A_DAY,
+        todayBlock: latestSyncedBlock,
+      },
+    }
+  );
 
   if (loading || !data) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
@@ -37,6 +41,8 @@ const Home: NextPage = () => {
       <main className={styles.main}>
         <MarketsOverview yesterday={yesterday} today={today} />
         <AssetsTable yesterday={yesterday} today={today} />
+
+        <Details asset={today[0]} />
       </main>
     </div>
   );

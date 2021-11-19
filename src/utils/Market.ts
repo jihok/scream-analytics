@@ -7,34 +7,26 @@ export interface RawMarket {
   exchangeRate: string;
   borrowRate: string;
   supplyRate: string;
+  id: string;
 }
 
-export interface Market {
+export interface Market extends Omit<RawMarket, 'underlyingPrice' | 'exchangeRate'> {
   totalSupplyUSD: number;
   totalBorrowsUSD: number;
   underlyingPrice: number;
-  underlyingSymbol: string;
-  underlyingName: string;
   exchangeRate: number;
-  borrowRate: number;
-  supplyRate: number;
+  borrowAPY: number;
+  supplyAPY: number;
 }
 
-type MarketType = 'SUPPLY' | 'BORROW';
-
-const getMarketUSD = (
-  { totalSupply, totalBorrows, exchangeRate, underlyingPrice }: RawMarket,
-  type: MarketType
-) => (type === 'SUPPLY' ? +exchangeRate * +totalSupply : +totalBorrows) * +underlyingPrice;
-
-export const transformData = (rawMarkets: RawMarket[]) => {
+export const transformData = (rawMarkets: RawMarket[]): Market[] => {
   return rawMarkets.map((rawMarket) => ({
     ...rawMarket,
-    totalSupplyUSD: getMarketUSD(rawMarket, 'SUPPLY'),
-    totalBorrowsUSD: getMarketUSD(rawMarket, 'BORROW'),
+    totalSupplyUSD: +rawMarket.exchangeRate * +rawMarket.totalSupply * +rawMarket.underlyingPrice,
+    totalBorrowsUSD: +rawMarket.totalBorrows * +rawMarket.underlyingPrice,
     underlyingPrice: +rawMarket.underlyingPrice,
     exchangeRate: +rawMarket.exchangeRate,
-    borrowRate: +rawMarket.borrowRate,
-    supplyRate: +rawMarket.supplyRate,
+    borrowAPY: +rawMarket.borrowRate * 100,
+    supplyAPY: +rawMarket.supplyRate * 100,
   }));
 };
