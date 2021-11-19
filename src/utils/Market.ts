@@ -31,7 +31,12 @@ export const transformData = (rawMarkets: RawMarket[]): Market[] => {
   }));
 };
 
-export const formatDisplay = (value: number) =>
+export const usdFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+});
+
+export const formatAbbrUSD = (value: number) =>
   Math.floor(value / 1_000_000) > 0
-    ? `$${(+(value / 1_000_000).toFixed(2)).toLocaleString()}M`
-    : `$${(value / 1_000).toFixed(2)}K`;
+    ? `${usdFormatter.format(value / 1_000_000)}M`
+    : `${usdFormatter.format(value / 1_000)}K`;

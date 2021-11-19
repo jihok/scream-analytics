@@ -1,4 +1,4 @@
-import { formatDisplay, Market } from '../../utils/Market';
+import { formatAbbrUSD, Market } from '../../utils/Market';
 
 interface Props {
   yesterday: Market[];
@@ -21,9 +21,9 @@ export default function Table({ yesterday, today }: Props) {
             <div>{market.underlyingSymbol}</div>
             {market.underlyingName}
           </td>
-          <td>{formatDisplay(market.totalSupplyUSD)}</td>
+          <td>{formatAbbrUSD(market.totalSupplyUSD)}</td>
           <td>{(+market.supplyAPY).toFixed(2)}%</td>
-          <td>{formatDisplay(market.totalBorrowsUSD)}</td>
+          <td>{formatAbbrUSD(market.totalBorrowsUSD)}</td>
           <td>{(+market.borrowAPY).toFixed(2)}%</td>
         </tr>
       ))}

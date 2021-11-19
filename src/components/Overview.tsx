@@ -1,4 +1,4 @@
-import { Market } from '../utils/Market';
+import { usdFormatter, Market } from '../utils/Market';
 
 interface Props {
   yesterday: Market[];
@@ -45,16 +45,16 @@ export default function MarketsOverview({ yesterday, today }: Props) {
   return (
     <div style={{ display: 'flex' }}>
       <div>
-        Total Supply: ${(+todaySupplyUSD.toFixed(2)).toLocaleString()}
+        Total Supply: {usdFormatter.format(todaySupplyUSD)}
         <MarketRatioBar marketRatios={supplyRatios} />
         <br />
-        24h supply volume: {(+(todaySupplyUSD - yesterdaySupplyUSD).toFixed(2)).toLocaleString()}
+        24h supply volume: {usdFormatter.format(todaySupplyUSD - yesterdaySupplyUSD)}
       </div>
       <div>
-        Total Borrow: ${(+todayBorrowUSD.toFixed(2)).toLocaleString()}
+        Total Borrow: {usdFormatter.format(todayBorrowUSD)}
         <MarketRatioBar marketRatios={borrowRatios} />
         <br />
-        24h borrow volume: {(+(todayBorrowUSD - yesterdayBorrowUSD).toFixed(2)).toLocaleString()}
+        24h borrow volume: {usdFormatter.format(todayBorrowUSD - yesterdayBorrowUSD)}
       </div>
     </div>
   );
