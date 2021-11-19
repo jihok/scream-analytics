@@ -5,7 +5,7 @@ interface Props {
   today: Market[];
 }
 
-export default function AssetsTable({ yesterday, today }: Props) {
+export default function Table({ yesterday, today }: Props) {
   return (
     <table>
       <tr>

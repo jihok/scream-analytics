@@ -15,6 +15,7 @@ import { screamClient } from '../../../pages/_app';
 import { useGlobalContext } from '../../contexts/GlobalContext';
 import { ASSET_BY_BLOCK_QUERY } from '../../queries';
 import { formatDisplay, Market, RawMarket, transformData } from '../../utils/Market';
+import UtilizationChart from '../UtilizationChart';
 
 interface Props {
   asset: any;
@@ -49,6 +50,7 @@ export function Details({ asset }: Props) {
 
   return (
     <div>
+      <UtilizationChart data={data} />
       <ComposedChart
         width={800}
         height={300}
@@ -64,10 +66,10 @@ export function Details({ asset }: Props) {
           cursor={{ strokeDasharray: 2 }}
           content={({ payload, active }) => <CustomToolTip payload={payload} active={active} />}
         />
-        <YAxis yAxisId="marketSize" orientation="left" padding={{ top: 100 }} />
+        <YAxis yAxisId="marketSize" display="none" padding={{ top: 100 }} />
         <Bar yAxisId="marketSize" dataKey="totalBorrowsUSD" stackId="a" fill="#8884d8" />
         <Bar yAxisId="marketSize" dataKey="totalSupplyUSD" stackId="a" fill="#82ca9d" />
-        <YAxis yAxisId="apy" orientation="right" padding={{ bottom: 200 }} />
+        <YAxis yAxisId="apy" display="none" padding={{ bottom: 200 }} />
         <Line yAxisId="apy" dataKey="borrowAPY" stroke="#8884d8" dot={false} />
         <Line yAxisId="apy" dataKey="supplyAPY" stroke="#82ca9d" dot={false} />
       </ComposedChart>
