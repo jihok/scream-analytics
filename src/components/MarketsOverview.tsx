@@ -67,7 +67,7 @@ const MarketRatioBar = (props: { marketRatios: MarketRatio[] }) => (
       <div key={underlyingSymbol} style={{ width: `${percentage}%`, height: '100%' }}>
         <div style={{ backgroundColor: BAR_COLORS[i], width: `100%`, height: '100%' }} />
         <div style={{ position: 'absolute' }}>
-          {underlyingSymbol} {percentage.toFixed(2)} %
+          {underlyingSymbol} {percentage.toFixed(2)}%
         </div>
       </div>
     ))}

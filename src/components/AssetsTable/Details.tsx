@@ -68,8 +68,8 @@ export function Details({ asset }: Props) {
         <Bar yAxisId="marketSize" dataKey="totalBorrowsUSD" stackId="a" fill="#8884d8" />
         <Bar yAxisId="marketSize" dataKey="totalSupplyUSD" stackId="a" fill="#82ca9d" />
         <YAxis yAxisId="apy" orientation="right" padding={{ bottom: 200 }} />
-        <Line yAxisId="apy" dataKey="borrowAPY" stroke="#8884d8" />
-        <Line yAxisId="apy" dataKey="supplyAPY" stroke="#82ca9d" />
+        <Line yAxisId="apy" dataKey="borrowAPY" stroke="#8884d8" dot={false} />
+        <Line yAxisId="apy" dataKey="supplyAPY" stroke="#82ca9d" dot={false} />
       </ComposedChart>
     </div>
   );
