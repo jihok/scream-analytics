@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Bar, BarChart, Tooltip, TooltipProps, YAxis } from 'recharts';
+import {
+  Bar,
+  BarChart,
+  ComposedChart,
+  Line,
+  LineChart,
+  Tooltip,
+  TooltipProps,
+  YAxis,
+} from 'recharts';
 import { NameType } from 'recharts/types/component/DefaultTooltipContent';
 import { BLOCKS_IN_A_DAY } from '../../../pages';
 import { screamClient } from '../../../pages/_app';
@@ -40,8 +49,8 @@ export function Details({ asset }: Props) {
 
   return (
     <div>
-      <BarChart
-        width={500}
+      <ComposedChart
+        width={800}
         height={300}
         data={data}
         margin={{
@@ -52,12 +61,16 @@ export function Details({ asset }: Props) {
         }}
       >
         <Tooltip
-          cursor
+          cursor={{ strokeDasharray: 2 }}
           content={({ payload, active }) => <CustomToolTip payload={payload} active={active} />}
         />
-        <Bar dataKey="totalBorrowsUSD" stackId="a" fill="#8884d8" />
-        <Bar dataKey="totalSupplyUSD" stackId="a" fill="#82ca9d" />
-      </BarChart>
+        <YAxis yAxisId="marketSize" orientation="left" padding={{ top: 100 }} />
+        <Bar yAxisId="marketSize" dataKey="totalBorrowsUSD" stackId="a" fill="#8884d8" />
+        <Bar yAxisId="marketSize" dataKey="totalSupplyUSD" stackId="a" fill="#82ca9d" />
+        <YAxis yAxisId="apy" orientation="right" padding={{ bottom: 200 }} />
+        <Line yAxisId="apy" dataKey="borrowAPY" stroke="#8884d8" />
+        <Line yAxisId="apy" dataKey="supplyAPY" stroke="#82ca9d" />
+      </ComposedChart>
     </div>
   );
 }
@@ -67,6 +80,10 @@ const CustomToolTip = ({ payload, active }: TooltipProps<any, any>) => {
 
   return (
     <div>
+      <p>Borrow APY</p>
+      <p>{payload[2].value.toFixed(2)}%</p>
+      <p>Supply APY</p>
+      <p>{payload[3].value.toFixed(2)}%</p>
       <p>Total Borrowed</p>
       <p>{formatDisplay(payload[0].value)}</p>
       <p>Total Supplied</p>
