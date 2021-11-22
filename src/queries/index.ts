@@ -30,11 +30,10 @@ export const YESTERDAY_TODAY_MARKETS_QUERY = gql`
       totalSupply
       totalBorrows
       underlyingPrice
-      underlyingSymbol
-      underlyingName
       exchangeRate
       borrowRate
       supplyRate
+      id
     }
     today: markets(block: { number: $todayBlock }, where: { totalSupply_gt: 0 }) {
       totalSupply

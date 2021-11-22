@@ -14,6 +14,8 @@ export const BLOCKS_IN_A_DAY = (24 * 60 * 60 * 1000) / BLOCK_TIME;
 
 const Home: NextPage = () => {
   const { latestSyncedBlock } = useGlobalContext();
+  console.log('yesterdayBlock: ', latestSyncedBlock - BLOCKS_IN_A_DAY);
+  console.log('todayBlock: ', latestSyncedBlock);
   const { loading, error, data } = useQuery<YesterdayTodayMarketsQuery>(
     YESTERDAY_TODAY_MARKETS_QUERY,
     {

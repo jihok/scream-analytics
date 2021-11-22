@@ -14,7 +14,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { CategoricalChartState } from 'recharts/types/chart/generateCategoricalChart';
+// import { CategoricalChartState } from 'recharts/types/chart/generateCategoricalChart';
 import { formatAbbrUSD, Market } from '../utils/Market';
 
 interface Props {
