@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { formatAbbrUSD, Market } from '../../utils/Market';
 import { useTable, Column } from 'react-table';
 
@@ -20,9 +20,9 @@ const CustomCell = ({ colId, val }: CellParams) => {
   // only 'asset' is a string tuple
   if (typeof val[0] === 'string' || typeof val[1] === 'string') {
     return (
-      <td>
+      <>
         {val[0]} {val[1]}
-      </td>
+      </>
     );
   }
 
@@ -30,20 +30,20 @@ const CustomCell = ({ colId, val }: CellParams) => {
     case 'supplied':
     case 'borrowed':
       return (
-        <td>
+        <>
           {formatAbbrUSD(val[0])}
           {val[1].toFixed(2)}
-        </td>
+        </>
       );
     case 'supplyAPY':
     case 'borrowAPY':
       return (
-        <td>
+        <>
           {val[0].toFixed(2)}%{val[1].toFixed(2)}%
-        </td>
+        </>
       );
     default:
-      return <td>--</td>;
+      return <>--</>;
   }
 };
 
@@ -113,8 +113,8 @@ export default function Table({ yesterday, today }: Props) {
   return (
     <table {...getTableProps()}>
       <thead>
-        {headerGroups.map((headerGroup) => (
-          <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
+        {headerGroups.map((headerGroup, i) => (
+          <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.headers[i].id}>
             {headerGroup.headers.map((column) => (
               <th {...column.getHeaderProps()} key={column.id}>
                 {column.render('Header')}

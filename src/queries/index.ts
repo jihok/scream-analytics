@@ -24,18 +24,9 @@ export interface YesterdayTodayMarketsQuery {
   today: RawMarket[];
 }
 
-export const YESTERDAY_TODAY_MARKETS_QUERY = gql`
-  query YesterdayTodayMarkets($yesterdayBlock: Int!, $todayBlock: Int!) {
-    yesterday: markets(block: { number: $yesterdayBlock }, where: { totalSupply_gt: 0 }) {
-      totalSupply
-      totalBorrows
-      underlyingPrice
-      exchangeRate
-      borrowRate
-      supplyRate
-      id
-    }
-    today: markets(block: { number: $todayBlock }, where: { totalSupply_gt: 0 }) {
+export const MARKETS_BY_BLOCK_QUERY = gql`
+  query MarketsByBlock($blockNumber: Int!) {
+    markets(block: { number: $blockNumber }, where: { totalSupply_gt: 0 }) {
       totalSupply
       totalBorrows
       underlyingPrice
@@ -50,7 +41,7 @@ export const YESTERDAY_TODAY_MARKETS_QUERY = gql`
 `;
 
 export const ASSET_BY_BLOCK_QUERY = gql`
-  query AssetQuery($id: String!, $blockNumber: Int!) {
+  query AssetByBlock($id: String!, $blockNumber: Int!) {
     markets(block: { number: $blockNumber }, where: { id: $id }) {
       totalSupply
       totalBorrows

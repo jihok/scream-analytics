@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { createContext, useContext } from 'react';
+import React, { createContext, useContext } from 'react';
 import { LatestBlockQuery, LATEST_BLOCK_QUERY } from '../queries';
 
 interface GlobalContext {
@@ -8,7 +8,7 @@ interface GlobalContext {
 
 const GlobalContext = createContext<GlobalContext>({ latestSyncedBlock: 0 });
 
-const Provider = (props: { children: React.ReactNode }) => {
+export default function Provider(props: { children: React.ReactNode }) {
   const { loading, error, data } = useQuery<LatestBlockQuery>(LATEST_BLOCK_QUERY);
 
   if (loading) return <p>Loading...</p>;
@@ -19,10 +19,8 @@ const Provider = (props: { children: React.ReactNode }) => {
       {props.children}
     </GlobalContext.Provider>
   );
-};
+}
 
 export const useGlobalContext = () => {
   return useContext(GlobalContext);
 };
-
-export default Provider;

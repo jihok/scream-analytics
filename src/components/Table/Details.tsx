@@ -1,5 +1,5 @@
-import { ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
+import { ethers } from 'ethers';
 import {
   Bar,
   BarChart,
@@ -25,7 +25,6 @@ interface Props {
 
 export function Details({ asset }: Props) {
   const { latestSyncedBlock } = useGlobalContext();
-  console.log('passed down info: ', latestSyncedBlock, asset);
 
   const [distributionAPY, setDistributionAPY] = useState({ supply: 0, borrow: 0 });
   const [historicalData, setHistoricalData] = useState<Market[]>([]);
@@ -55,8 +54,13 @@ export function Details({ asset }: Props) {
           })
         )
       );
+
+      console.log(
+        'transformed data',
+        a.map((b) => transformData(b.data.markets)[0])
+      );
+
       setHistoricalData(a.map((b) => transformData(b.data.markets)[0]));
-      console.log(a.map((b) => transformData(b.data.markets)[0]));
     })();
   }, [latestSyncedBlock, asset]);
 

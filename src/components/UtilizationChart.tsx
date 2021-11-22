@@ -14,7 +14,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-// import { CategoricalChartState } from 'recharts/types/chart/generateCategoricalChart';
+import { CategoricalChartState } from 'recharts/types/chart/generateCategoricalChart';
 import { formatAbbrUSD, Market } from '../utils/Market';
 
 interface Props {
@@ -32,22 +32,28 @@ export default function UtilizationChart({ data }: Props) {
     { value: data.length && data[0].totalSupplyUSD },
   ];
 
+  if (!data.length || !data) {
+    console.log('there si no data');
+  }
+
+  return <div></div>;
+
   return (
     <ComposedChart
       width={400}
       height={400}
       data={data}
-      onMouseMove={({ isTooltipActive, activeTooltipIndex }: CategoricalChartState) => {
-        if (isTooltipActive) {
-          setFocusedBar(activeTooltipIndex);
-        } else {
-          setFocusedBar(undefined);
-        }
-      }}
-      onClick={({ activeTooltipIndex }: CategoricalChartState) => {
-        setFocusedBar(activeTooltipIndex === focusedBar ? undefined : activeTooltipIndex);
-      }}
-      defaultShowTooltip
+      // onMouseMove={({ isTooltipActive, activeTooltipIndex }: CategoricalChartState) => {
+      //   if (isTooltipActive) {
+      //     setFocusedBar(activeTooltipIndex);
+      //   } else {
+      //     setFocusedBar(undefined);
+      //   }
+      // }}
+      // onClick={({ activeTooltipIndex }: CategoricalChartState) => {
+      //   setFocusedBar(activeTooltipIndex === focusedBar ? undefined : activeTooltipIndex);
+      // }}
+      // defaultShowTooltip
     >
       <Tooltip
         offset={20}

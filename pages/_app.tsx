@@ -8,7 +8,7 @@ export const screamClient = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-function MyApp({ Component, pageProps }: AppProps) {
+export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={screamClient}>
       <GlobalProvider>
@@ -17,5 +17,3 @@ function MyApp({ Component, pageProps }: AppProps) {
     </ApolloProvider>
   );
 }
-
-export default MyApp;
