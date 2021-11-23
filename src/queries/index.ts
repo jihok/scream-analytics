@@ -1,5 +1,4 @@
 import { gql } from '@apollo/client';
-import { RawMarket } from '../utils/Market';
 
 export interface LatestBlockQuery {
   _meta: {
@@ -18,11 +17,6 @@ export const LATEST_BLOCK_QUERY = gql`
     }
   }
 `;
-
-export interface YesterdayTodayMarketsQuery {
-  yesterday: RawMarket[];
-  today: RawMarket[];
-}
 
 export const MARKETS_BY_BLOCK_QUERY = gql`
   query MarketsByBlock($blockNumber: Int!) {
