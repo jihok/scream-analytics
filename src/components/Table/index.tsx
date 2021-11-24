@@ -3,13 +3,25 @@ import { formatAbbrUSD, Market } from '../../utils/Market';
 import { useTable, Column } from 'react-table';
 
 interface TableData {
-  asset: [string, string]; // underlyingName, underlyingSymbol
-  liquidity: [number, number]; // value, delta
-  supplied: [number, number]; // value, delta
-  supplyAPY: [number, number]; // value, delta
-  borrowed: [number, number]; // value, delta
-  borrowAPY: [number, number]; // value, delta
+  // [underlyingName, underlyingSymbol]
+  asset: [string, string];
+
+  // [value, percentChange]
+  liquidity: [number, number];
+  supplied: [number, number];
+  supplyAPY: [number, number];
+  borrowed: [number, number];
+  borrowAPY: [number, number];
 }
+
+const getPercentChange = (yesterdayVal: number, todayVal: number) => {
+  // avoid dividing by 0
+  if (yesterdayVal === 0) {
+    return yesterdayVal === todayVal ? 0 : 100;
+  }
+
+  return (100 * (todayVal - yesterdayVal)) / yesterdayVal;
+};
 
 interface CellParams {
   colId: keyof TableData;
@@ -26,20 +38,22 @@ const CustomCell = ({ colId, val }: CellParams) => {
     );
   }
 
+  const [value, percentChange] = val;
+
   switch (colId) {
     case 'supplied':
     case 'borrowed':
       return (
         <>
-          {formatAbbrUSD(val[0])}
-          {val[1].toFixed(2)}
+          {formatAbbrUSD(value)}
+          {percentChange.toFixed(2)}%
         </>
       );
     case 'supplyAPY':
     case 'borrowAPY':
       return (
         <>
-          {val[0].toFixed(2)}%{val[1].toFixed(2)}%
+          {value.toFixed(2)}%{percentChange.toFixed(2)}%
         </>
       );
     default:
@@ -53,28 +67,6 @@ interface Props {
 }
 
 export default function Table({ yesterday, today }: Props) {
-  const tableData: TableData[] = today.map((market) => {
-    const marketYesterday = yesterday.find((yd) => yd.id === market.id);
-    return marketYesterday
-      ? {
-          asset: [market.underlyingName, market.underlyingSymbol],
-          liquidity: [
-            market.totalSupplyUSD - market.totalBorrowsUSD,
-            market.totalSupplyUSD -
-              market.totalBorrowsUSD -
-              (marketYesterday.totalSupplyUSD - marketYesterday.totalBorrowsUSD),
-          ],
-          supplied: [market.totalSupplyUSD, market.totalSupplyUSD - marketYesterday.totalSupplyUSD],
-          supplyAPY: [market.supplyAPY, market.supplyAPY - marketYesterday.supplyAPY],
-          borrowed: [
-            market.totalBorrowsUSD,
-            market.totalBorrowsUSD - marketYesterday.totalBorrowsUSD,
-          ],
-          borrowAPY: [market.borrowAPY, market.borrowAPY - marketYesterday.borrowAPY],
-        }
-      : ({} as TableData);
-  });
-
   const columns = useMemo<Column<TableData>[]>(
     () => [
       {
@@ -104,6 +96,39 @@ export default function Table({ yesterday, today }: Props) {
     ],
     []
   );
+
+  console.log(yesterday, today);
+  const tableData: TableData[] = today.map((market) => {
+    // if there is no matching market yesterday, it's a newly added market
+    const marketYesterday = yesterday.find((yd) => yd.id === market.id) ?? {
+      ...market,
+      totalSupplyUSD: 0,
+      totalBorrowsUSD: 0,
+      borrowAPY: 0,
+      supplyAPY: 0,
+    };
+
+    return {
+      asset: [market.underlyingName, market.underlyingSymbol],
+      liquidity: [
+        market.totalSupplyUSD - market.totalBorrowsUSD,
+        getPercentChange(
+          marketYesterday.totalSupplyUSD - marketYesterday.totalBorrowsUSD,
+          market.totalSupplyUSD - market.totalBorrowsUSD
+        ),
+      ],
+      supplied: [
+        market.totalSupplyUSD,
+        getPercentChange(marketYesterday.totalSupplyUSD, market.totalSupplyUSD),
+      ],
+      supplyAPY: [market.supplyAPY, getPercentChange(marketYesterday.supplyAPY, market.supplyAPY)],
+      borrowed: [
+        market.totalBorrowsUSD,
+        getPercentChange(marketYesterday.totalBorrowsUSD, market.totalBorrowsUSD),
+      ],
+      borrowAPY: [market.borrowAPY, getPercentChange(marketYesterday.borrowAPY, market.borrowAPY)],
+    };
+  });
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable<TableData>({
     columns,

@@ -9,6 +9,11 @@ const PROVIDER = new ethers.providers.JsonRpcProvider('https://rpc.ftm.tools/', 
 
 export const getCompSpeeds = async (cToken: string) => {
   try {
+    // console.log(
+    //   await PROVIDER.getTransaction(
+    //     '0x204db01d61f1db742441c91b981b9e71d117ab3f7f62ce2d63b7b3d820e7fd42'
+    //   )
+    // );
     const comptroller = new ethers.Contract(UNITROLLER_ADDRESS, COMPTROLLER_ABI, PROVIDER);
     const compSpeedsBN: ethers.BigNumber = await comptroller.compSpeeds(cToken);
     return +ethers.utils.formatEther(compSpeedsBN);
