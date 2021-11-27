@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { formatAbbrUSD, Market } from '../../utils/Market';
-import { useTable, Column } from 'react-table';
+import { useTable, Column, useSortBy, Row } from 'react-table';
 
 interface TableData {
   // [underlyingName, underlyingSymbol]
@@ -98,53 +98,74 @@ export default function Table({ yesterday, today }: Props) {
   );
 
   console.log(yesterday, today);
-  const tableData: TableData[] = today.map((market) => {
-    // if there is no matching market yesterday, it's a newly added market
-    const marketYesterday = yesterday.find((yd) => yd.id === market.id) ?? {
-      ...market,
-      totalSupplyUSD: 0,
-      totalBorrowsUSD: 0,
-      borrowAPY: 0,
-      supplyAPY: 0,
-    };
+  const tableData: TableData[] = useMemo(
+    () =>
+      today.map((market) => {
+        // if there is no matching market yesterday, it's a newly added market
+        const marketYesterday = yesterday.find((yd) => yd.id === market.id) ?? {
+          ...market,
+          totalSupplyUSD: 0,
+          totalBorrowsUSD: 0,
+          borrowAPY: 0,
+          supplyAPY: 0,
+        };
 
-    return {
-      asset: [market.underlyingName, market.underlyingSymbol],
-      liquidity: [
-        market.totalSupplyUSD - market.totalBorrowsUSD,
-        getPercentChange(
-          marketYesterday.totalSupplyUSD - marketYesterday.totalBorrowsUSD,
-          market.totalSupplyUSD - market.totalBorrowsUSD
-        ),
-      ],
-      supplied: [
-        market.totalSupplyUSD,
-        getPercentChange(marketYesterday.totalSupplyUSD, market.totalSupplyUSD),
-      ],
-      supplyAPY: [market.supplyAPY, getPercentChange(marketYesterday.supplyAPY, market.supplyAPY)],
-      borrowed: [
-        market.totalBorrowsUSD,
-        getPercentChange(marketYesterday.totalBorrowsUSD, market.totalBorrowsUSD),
-      ],
-      borrowAPY: [market.borrowAPY, getPercentChange(marketYesterday.borrowAPY, market.borrowAPY)],
-    };
-  });
+        return {
+          asset: [market.underlyingName, market.underlyingSymbol],
+          liquidity: [
+            market.totalSupplyUSD - market.totalBorrowsUSD,
+            getPercentChange(
+              marketYesterday.totalSupplyUSD - marketYesterday.totalBorrowsUSD,
+              market.totalSupplyUSD - market.totalBorrowsUSD
+            ),
+          ],
+          supplied: [
+            market.totalSupplyUSD,
+            getPercentChange(marketYesterday.totalSupplyUSD, market.totalSupplyUSD),
+          ],
+          supplyAPY: [
+            market.supplyAPY,
+            getPercentChange(marketYesterday.supplyAPY, market.supplyAPY),
+          ],
+          borrowed: [
+            market.totalBorrowsUSD,
+            getPercentChange(marketYesterday.totalBorrowsUSD, market.totalBorrowsUSD),
+          ],
+          borrowAPY: [
+            market.borrowAPY,
+            getPercentChange(marketYesterday.borrowAPY, market.borrowAPY),
+          ],
+        };
+      }),
+    [today, yesterday]
+  );
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable<TableData>({
-    columns,
-    data: tableData,
-  });
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable<TableData>(
+    {
+      columns,
+      data: tableData,
+    },
+    useSortBy
+  );
 
   return (
     <table {...getTableProps()}>
       <thead>
         {headerGroups.map((headerGroup, i) => (
           <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.headers[i].id}>
-            {headerGroup.headers.map((column) => (
-              <th {...column.getHeaderProps()} key={column.id}>
-                {column.render('Header')}
-              </th>
-            ))}
+            {headerGroup.headers.map((column) => {
+              // @ts-ignore - UseSortByColumnOptions
+              column.sortType = (a: Row, b: Row, accessor: string) =>
+                a.values[accessor][0] > b.values[accessor][0] ? 1 : -1;
+              return (
+                // @ts-ignore - UseSortByColumnProps
+                <th {...column.getHeaderProps(column.getSortByToggleProps())} key={column.id}>
+                  {column.render('Header')}
+                  {/* @ts-ignore - UseSortByColumnProps */}
+                  <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
+                </th>
+              );
+            })}
           </tr>
         ))}
       </thead>
@@ -156,7 +177,7 @@ export default function Table({ yesterday, today }: Props) {
               {row.cells.map((cell) => (
                 <td {...cell.getCellProps()} key={`${cell.row.id}-${cell.column.id}`}>
                   {
-                    // @ts-ignore - type def should but doesn't include JSX element
+                    // @ts-ignore - type def should but doesn't include JSX.Element
                     cell.render(<CustomCell colId={cell.column.id} val={cell.value} />)
                   }
                 </td>
