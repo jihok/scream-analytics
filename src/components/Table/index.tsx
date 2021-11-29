@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import Link from 'next/link';
 import { formatAbbrUSD, Market } from '../../utils/Market';
 import { useTable, Column, useSortBy, Row } from 'react-table';
 
@@ -41,6 +42,7 @@ const CustomCell = ({ colId, val }: CellParams) => {
   const [value, percentChange] = val;
 
   switch (colId) {
+    case 'liquidity':
     case 'supplied':
     case 'borrowed':
       return (
@@ -144,6 +146,10 @@ export default function Table({ yesterday, today }: Props) {
     {
       columns,
       data: tableData,
+      initialState: {
+        // @ts-ignore
+        sortBy: [{ id: 'liquidity' }],
+      },
     },
     useSortBy
   );
@@ -173,16 +179,18 @@ export default function Table({ yesterday, today }: Props) {
         {rows.map((row) => {
           prepareRow(row);
           return (
-            <tr {...row.getRowProps()} key={row.id}>
-              {row.cells.map((cell) => (
-                <td {...cell.getCellProps()} key={`${cell.row.id}-${cell.column.id}`}>
-                  {
-                    // @ts-ignore - type def should but doesn't include JSX.Element
-                    cell.render(<CustomCell colId={cell.column.id} val={cell.value} />)
-                  }
-                </td>
-              ))}
-            </tr>
+            <Link href="#" key={row.id}>
+              <tr {...row.getRowProps()} onClick={() => alert('hey!')}>
+                {row.cells.map((cell) => (
+                  <td {...cell.getCellProps()} key={`${cell.row.id}-${cell.column.id}`}>
+                    {
+                      // @ts-ignore - type def should but doesn't include JSX.Element
+                      cell.render(<CustomCell colId={cell.column.id} val={cell.value} />)
+                    }
+                  </td>
+                ))}
+              </tr>
+            </Link>
           );
         })}
       </tbody>
