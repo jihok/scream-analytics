@@ -8,7 +8,7 @@ interface GlobalContext {
 
 const GlobalContext = createContext<GlobalContext>({ latestSyncedBlock: 0 });
 
-export default function Provider(props: { children: React.ReactNode }) {
+export default function GlobalProvider(props: { children: React.ReactNode }) {
   const { loading, error, data } = useQuery<LatestBlockQuery>(LATEST_BLOCK_QUERY);
 
   if (loading) return <p>Loading...</p>;

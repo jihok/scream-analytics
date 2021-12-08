@@ -11,13 +11,13 @@ import {
   YAxis,
 } from 'recharts';
 import { NameType } from 'recharts/types/component/DefaultTooltipContent';
-import { BLOCKS_IN_A_DAY } from '../../../pages';
 import { screamClient } from '../../../pages/_app';
 import { useGlobalContext } from '../../contexts/GlobalContext';
 import { ASSET_BY_BLOCK_QUERY } from '../../queries';
 import { formatAbbrUSD, Market, RawMarket, transformData } from '../../utils/Market';
 import { getCompSpeeds, getScreamPrice } from '../../utils';
 import UtilizationChart from '../UtilizationChart';
+import { BLOCKS_IN_A_DAY } from '../../contexts/MarketContext';
 
 interface Props {
   asset: Market;
