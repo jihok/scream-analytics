@@ -6,7 +6,7 @@ import UtilizationChart from '../../src/components/UtilizationChart';
 import { useGlobalContext } from '../../src/contexts/GlobalContext';
 import { BLOCKS_IN_A_DAY, useMarketContext } from '../../src/contexts/MarketContext';
 import { MARKET_BASE_BY_BLOCK_QUERY, MARKET_DETAILS_QUERY } from '../../src/queries';
-import { getCompSpeeds, getScreamPrice } from '../../src/utils';
+import { getCompSpeeds } from '../../src/utils';
 import {
   formatAbbrUSD,
   getPercentChange,
@@ -20,7 +20,7 @@ import {
 import { screamClient } from '../_app';
 
 export default function MarketPage() {
-  const { latestSyncedBlock } = useGlobalContext();
+  const { latestSyncedBlock, screamPrice } = useGlobalContext();
   const { yesterdayMarkets } = useMarketContext();
   const {
     query: { id },
@@ -29,7 +29,6 @@ export default function MarketPage() {
     variables: { id },
   });
   const [compSpeeds, setCompSpeeds] = useState(0);
-  const [screamPrice, setScreamPrice] = useState(0);
 
   const [market, setMarket] = useState<MarketDetails>();
   const [historicalData, setHistoricalData] = useState<Market[]>([]);
@@ -47,12 +46,7 @@ export default function MarketPage() {
   useEffect(() => {
     // fetch compSpeeds with id passed from router
     const getDistributionData = async () => {
-      const [compSpeeds, screamPrice] = await Promise.all([
-        getCompSpeeds(id as string),
-        getScreamPrice(),
-      ]);
-      setCompSpeeds(compSpeeds);
-      setScreamPrice(screamPrice);
+      setCompSpeeds(await getCompSpeeds(id as string));
     };
     getDistributionData();
   }, [id]);
