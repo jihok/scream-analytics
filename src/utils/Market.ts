@@ -65,3 +65,18 @@ export const formatAbbrUSD = (value: number) =>
   Math.floor(value / 1_000_000) > 0
     ? `${usdFormatter.format(value / 1_000_000)}M`
     : `${usdFormatter.format(value / 1_000)}K`;
+
+/**
+ * convenience function to handle changes between yesterday and today while handling new markets edge case
+ * @param yesterdayVal
+ * @param todayVal
+ * @returns the percentage unformatted
+ */
+export const getPercentChange = (yesterdayVal: number, todayVal: number) => {
+  // avoid dividing by 0
+  if (yesterdayVal === 0) {
+    return yesterdayVal === todayVal ? 0 : 100;
+  }
+
+  return (100 * (todayVal - yesterdayVal)) / yesterdayVal;
+};

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import Link from 'next/link';
-import { formatAbbrUSD, Market } from '../utils/Market';
+import { formatAbbrUSD, getPercentChange, Market } from '../utils/Market';
 import { useTable, Column, useSortBy, Row } from 'react-table';
 
 interface TableData {
@@ -17,15 +17,6 @@ interface TableData {
   // additional metadata for routing
   data: { id: string; todayIndex: number; yesterdayIndex: number };
 }
-
-const getPercentChange = (yesterdayVal: number, todayVal: number) => {
-  // avoid dividing by 0
-  if (yesterdayVal === 0) {
-    return yesterdayVal === todayVal ? 0 : 100;
-  }
-
-  return (100 * (todayVal - yesterdayVal)) / yesterdayVal;
-};
 
 interface CellParams {
   colId: keyof TableData;

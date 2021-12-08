@@ -9,6 +9,7 @@ import { MARKET_BASE_BY_BLOCK_QUERY, MARKET_DETAILS_QUERY } from '../../src/quer
 import { getCompSpeeds, getScreamPrice } from '../../src/utils';
 import {
   formatAbbrUSD,
+  getPercentChange,
   Market,
   MarketDetails,
   RawMarket,
@@ -33,6 +34,15 @@ export default function MarketPage() {
   const [market, setMarket] = useState<MarketDetails>();
   const [historicalData, setHistoricalData] = useState<Market[]>([]);
   const [daysToFetch, setDaysToFetch] = useState(7);
+  const yesterday =
+    yesterdayMarkets.find((market) => market.id === id) ??
+    ({
+      totalSupplyUSD: 0,
+      totalBorrowsUSD: 0,
+      borrowAPY: 0,
+      supplyAPY: 0,
+      cash: '0',
+    } as Market);
 
   useEffect(() => {
     // fetch compSpeeds with id passed from router
@@ -81,10 +91,10 @@ export default function MarketPage() {
 
   if (!market) return <p>Error :( - no market</p>;
 
-  const distributionAPY = {
-    supply: ((BLOCKS_IN_A_DAY * 365) / market.totalSupplyUSD) * compSpeeds * screamPrice * 100,
-    borrow: ((BLOCKS_IN_A_DAY * 365) / market.totalBorrowsUSD) * compSpeeds * screamPrice * 100,
-  };
+  const supplyDistribution =
+    ((BLOCKS_IN_A_DAY * 365) / market.totalSupplyUSD) * compSpeeds * screamPrice * 100;
+  const borrowDistribution =
+    ((BLOCKS_IN_A_DAY * 365) / market.totalBorrowsUSD) * compSpeeds * screamPrice * 100;
 
   return (
     <main>
@@ -99,14 +109,26 @@ export default function MarketPage() {
           {usdFormatter.format(market.underlyingPrice)}
         </div>
         <div>
-          <div>Supplied {formatAbbrUSD(market.totalSupplyUSD)}</div>
-          <div>Borrowed {formatAbbrUSD(market.totalBorrowsUSD)}</div>
+          <div>
+            Supplied {formatAbbrUSD(market.totalSupplyUSD)}{' '}
+            {getPercentChange(yesterday.totalSupplyUSD, market.totalSupplyUSD).toFixed(2)}%
+          </div>
+          <div>
+            Borrowed {formatAbbrUSD(market.totalBorrowsUSD)}
+            {getPercentChange(yesterday.totalBorrowsUSD, market.totalBorrowsUSD).toFixed(2)}%
+          </div>
           <div>
             Utilization {((market.totalBorrowsUSD / market.totalSupplyUSD) * 100).toFixed(2)}%
+            {getPercentChange(
+              yesterday.totalBorrowsUSD / yesterday.totalSupplyUSD,
+              market.totalBorrowsUSD / market.totalSupplyUSD
+            ).toFixed(2)}
+            %
           </div>
           <div>
             Liquidity
             {formatAbbrUSD(+market.cash)}
+            {getPercentChange(+yesterday.cash, +market.cash).toFixed(2)}%
           </div>
         </div>
       </div>
@@ -123,15 +145,21 @@ export default function MarketPage() {
               </tr>
               <tr>
                 <td>Supply</td>
-                <td>{market.supplyAPY.toFixed(2)}%</td>
-                <td>{distributionAPY.supply.toFixed(2)}%</td>
-                <td>{(market.supplyAPY + distributionAPY.supply).toFixed(2)}%</td>
+                <td>
+                  {market.supplyAPY.toFixed(2)}%{' '}
+                  {getPercentChange(yesterday.supplyAPY, market.supplyAPY).toFixed(2)}%
+                </td>
+                <td>{supplyDistribution.toFixed(2)}%</td>
+                <td>{(market.supplyAPY + supplyDistribution).toFixed(2)}%</td>
               </tr>
               <tr>
                 <td>Borrow</td>
-                <td>{market.borrowAPY.toFixed(2)}%</td>
-                <td>{distributionAPY.borrow.toFixed(2)}%</td>
-                <td>{(market.borrowAPY - distributionAPY.borrow).toFixed(2)}%</td>
+                <td>
+                  {market.borrowAPY.toFixed(2)}%{' '}
+                  {getPercentChange(yesterday.borrowAPY, market.borrowAPY).toFixed(2)}%
+                </td>
+                <td>{borrowDistribution.toFixed(2)}%</td>
+                <td>{(market.borrowAPY - borrowDistribution).toFixed(2)}%</td>
               </tr>
             </table>
             <div style={{ display: 'flex' }}>
