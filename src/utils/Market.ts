@@ -1,3 +1,5 @@
+import { ethers } from 'ethers';
+
 export interface RawMarket {
   totalSupply: string; // in tokens
   totalBorrows: string; // in tokens
@@ -19,8 +21,23 @@ export interface Market extends Omit<RawMarket, 'underlyingPrice' | 'exchangeRat
   supplyAPY: number;
 }
 
-export const transformData = (rawMarkets: RawMarket[]): Market[] => {
-  return rawMarkets.map((rawMarket) => ({
+export interface RawMarketDetails extends RawMarket {
+  totalInterestAccumulated: string;
+  reserveFactor: string;
+  collateralFactor: string;
+}
+
+export interface MarketDetails extends Market {
+  symbol: string;
+  totalInterestAccumulated: number;
+  reserveFactor: number;
+  collateralFactor: number;
+}
+
+export function transformData(rawMarkets: RawMarketDetails[]): MarketDetails[];
+export function transformData(rawMarkets: RawMarket[]): Market[];
+export function transformData(rawMarkets: any): any {
+  return rawMarkets.map((rawMarket: any) => ({
     ...rawMarket,
     totalSupplyUSD: +rawMarket.exchangeRate * +rawMarket.totalSupply * +rawMarket.underlyingPrice,
     totalBorrowsUSD: +rawMarket.totalBorrows * +rawMarket.underlyingPrice,
@@ -28,8 +45,15 @@ export const transformData = (rawMarkets: RawMarket[]): Market[] => {
     exchangeRate: +rawMarket.exchangeRate,
     borrowAPY: +rawMarket.borrowRate * 100,
     supplyAPY: +rawMarket.supplyRate * 100,
+
+    // MarketDetails
+    totalInterestAccumulated: +rawMarket.totalInterestAccumulated,
+    reserveFactor: rawMarket.reserveFactor
+      ? +ethers.utils.formatEther(rawMarket.reserveFactor)
+      : undefined,
+    collateralFactor: +rawMarket.collateralFactor,
   }));
-};
+}
 
 export const usdFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
