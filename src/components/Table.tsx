@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import Link from 'next/link';
-import { formatAbbrUSD, Market } from '../../utils/Market';
+import { formatAbbrUSD, Market } from '../utils/Market';
 import { useTable, Column, useSortBy, Row } from 'react-table';
 
 interface TableData {
