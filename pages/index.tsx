@@ -53,8 +53,6 @@ const Home: NextPage = () => {
       <main className={styles.main}>
         <Overview yesterday={yesterdayMarkets} today={todayMarkets} />
         <Table yesterday={yesterdayMarkets} today={todayMarkets} />
-
-        <Details asset={todayMarkets[0]} />
       </main>
     </div>
   );

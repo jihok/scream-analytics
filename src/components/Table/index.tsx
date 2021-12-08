@@ -13,6 +13,9 @@ interface TableData {
   supplyAPY: [number, number];
   borrowed: [number, number];
   borrowAPY: [number, number];
+
+  // additional metadata for routing
+  data: { id: string; todayIndex: number; yesterdayIndex: number };
 }
 
 const getPercentChange = (yesterdayVal: number, todayVal: number) => {
@@ -33,9 +36,9 @@ const CustomCell = ({ colId, val }: CellParams) => {
   // only 'asset' is a string tuple
   if (typeof val[0] === 'string' || typeof val[1] === 'string') {
     return (
-      <>
+      <a>
         {val[0]} {val[1]}
-      </>
+      </a>
     );
   }
 
@@ -102,15 +105,19 @@ export default function Table({ yesterday, today }: Props) {
   console.log(yesterday, today);
   const tableData: TableData[] = useMemo(
     () =>
-      today.map((market) => {
+      today.map((market, i) => {
+        const yesterdayIndex = yesterday.findIndex((yd) => yd.id === market.id);
         // if there is no matching market yesterday, it's a newly added market
-        const marketYesterday = yesterday.find((yd) => yd.id === market.id) ?? {
-          ...market,
-          totalSupplyUSD: 0,
-          totalBorrowsUSD: 0,
-          borrowAPY: 0,
-          supplyAPY: 0,
-        };
+        const marketYesterday =
+          yesterdayIndex > -1
+            ? yesterday[yesterdayIndex]
+            : {
+                ...market,
+                totalSupplyUSD: 0,
+                totalBorrowsUSD: 0,
+                borrowAPY: 0,
+                supplyAPY: 0,
+              };
 
         return {
           asset: [market.underlyingName, market.underlyingSymbol],
@@ -137,6 +144,11 @@ export default function Table({ yesterday, today }: Props) {
             market.borrowAPY,
             getPercentChange(marketYesterday.borrowAPY, market.borrowAPY),
           ],
+          data: {
+            id: market.id,
+            todayIndex: i,
+            yesterdayIndex,
+          },
         };
       }),
     [today, yesterday]
@@ -150,6 +162,7 @@ export default function Table({ yesterday, today }: Props) {
         // @ts-ignore
         sortBy: [{ id: 'liquidity' }],
       },
+      getRowId: (row) => row.data.id,
     },
     useSortBy
   );
@@ -179,8 +192,8 @@ export default function Table({ yesterday, today }: Props) {
         {rows.map((row) => {
           prepareRow(row);
           return (
-            <Link href="#" key={row.id}>
-              <tr {...row.getRowProps()} onClick={() => alert('hey!')}>
+            <Link href={`market/${row.id}`} key={row.id} passHref>
+              <tr {...row.getRowProps()} style={{ cursor: 'pointer' }}>
                 {row.cells.map((cell) => (
                   <td {...cell.getCellProps()} key={`${cell.row.id}-${cell.column.id}`}>
                     {
