@@ -30,6 +30,7 @@ underlyingPrice
 /**
  * query for market overview data.
  * this fetches snapshot of markets currently + yesterday for the MarketContext
+ * @returns RawMarket
  */
 export const MARKETS_BY_BLOCK_QUERY = gql`
   query MarketsByBlock($blockNumber: Int!) {
@@ -38,6 +39,7 @@ export const MARKETS_BY_BLOCK_QUERY = gql`
       underlyingSymbol
       underlyingName
       id
+      cash
     }
   }
 `;
@@ -45,6 +47,7 @@ export const MARKETS_BY_BLOCK_QUERY = gql`
 /**
  * query for data to make historical utilization charts.
  * keep this lean as this query will be sent up to 30 times (1 month) at a time
+ * @returns RawMarketBase
  */
 export const MARKET_BASE_BY_BLOCK_QUERY = gql`
   query MarketBaseByBlock($id: String!, $blockNumber: Int!) {
@@ -57,6 +60,7 @@ export const MARKET_BASE_BY_BLOCK_QUERY = gql`
 
 /**
  * query for full market details.
+ * @returns RawMarketDetails
  */
 export const MARKET_DETAILS_QUERY = gql`
   query MarketDetails($id: String!) {
@@ -68,6 +72,7 @@ export const MARKET_DETAILS_QUERY = gql`
       symbol
       underlyingName
       underlyingSymbol
+      cash
     }
   }
 `;

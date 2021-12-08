@@ -1,5 +1,4 @@
 import { useQuery } from '@apollo/client';
-import { ethers } from 'ethers';
 import { useRouter } from 'next/dist/client/router';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
@@ -9,6 +8,7 @@ import { BLOCKS_IN_A_DAY, useMarketContext } from '../../src/contexts/MarketCont
 import { MARKET_BASE_BY_BLOCK_QUERY, MARKET_DETAILS_QUERY } from '../../src/queries';
 import { getCompSpeeds, getScreamPrice } from '../../src/utils';
 import {
+  formatAbbrUSD,
   Market,
   MarketDetails,
   RawMarket,
@@ -27,22 +27,39 @@ export default function MarketPage() {
   const { loading, error, data } = useQuery<{ markets: RawMarketDetails[] }>(MARKET_DETAILS_QUERY, {
     variables: { id },
   });
+  const [compSpeeds, setCompSpeeds] = useState(0);
+  const [screamPrice, setScreamPrice] = useState(0);
+
   const [market, setMarket] = useState<MarketDetails>();
-  const [distributionAPY, setDistributionAPY] = useState({ supply: 0, borrow: 0 });
   const [historicalData, setHistoricalData] = useState<Market[]>([]);
+  const [daysToFetch, setDaysToFetch] = useState(7);
 
   useEffect(() => {
-    const getMarketDetails = async (market: MarketDetails) => {
+    // fetch compSpeeds with id passed from router
+    const getDistributionData = async () => {
       const [compSpeeds, screamPrice] = await Promise.all([
         getCompSpeeds(id as string),
         getScreamPrice(),
       ]);
-      setDistributionAPY({
-        supply: ((BLOCKS_IN_A_DAY * 365) / market.totalSupplyUSD) * compSpeeds * screamPrice * 100,
-        borrow: ((BLOCKS_IN_A_DAY * 365) / market.totalBorrowsUSD) * compSpeeds * screamPrice * 100,
-      });
+      setCompSpeeds(compSpeeds);
+      setScreamPrice(screamPrice);
+    };
+    getDistributionData();
+  }, [id]);
 
-      const blocksToQuery = [...Array(7)].map((_, i) => latestSyncedBlock - BLOCKS_IN_A_DAY * i);
+  useEffect(() => {
+    // transform data for state once apollo query returns valid
+    if (data) {
+      setMarket(transformData(data.markets)[0]);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    // get data for chart
+    const getHistoricalData = async () => {
+      const blocksToQuery = [...Array(daysToFetch)].map(
+        (_, i) => latestSyncedBlock - BLOCKS_IN_A_DAY * i
+      );
 
       const historicalRawData = await Promise.all(
         blocksToQuery.map((blockNumber) =>
@@ -56,17 +73,18 @@ export default function MarketPage() {
         )
       );
 
-      console.log('hey', market);
-      setMarket(market);
       setHistoricalData(historicalRawData.map((raw) => transformData(raw.data.markets)[0]));
     };
 
-    if (data) {
-      getMarketDetails(transformData(data.markets)[0]);
-    }
-  }, [latestSyncedBlock, id, data]);
+    getHistoricalData();
+  }, [latestSyncedBlock, id, daysToFetch]);
 
-  if (!market) return <p>Error :(</p>;
+  if (!market) return <p>Error :( - no market</p>;
+
+  const distributionAPY = {
+    supply: ((BLOCKS_IN_A_DAY * 365) / market.totalSupplyUSD) * compSpeeds * screamPrice * 100,
+    borrow: ((BLOCKS_IN_A_DAY * 365) / market.totalBorrowsUSD) * compSpeeds * screamPrice * 100,
+  };
 
   return (
     <main>
@@ -75,9 +93,22 @@ export default function MarketPage() {
         <a>⬅️ Back to Market Analytics</a>
       </Link>
       <div>
-        {market.underlyingName}
-        {market.underlyingSymbol}
-        {usdFormatter.format(market.underlyingPrice)}
+        <div>
+          {market.underlyingName}
+          {market.underlyingSymbol}
+          {usdFormatter.format(market.underlyingPrice)}
+        </div>
+        <div>
+          <div>Supplied {formatAbbrUSD(market.totalSupplyUSD)}</div>
+          <div>Borrowed {formatAbbrUSD(market.totalBorrowsUSD)}</div>
+          <div>
+            Utilization {((market.totalBorrowsUSD / market.totalSupplyUSD) * 100).toFixed(2)}%
+          </div>
+          <div>
+            Liquidity
+            {formatAbbrUSD(+market.cash)}
+          </div>
+        </div>
       </div>
       <div style={{ display: 'flex' }}>
         <div>
@@ -138,7 +169,12 @@ export default function MarketPage() {
             <div>{market.underlyingSymbol} borrow cap No Limit</div>
           </div>
         </div>
-        <UtilizationChart data={historicalData} />
+        <div>
+          Historical view of utilization
+          <a onClick={() => setDaysToFetch(7)}>Weekly</a>
+          <a onClick={() => setDaysToFetch(30)}>Monthly</a>
+          <UtilizationChart data={historicalData} />
+        </div>
       </div>
     </main>
   );

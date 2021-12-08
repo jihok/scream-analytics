@@ -25,7 +25,7 @@ export const getCompSpeeds = async (cToken: string) => {
   return 0;
 };
 
-export const getScreamPrice = async () => {
+export const getScreamPrice = async (): Promise<number> => {
   try {
     const response = await fetch('https://api.coingecko.com/api/v3/coins/scream');
     const {

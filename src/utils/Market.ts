@@ -10,6 +10,7 @@ export interface RawMarket {
   borrowRate: string;
   supplyRate: string;
   id: string;
+  cash: string;
 }
 
 export interface Market extends Omit<RawMarket, 'underlyingPrice' | 'exchangeRate'> {
