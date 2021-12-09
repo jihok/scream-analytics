@@ -9,7 +9,7 @@ interface Props {
 
 export default function Layout({ children, home }: Props) {
   return (
-    <div>
+    <div className="bg-gray opacity-95 text-primary">
       <Head>
         <title>SCREAM Analytics</title>
         <meta name="description" content="SCREAM Analytics" />
@@ -32,7 +32,7 @@ export default function Layout({ children, home }: Props) {
           <input type="text" placeholder="Search for an account..."></input>
         </form>
       </header>
-      <main>{children}</main>
+      <main className="flex flex-col justify-center">{children}</main>
     </div>
   );
 }

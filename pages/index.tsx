@@ -1,5 +1,4 @@
 import type { NextPage } from 'next';
-import styles from '../styles/Home.module.css';
 import Overview from '../src/components/Overview';
 import Table from '../src/components/Table';
 import Layout from '../src/components/Layout';

@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  h1 {
+    @apply text-header;
+  }
+  h2 {
+    @apply text-subheading;
+  }
+  h3 {
+    @apply text-title font-bold;
+  }
+  p {
+    @apply text-body;
+  }
+}
