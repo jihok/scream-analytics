@@ -54,8 +54,8 @@ export default function MarketsOverview() {
   } as MarketRatio);
 
   return (
-    <div className="flex py-5 bg-darkGray self-center rounded-md shadow-lg">
-      <div className="border-r border-border px-4">
+    <div className="flex bg-darkGray rounded-md shadow-lg flex-col sm:flex-row w-full justify-center mx-5">
+      <div className="border-border border-b sm:border-b-0 sm:border-r mx-4 sm:mx-0 sm:px-4 py-5 sm:py-0 sm:my-5">
         <div className="flex justify-between pb-4">
           <div>
             <h3>Total Supply</h3>
@@ -65,7 +65,7 @@ export default function MarketsOverview() {
         </div>
         <MarketRatioBar marketRatios={supplyRatios} />
       </div>
-      <div className="px-4">
+      <div className="mx-4 my-5">
         <div className="flex justify-between pb-4">
           <div>
             <h3>Total Borrow</h3>
@@ -85,11 +85,11 @@ export default function MarketsOverview() {
  * @returns
  */
 const MarketRatioBar = (props: { marketRatios: MarketRatio[] }) => (
-  <div className="flex h-8">
+  <div className="flex">
     {props.marketRatios.map(({ percentage, underlyingSymbol, colorIndex }, i) => (
       <div key={underlyingSymbol} style={{ width: `${percentage}%` }}>
         <div
-          className={`bg-bar-${colorIndex} w-full h-full`}
+          className={`bg-bar-${colorIndex} w-full h-8`}
           style={{ borderRadius: getBorderRadius(i) }}
         />
         <div className="flex mt-2">
