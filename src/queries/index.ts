@@ -18,6 +18,7 @@ export const LATEST_BLOCK_QUERY = gql`
   }
 `;
 
+// might be able to do this in a type safe way that links to defined interfaces
 const MARKET_BASE_VARS = `
 totalSupply
 totalBorrows

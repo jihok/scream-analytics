@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import Link from 'next/link';
 import { formatAbbrUSD, getPercentChange, Market } from '../utils/Market';
 import { useTable, Column, useSortBy, Row } from 'react-table';
+import { useMarketContext } from '../contexts/MarketContext';
 
 interface TableData {
   // [underlyingName, underlyingSymbol]
@@ -57,12 +58,8 @@ const CustomCell = ({ colId, val }: CellParams) => {
   }
 };
 
-interface Props {
-  yesterday: Market[];
-  today: Market[];
-}
-
-export default function Table({ yesterday, today }: Props) {
+export default function Table() {
+  const { yesterdayMarkets, todayMarkets } = useMarketContext();
   const columns = useMemo<Column<TableData>[]>(
     () => [
       {
@@ -93,15 +90,14 @@ export default function Table({ yesterday, today }: Props) {
     []
   );
 
-  console.log(yesterday, today);
   const tableData: TableData[] = useMemo(
     () =>
-      today.map((market, i) => {
-        const yesterdayIndex = yesterday.findIndex((yd) => yd.id === market.id);
+      todayMarkets.map((market, i) => {
+        const yesterdayIndex = yesterdayMarkets.findIndex((yd) => yd.id === market.id);
         // if there is no matching market yesterday, it's a newly added market
         const marketYesterday =
           yesterdayIndex > -1
-            ? yesterday[yesterdayIndex]
+            ? yesterdayMarkets[yesterdayIndex]
             : {
                 ...market,
                 totalSupplyUSD: 0,
@@ -142,7 +138,7 @@ export default function Table({ yesterday, today }: Props) {
           },
         };
       }),
-    [today, yesterday]
+    [todayMarkets, yesterdayMarkets]
   );
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable<TableData>(

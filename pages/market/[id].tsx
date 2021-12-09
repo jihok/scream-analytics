@@ -2,6 +2,7 @@ import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/dist/client/router';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
+import Layout from '../../src/components/Layout';
 import UtilizationChart from '../../src/components/UtilizationChart';
 import { useGlobalContext } from '../../src/contexts/GlobalContext';
 import { BLOCKS_IN_A_DAY, useMarketContext } from '../../src/contexts/MarketContext';
@@ -91,11 +92,7 @@ export default function MarketPage() {
     ((BLOCKS_IN_A_DAY * 365) / market.totalBorrowsUSD) * compSpeeds * screamPrice * 100;
 
   return (
-    <main>
-      {/* TODO: make a base component for this header/footer */}
-      <Link href="/">
-        <a>⬅️ Back to Market Analytics</a>
-      </Link>
+    <Layout>
       <div>
         <div>
           {market.underlyingName}
@@ -198,6 +195,6 @@ export default function MarketPage() {
           <UtilizationChart data={historicalData} />
         </div>
       </div>
-    </main>
+    </Layout>
   );
 }

@@ -1,40 +1,43 @@
+import { useMarketContext } from '../contexts/MarketContext';
 import { usdFormatter, Market } from '../utils/Market';
-
-interface Props {
-  yesterday: Market[];
-  today: Market[];
-}
 
 interface MarketRatio extends Market {
   percentage: number;
 }
 
-export default function MarketsOverview({ yesterday, today }: Props) {
-  const yesterdaySupplyUSD = yesterday.reduce((prev, curr) => curr.totalSupplyUSD + prev, 0);
-  const yesterdayBorrowUSD = yesterday.reduce((prev, curr) => curr.totalBorrowsUSD + prev, 0);
-  const todaySupplyUSD = today.reduce((prev, curr) => curr.totalSupplyUSD + prev, 0);
-  const todayBorrowUSD = today.reduce((prev, curr) => curr.totalBorrowsUSD + prev, 0);
+export default function MarketsOverview() {
+  const { yesterdayMarkets, todayMarkets } = useMarketContext();
+  const yesterdaySupplyUSD = yesterdayMarkets.reduce((prev, curr) => curr.totalSupplyUSD + prev, 0);
+  const yesterdayBorrowUSD = yesterdayMarkets.reduce(
+    (prev, curr) => curr.totalBorrowsUSD + prev,
+    0
+  );
+  const todaySupplyUSD = todayMarkets.reduce((prev, curr) => curr.totalSupplyUSD + prev, 0);
+  const todayBorrowUSD = todayMarkets.reduce((prev, curr) => curr.totalBorrowsUSD + prev, 0);
 
-  const supplyRatios: MarketRatio[] = today
+  const supplyRatios: MarketRatio[] = todayMarkets
     .sort((a, b) => b.totalSupplyUSD - a.totalSupplyUSD)
     .slice(0, 3)
     .map((market) => ({
       ...market,
       percentage:
-        (market.totalSupplyUSD / today.reduce((prev, curr) => curr.totalSupplyUSD + prev, 0)) * 100,
+        (market.totalSupplyUSD /
+          todayMarkets.reduce((prev, curr) => curr.totalSupplyUSD + prev, 0)) *
+        100,
     }));
   supplyRatios.push({
     underlyingSymbol: 'Others',
     percentage: 100 - supplyRatios.reduce((prev, curr) => curr.percentage + prev, 0),
   } as MarketRatio);
 
-  const borrowRatios = today
+  const borrowRatios = todayMarkets
     .sort((a, b) => b.totalBorrowsUSD - a.totalBorrowsUSD)
     .slice(0, 3)
     .map((market) => ({
       ...market,
       percentage:
-        (market.totalBorrowsUSD / today.reduce((prev, curr) => curr.totalBorrowsUSD + prev, 0)) *
+        (market.totalBorrowsUSD /
+          todayMarkets.reduce((prev, curr) => curr.totalBorrowsUSD + prev, 0)) *
         100,
     }));
   borrowRatios.push({
