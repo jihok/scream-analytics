@@ -3,25 +3,23 @@ import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/dist/client/router';
 import Link from 'next/link';
 import Layout from '../../src/components/Layout';
-import PercentChange from '../../src/components/PercentChange';
 import UtilizationChart from '../../src/components/UtilizationChart';
 import { useGlobalContext } from '../../src/contexts/GlobalContext';
 import { BLOCKS_IN_A_DAY, useMarketContext } from '../../src/contexts/MarketContext';
 import { MARKET_BASE_BY_BLOCK_QUERY, MARKET_DETAILS_QUERY } from '../../src/queries';
-import { getCompSpeeds } from '../../src/utils';
 import {
   Market,
   MarketDetails,
   RawMarket,
   RawMarketDetails,
   transformData,
-  usdFormatter,
 } from '../../src/utils/Market';
 import { screamClient } from '../_app';
 import MarketHeader from '../../src/components/Market/Header';
+import MarketState from '../../src/components/Market/State';
 
 export default function MarketPage() {
-  const { latestSyncedBlock, screamPrice } = useGlobalContext();
+  const { latestSyncedBlock } = useGlobalContext();
   const { yesterdayMarkets } = useMarketContext();
   const {
     query: { id },
@@ -29,7 +27,6 @@ export default function MarketPage() {
   const { loading, error, data } = useQuery<{ markets: RawMarketDetails[] }>(MARKET_DETAILS_QUERY, {
     variables: { id },
   });
-  const [compSpeeds, setCompSpeeds] = useState(0);
 
   const [market, setMarket] = useState<MarketDetails>();
   const [historicalData, setHistoricalData] = useState<Market[]>([]);
@@ -43,14 +40,6 @@ export default function MarketPage() {
       supplyAPY: 0,
       cash: '0',
     } as Market);
-
-  useEffect(() => {
-    // fetch compSpeeds with id passed from router
-    const getDistributionData = async () => {
-      setCompSpeeds(await getCompSpeeds(id as string));
-    };
-    getDistributionData();
-  }, [id]);
 
   useEffect(() => {
     // transform data for state once apollo query returns valid
@@ -87,14 +76,10 @@ export default function MarketPage() {
   if (loading || !market) return <p>Loading</p>;
   if (error) return <p>Error :(</p>;
 
-  const supplyDistribution =
-    ((BLOCKS_IN_A_DAY * 365) / market.totalSupplyUSD) * compSpeeds * screamPrice * 100;
-  const borrowDistribution =
-    ((BLOCKS_IN_A_DAY * 365) / market.totalBorrowsUSD) * compSpeeds * screamPrice * 100;
-
   return (
     <Layout className="p-5">
       <MarketHeader yesterday={yesterday} market={market} />
+
       <div className="flex flex-col lg:flex-row-reverse lg:justify-between">
         <div className="pb-8 lg:ml-20 lg:flex-1">
           <div className="flex justify-between items-center pb-3 border-b border-border-primary">
@@ -121,94 +106,7 @@ export default function MarketPage() {
           <UtilizationChart data={historicalData} />
         </div>
 
-        <div style={{ minWidth: 'fit-content' }}>
-          <div className="pb-8">
-            <h3 className="pb-3">Current State</h3>
-            <table className="w-full border-t border-border-primary mb-4">
-              <thead className="caption-label">
-                <tr className="border-border-secondary border-b">
-                  <th />
-                  <th>APY</th>
-                  <th>Distribution APY</th>
-                  <th>Net APY</th>
-                </tr>
-              </thead>
-              <tr className="border-border-secondary border-b">
-                <td className="caption-label">Supply</td>
-                <td>
-                  <h2>{market.supplyAPY.toFixed(2)}%</h2>
-                  <PercentChange yesterdayVal={yesterday.supplyAPY} todayVal={market.supplyAPY} />
-                </td>
-                <td>
-                  <h2>{supplyDistribution.toFixed(2)}%</h2>
-                </td>
-                <td>
-                  <h2>{(market.supplyAPY + supplyDistribution).toFixed(2)}%</h2>
-                </td>
-              </tr>
-              <tr className="border-border-primary border-b">
-                <td className="caption-label">Borrow</td>
-                <td>
-                  <h2>{market.borrowAPY.toFixed(2)}%</h2>
-                  <PercentChange yesterdayVal={yesterday.borrowAPY} todayVal={market.borrowAPY} />
-                </td>
-                <td>
-                  <h2>{borrowDistribution.toFixed(2)}%</h2>
-                </td>
-                <td>
-                  <h2>{(market.borrowAPY - borrowDistribution).toFixed(2)}%</h2>
-                </td>
-              </tr>
-            </table>
-
-            <div className="flex whitespace-nowrap mb-3">
-              <p>Interest paid per day</p>
-              <div className="border-b border-border-secondary w-full mb-1 mx-2" />
-              <p className="font-sans-semibold">
-                {usdFormatter.format(
-                  (market.borrowAPY * market.underlyingPrice * market.totalBorrowsUSD) / 365
-                )}
-              </p>
-            </div>
-            <div className="flex whitespace-nowrap mb-3">
-              <p>Total interest accumulated</p>
-              <div className="border-b border-border-secondary w-full mb-1 mx-2" />
-              <p className="font-sans-semibold">
-                {usdFormatter.format(market.totalInterestAccumulated)}
-              </p>
-            </div>
-            <div className="flex whitespace-nowrap mb-3">
-              <p>Exchange rate </p>
-              <div className="border-b border-border-secondary w-full mb-1 mx-2" />
-              <p className="font-sans-semibold">
-                1 {market.underlyingSymbol} = {market.exchangeRate.toFixed(6)} {market.symbol}
-              </p>
-            </div>
-            <div className="flex whitespace-nowrap">
-              <p>{market.symbol} Minted</p>
-              <div className="border-b border-border-secondary w-full mb-1 mx-2" />
-              <p className="font-sans-semibold">{(+market.totalSupply).toLocaleString()}</p>
-            </div>
-          </div>
-
-          <div>
-            <h3 className="pb-3 border-b border-border-primary">Market Parameters</h3>
-            <div className="flex mt-5">
-              <div className="pr-6">
-                <div className="caption-label">Reserve Factor</div>
-                <h2 className="py-1">{market.reserveFactor * 100}%</h2>
-              </div>
-              <div className="pr-6">
-                <div className="caption-label">Collateral Factor</div>
-                <h2 className="py-1">{market.collateralFactor * 100}%</h2>
-              </div>
-              <div className="pr-6">
-                <div className="caption-label">{market.underlyingSymbol} borrow cap</div>
-                <h2 className="py-1">No Limit</h2>
-              </div>
-            </div>
-          </div>
-        </div>
+        <MarketState yesterday={yesterday} market={market} />
       </div>
     </Layout>
   );
