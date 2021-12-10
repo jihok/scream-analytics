@@ -95,7 +95,8 @@ export default function MarketPage() {
 
   return (
     <Layout className="p-5">
-      <div>
+      <div className="pb-8">
+        {/* asset name and price */}
         <div className="flex flex-row justify-between">
           <div className="flex flex-row">
             <Image
@@ -111,6 +112,8 @@ export default function MarketPage() {
           </div>
           <h1>{usdFormatter.format(market.underlyingPrice)}</h1>
         </div>
+
+        {/* mutable asset metrics */}
         <div className="flex mt-7 justify-center">
           <div className="pr-6">
             <div className="caption-label">Supplied</div>
@@ -145,76 +148,120 @@ export default function MarketPage() {
           </div>
         </div>
       </div>
+
       <div>
+        <div className="pb-8">
+          <div className="flex justify-between items-center pb-3 border-b border-border-primary">
+            <h3>Historical Utilization</h3>
+            <div className="flex">
+              <div
+                className={`border py-2 px-4 ${daysToFetch === 7 && 'bg-border-primary'}`}
+                style={{ borderRadius: '50px 0px 0px 50px' }}
+              >
+                <a onClick={() => setDaysToFetch(7)}>
+                  <p>Weekly</p>
+                </a>
+              </div>
+              <div
+                className={`border py-2 px-4 ${daysToFetch === 30 && 'bg-border-primary'}`}
+                style={{ borderRadius: '0px 50px 50px 0px' }}
+              >
+                <a onClick={() => setDaysToFetch(30)}>
+                  <p>Monthly</p>
+                </a>
+              </div>
+            </div>
+          </div>
+          <UtilizationChart data={historicalData} />
+        </div>
+
         <div>
-          <div>
-            Current State
-            <table>
-              <tr>
-                <th />
-                <th>APY</th>
-                <th>Distribution APY</th>
-                <th>Net APY</th>
-              </tr>
-              <tr>
-                <td>Supply</td>
+          <div className="pb-8">
+            <h3 className="pb-3 border-b border-border-primary">Current State</h3>
+            <table className="w-full mb-5">
+              <thead className="caption-label">
+                <tr className="border-border-secondary border-b">
+                  <th />
+                  <th>APY</th>
+                  <th>Distribution APY</th>
+                  <th>Net APY</th>
+                </tr>
+              </thead>
+              <tr className="border-border-secondary border-b">
+                <td className="caption-label">Supply</td>
                 <td>
-                  {market.supplyAPY.toFixed(2)}%
+                  <h2>{market.supplyAPY.toFixed(2)}%</h2>
                   <PercentChange yesterdayVal={yesterday.supplyAPY} todayVal={market.supplyAPY} />
                 </td>
-                <td>{supplyDistribution.toFixed(2)}%</td>
-                <td>{(market.supplyAPY + supplyDistribution).toFixed(2)}%</td>
-              </tr>
-              <tr>
-                <td>Borrow</td>
                 <td>
-                  {market.borrowAPY.toFixed(2)}%
+                  <h2>{supplyDistribution.toFixed(2)}%</h2>
+                </td>
+                <td>
+                  <h2>{(market.supplyAPY + supplyDistribution).toFixed(2)}%</h2>
+                </td>
+              </tr>
+              <tr className="border-border-primary border-b">
+                <td className="caption-label">Borrow</td>
+                <td>
+                  <h2>{market.borrowAPY.toFixed(2)}%</h2>
                   <PercentChange yesterdayVal={yesterday.borrowAPY} todayVal={market.borrowAPY} />
                 </td>
-                <td>{borrowDistribution.toFixed(2)}%</td>
-                <td>{(market.borrowAPY - borrowDistribution).toFixed(2)}%</td>
+                <td>
+                  <h2>{borrowDistribution.toFixed(2)}%</h2>
+                </td>
+                <td>
+                  <h2>{(market.borrowAPY - borrowDistribution).toFixed(2)}%</h2>
+                </td>
               </tr>
             </table>
-            <div style={{ display: 'flex' }}>
-              <div>Interest paid per day</div>
-              <div style={{ borderBottom: '1px dotted black', width: '100%' }} />
-              <div>
+
+            <div className="flex whitespace-nowrap mb-3">
+              <p>Interest paid per day</p>
+              <div className="border-b border-border-secondary w-full mb-1 mx-2" />
+              <p className="font-sans-semibold">
                 {usdFormatter.format(
                   (market.borrowAPY * market.underlyingPrice * market.totalBorrowsUSD) / 365
                 )}
-              </div>
+              </p>
             </div>
-            <div style={{ display: 'flex' }}>
-              <div>Total interest produced by borrowed assets </div>
-              <div style={{ borderBottom: '1px dotted black', width: '100%' }} />
-              <div>{usdFormatter.format(market.totalInterestAccumulated)}</div>
+            <div className="flex whitespace-nowrap mb-3">
+              <p>Total interest produced by borrowed assets</p>
+              <div className="border-b border-border-secondary w-full mb-1 mx-2" />
+              <p className="font-sans-semibold">
+                {usdFormatter.format(market.totalInterestAccumulated)}
+              </p>
             </div>
-            <div style={{ display: 'flex' }}>
-              <div>Exchange rate </div>
-              <div style={{ borderBottom: '1px dotted black', width: '100%' }} />
-              <div>
-                1 {market.underlyingSymbol} = {market.exchangeRate}
-                {market.symbol}
-              </div>
+            <div className="flex whitespace-nowrap mb-3">
+              <p>Exchange rate </p>
+              <div className="border-b border-border-secondary w-full mb-1 mx-2" />
+              <p className="font-sans-semibold">
+                1 {market.underlyingSymbol} = {market.exchangeRate} {market.symbol}
+              </p>
             </div>
-            <div style={{ display: 'flex' }}>
-              <div>{market.symbol} Minted</div>
-              <div style={{ borderBottom: '1px dotted black', width: '100%' }} />
-              <div>{(+market.totalSupply).toLocaleString()}</div>
+            <div className="flex whitespace-nowrap">
+              <p>{market.symbol} Minted</p>
+              <div className="border-b border-border-secondary w-full mb-1 mx-2" />
+              <p className="font-sans-semibold">{(+market.totalSupply).toLocaleString()}</p>
             </div>
           </div>
+
           <div>
-            Market Parameters
-            <div>Reserve factor {market.reserveFactor * 100}%</div>
-            <div>Collateral factor {market.collateralFactor * 100}%</div>
-            <div>{market.underlyingSymbol} borrow cap No Limit</div>
+            <h3 className="pb-3 border-b border-border-primary">Market Parameters</h3>
+            <div className="flex mt-5">
+              <div className="pr-6">
+                <div className="caption-label">Reserve Factor</div>
+                <h2 className="py-1">{market.reserveFactor * 100}%</h2>
+              </div>
+              <div className="pr-6">
+                <div className="caption-label">Collateral Factor</div>
+                <h2 className="py-1">{market.collateralFactor * 100}%</h2>
+              </div>
+              <div className="pr-6">
+                <div className="caption-label">{market.underlyingSymbol} borrow cap</div>
+                <h2 className="py-1">No Limit</h2>
+              </div>
+            </div>
           </div>
-        </div>
-        <div>
-          Historical view of utilization
-          <a onClick={() => setDaysToFetch(7)}>Weekly</a>
-          <a onClick={() => setDaysToFetch(30)}>Monthly</a>
-          <UtilizationChart data={historicalData} />
         </div>
       </div>
     </Layout>
