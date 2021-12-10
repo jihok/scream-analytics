@@ -95,9 +95,9 @@ export default function MarketPage() {
 
   return (
     <Layout className="p-5">
-      <div className="pb-8">
+      <div className="pb-8 flex flex-col lg:flex-row lg:justify-between">
         {/* asset name and price */}
-        <div className="flex flex-row justify-between">
+        <div className="flex flex-row justify-between lg:flex-col">
           <div className="flex flex-row">
             <Image
               src={`/img/tokens/${market.underlyingSymbol}.svg`}
@@ -105,16 +105,21 @@ export default function MarketPage() {
               height={33}
               alt={market.underlyingSymbol}
             />
-            <span className="ml-3 lg:ml-5">
-              <p className="pb-1">{market.underlyingSymbol}</p>
-              <p className="font-sans-semibold text-subheading">{market.underlyingName}</p>
-            </span>
+            <div className="ml-3 lg:ml-5">
+              <span className="lg:flex lg:flex-row-reverse lg:justify-end lg:items-baseline">
+                <p className="pb-1 lg:ml-2">{market.underlyingSymbol}</p>
+                <p className="font-sans-semibold text-subheading">{market.underlyingName}</p>
+              </span>
+              <h1 className="invisible lg:visible">
+                {usdFormatter.format(market.underlyingPrice)}
+              </h1>
+            </div>
           </div>
-          <h1>{usdFormatter.format(market.underlyingPrice)}</h1>
+          <h1 className="lg:invisible">{usdFormatter.format(market.underlyingPrice)}</h1>
         </div>
 
         {/* mutable asset metrics */}
-        <div className="flex mt-7 justify-center">
+        <div className="flex justify-center mt-7 lg:mt-1">
           <div className="pr-6">
             <div className="caption-label">Supplied</div>
             <h2 className="py-1">{formatAbbrUSD(market.totalSupplyUSD)}</h2>
