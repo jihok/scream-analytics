@@ -28,7 +28,7 @@ export default function MarketHeader({ yesterday, market }: MarketPageProps) {
       </div>
 
       {/* mutable asset metrics */}
-      <div className="flex justify-center mt-7 lg:mt-1">
+      <div className="flex justify-between px-16 lg:px-0 mt-7 lg:mt-1">
         <div className="pr-6">
           <div className="caption-label">Supplied</div>
           <h2 className="py-1">{formatAbbrUSD(market.totalSupplyUSD)}</h2>
