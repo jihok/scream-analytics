@@ -55,11 +55,11 @@ export default function MarketsOverview() {
   } as MarketRatio);
 
   return (
-    <div className="flex bg-darkGray rounded-md shadow-3xl flex-col lg:flex-row w-full justify-center mx-5">
-      <div className="w-full border-border border-b lg:border-b-0 lg:border-r px-5 lg:px-5 py-5 lg:py-0 lg:my-5">
+    <div className="flex bg-darkGray rounded-md shadow-3xl flex-col lg:flex-row w-full justify-center">
+      <div className="w-full border-border-primary border-b lg:border-b-0 lg:border-r px-5 lg:px-5 py-5 lg:py-0 lg:my-5">
         <div className="flex justify-between pb-4">
           <div>
-            <h3 className="text-body">Total Supply</h3>
+            <h3 className="text-body mb-1">Total Supply</h3>
             <PercentChange yesterdayVal={yesterdaySupplyUSD} todayVal={todaySupplyUSD} />
           </div>
           <h1>{usdFormatter.format(todaySupplyUSD)}</h1>
@@ -69,7 +69,7 @@ export default function MarketsOverview() {
       <div className="w-full px-5 my-5">
         <div className="flex justify-between pb-4">
           <div>
-            <h3 className="text-body">Total Borrow</h3>
+            <h3 className="text-body mb-1">Total Borrow</h3>
             <PercentChange yesterdayVal={yesterdayBorrowUSD} todayVal={todayBorrowUSD} />
           </div>
           <h1>{usdFormatter.format(todayBorrowUSD)}</h1>

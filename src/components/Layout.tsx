@@ -32,7 +32,7 @@ export default function Layout({ children, home }: Props) {
           <input type="text" placeholder="Search for an account..."></input>
         </form>
       </header>
-      <main className="flex flex-col sm:px-40">{children}</main>
+      <main className="flex flex-col md:px-40">{children}</main>
     </div>
   );
 }

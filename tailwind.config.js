@@ -14,7 +14,7 @@ module.exports = {
         5: '#12ADA6',
         6: '#4F4F50', // 'other' color
       },
-      border: '#FFFFFF4D',
+      border: { primary: '#FFFFFF4D', secondary: '#FFFFFF1A' },
     },
     textColor: {
       primary: '#FFFFFF',

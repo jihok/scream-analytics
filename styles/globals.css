@@ -17,13 +17,13 @@
   }
   @font-face {
     font-family: 'Graphik Medium';
-    font-weight: 300;
+    font-weight: 400;
     src: url('/fonts/Graphik-Medium-Web.woff') format('woff'),
       url('/fonts/Graphik-Medium-Web.woff2') format('woff2');
   }
   @font-face {
     font-family: 'Graphik Semibold';
-    font-weight: 300;
+    font-weight: 600;
     src: url('/fonts/Graphik-Semibold-Web.woff') format('woff'),
       url('/fonts/Graphik-Semibold-Web.woff2') format('woff2');
   }
@@ -47,5 +47,11 @@
   }
   .metric {
     @apply text-captionColored;
+  }
+  th {
+    @apply p-3;
+  }
+  td {
+    @apply p-3;
   }
 }

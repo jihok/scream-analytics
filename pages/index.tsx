@@ -6,7 +6,9 @@ import Layout from '../src/components/Layout';
 const Home: NextPage = () => {
   return (
     <Layout home>
-      <Overview />
+      <div className="px-5">
+        <Overview />
+      </div>
       <Table />
     </Layout>
   );

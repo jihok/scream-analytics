@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { formatAbbrUSD, Market } from '../utils/Market';
 import { useTable, Column, useSortBy, Row } from 'react-table';
 import { useMarketContext } from '../contexts/MarketContext';
@@ -25,9 +26,18 @@ interface CellParams {
 const CustomCell = ({ colId, val }: CellParams) => {
   if (val.underlyingName) {
     return (
-      <a>
-        {val.underlyingName} {val.underlyingSymbol}
-      </a>
+      <div className="flex">
+        <Image
+          src={`/img/tokens/${val.underlyingSymbol}.svg`}
+          width={16}
+          height={16}
+          alt={val.underlyingSymbol}
+        />
+        <span className="ml-1 lg:ml-5">
+          <p>{val.underlyingSymbol}</p>
+          <p className="font-sans-semibold">{val.underlyingName}</p>
+        </span>
+      </div>
     );
   }
 
@@ -39,7 +49,7 @@ const CustomCell = ({ colId, val }: CellParams) => {
     case 'borrowed':
       return (
         <>
-          {formatAbbrUSD(todayVal)}
+          <span className="text-title font-sans-light">{formatAbbrUSD(todayVal)}</span>
           <PercentChange yesterdayVal={yesterdayVal} todayVal={todayVal} />
         </>
       );
@@ -47,7 +57,7 @@ const CustomCell = ({ colId, val }: CellParams) => {
     case 'borrowAPY':
       return (
         <>
-          {todayVal.toFixed(2)}%
+          <span className="text-title font-sans-light">{todayVal.toFixed(2)}%</span>
           <PercentChange yesterdayVal={yesterdayVal} todayVal={todayVal} />
         </>
       );
@@ -153,20 +163,33 @@ export default function Table() {
   );
 
   return (
-    <table {...getTableProps()} className="">
-      <thead>
+    <table {...getTableProps()} className="mt-7 bg-darkGray rounded-md shadow-3xl">
+      <thead className="font-sans-semibold text-caption">
         {headerGroups.map((headerGroup, i) => (
-          <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.headers[i].id}>
+          <tr
+            {...headerGroup.getHeaderGroupProps()}
+            key={headerGroup.headers[i].id}
+            className="border-border-primary border-b"
+          >
             {headerGroup.headers.map((column) => {
               // @ts-ignore - UseSortByColumnOptions
               column.sortType = (a: Row, b: Row, accessor: string) =>
                 a.values[accessor][0] > b.values[accessor][0] ? 1 : -1;
               return (
-                // @ts-ignore - UseSortByColumnProps
-                <th {...column.getHeaderProps(column.getSortByToggleProps())} key={column.id}>
+                <th
+                  // @ts-ignore - UseSortByColumnProps
+                  {...column.getHeaderProps(column.getSortByToggleProps())}
+                  key={column.id}
+                >
                   {column.render('Header')}
+
                   {/* @ts-ignore - UseSortByColumnProps */}
-                  <span>{column.isSorted ? (column.isSortedDesc ? ' ▼' : ' ▲') : ''}</span>
+                  {column.isSorted && (
+                    <span style={{ fontSize: 6, marginLeft: 3 }}>
+                      {/* @ts-ignore - UseSortByColumnProps */}
+                      {column.isSortedDesc ? ' ▼' : ' ▲'}
+                    </span>
+                  )}
                 </th>
               );
             })}
@@ -178,7 +201,11 @@ export default function Table() {
           prepareRow(row);
           return (
             <Link href={`market/${row.id}`} key={row.id} passHref>
-              <tr {...row.getRowProps()} style={{ cursor: 'pointer' }}>
+              <tr
+                {...row.getRowProps()}
+                style={{ cursor: 'pointer' }}
+                className="border-border-secondary border-b"
+              >
                 {row.cells.map((cell) => (
                   <td {...cell.getCellProps()} key={`${cell.row.id}-${cell.column.id}`}>
                     {
