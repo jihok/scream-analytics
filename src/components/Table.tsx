@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { formatAbbrUSD, Market } from '../utils/Market';
+import { formatAbbrUSD } from '../utils/Market';
 import { useTable, Column, useSortBy, Row } from 'react-table';
 import { useMarketContext } from '../contexts/MarketContext';
 import PercentChange, { MutableData } from './PercentChange';
@@ -14,8 +14,8 @@ interface TableData {
   borrowed: MutableData;
   borrowAPY: MutableData;
 
-  // additional metadata for routing
-  data: { id: string; todayIndex: number; yesterdayIndex: number };
+  // for routing
+  id: string;
 }
 
 interface CellParams {
@@ -101,18 +101,14 @@ export default function Table() {
   const tableData: TableData[] = useMemo(
     () =>
       todayMarkets.map((market, i) => {
-        const yesterdayIndex = yesterdayMarkets.findIndex((yd) => yd.id === market.id);
         // if there is no matching market yesterday, it's a newly added market
-        const marketYesterday =
-          yesterdayIndex > -1
-            ? yesterdayMarkets[yesterdayIndex]
-            : {
-                ...market,
-                totalSupplyUSD: 0,
-                totalBorrowsUSD: 0,
-                borrowAPY: 0,
-                supplyAPY: 0,
-              };
+        const marketYesterday = yesterdayMarkets.find((yd) => yd.id === market.id) ?? {
+          ...market,
+          totalSupplyUSD: 0,
+          totalBorrowsUSD: 0,
+          borrowAPY: 0,
+          supplyAPY: 0,
+        };
 
         return {
           asset: {
@@ -139,11 +135,8 @@ export default function Table() {
             todayVal: market.borrowAPY,
             yesterdayVal: marketYesterday.borrowAPY,
           },
-          data: {
-            id: market.id,
-            todayIndex: i,
-            yesterdayIndex,
-          },
+
+          id: market.id,
         };
       }),
     [todayMarkets, yesterdayMarkets]
@@ -157,7 +150,7 @@ export default function Table() {
         // @ts-ignore
         sortBy: [{ id: 'liquidity' }],
       },
-      getRowId: (row) => row.data.id,
+      getRowId: (row) => row.id,
     },
     useSortBy
   );
