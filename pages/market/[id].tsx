@@ -1,6 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/dist/client/router';
 import Link from 'next/link';
+import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import Layout from '../../src/components/Layout';
 import PercentChange from '../../src/components/PercentChange';
@@ -84,7 +85,8 @@ export default function MarketPage() {
     getHistoricalData();
   }, [latestSyncedBlock, id, daysToFetch]);
 
-  if (!market) return <p>Error :( - no market</p>;
+  if (loading || !market) return <p>Loading</p>;
+  if (error) return <p>Error :( - no market</p>;
 
   const supplyDistribution =
     ((BLOCKS_IN_A_DAY * 365) / market.totalSupplyUSD) * compSpeeds * screamPrice * 100;
@@ -92,43 +94,58 @@ export default function MarketPage() {
     ((BLOCKS_IN_A_DAY * 365) / market.totalBorrowsUSD) * compSpeeds * screamPrice * 100;
 
   return (
-    <Layout>
+    <Layout className="p-5">
       <div>
-        <div>
-          {market.underlyingName}
-          {market.underlyingSymbol}
-          {usdFormatter.format(market.underlyingPrice)}
+        <div className="flex flex-row justify-between">
+          <div className="flex flex-row">
+            <Image
+              src={`/img/tokens/${market.underlyingSymbol}.svg`}
+              width={33}
+              height={33}
+              alt={market.underlyingSymbol}
+            />
+            <span className="ml-3 lg:ml-5">
+              <p className="pb-1">{market.underlyingSymbol}</p>
+              <p className="font-sans-semibold text-subheading">{market.underlyingName}</p>
+            </span>
+          </div>
+          <h1>{usdFormatter.format(market.underlyingPrice)}</h1>
         </div>
-        <div>
-          <div>
-            Supplied {formatAbbrUSD(market.totalSupplyUSD)}
+        <div className="flex mt-7 justify-center">
+          <div className="pr-6">
+            <div className="caption-label">Supplied</div>
+            <h2 className="py-1">{formatAbbrUSD(market.totalSupplyUSD)}</h2>
             <PercentChange
               yesterdayVal={yesterday.totalSupplyUSD}
               todayVal={market.totalSupplyUSD}
             />
           </div>
-          <div>
-            Borrowed {formatAbbrUSD(market.totalBorrowsUSD)}
+          <div className="pr-6">
+            <div className="caption-label">Borrowed</div>
+            <h2 className="py-1">{formatAbbrUSD(market.totalBorrowsUSD)}</h2>
             <PercentChange
               yesterdayVal={yesterday.totalBorrowsUSD}
               todayVal={market.totalBorrowsUSD}
             />
           </div>
-          <div>
-            Utilization {((market.totalBorrowsUSD / market.totalSupplyUSD) * 100).toFixed(2)}%
+          <div className="pr-6">
+            <div className="caption-label">Utilization</div>
+            <h2 className="py-1">
+              {((market.totalBorrowsUSD / market.totalSupplyUSD) * 100).toFixed(2)}%
+            </h2>
             <PercentChange
               yesterdayVal={yesterday.totalBorrowsUSD / yesterday.totalSupplyUSD}
               todayVal={market.totalBorrowsUSD / market.totalSupplyUSD}
             />
           </div>
           <div>
-            Liquidity
-            {formatAbbrUSD(+market.cash)}
+            <div className="caption-label">Liquidity</div>
+            <h2 className="py-1">{formatAbbrUSD(+market.cash)}</h2>
             <PercentChange yesterdayVal={+yesterday.cash} todayVal={+market.cash} />
           </div>
         </div>
       </div>
-      <div style={{ display: 'flex' }}>
+      <div>
         <div>
           <div>
             Current State

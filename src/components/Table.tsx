@@ -164,7 +164,7 @@ export default function Table() {
 
   return (
     <table {...getTableProps()} className="mt-7 bg-darkGray rounded-md shadow-3xl">
-      <thead className="font-sans-semibold text-caption">
+      <thead className="caption-label">
         {headerGroups.map((headerGroup, i) => (
           <tr
             {...headerGroup.getHeaderGroupProps()}

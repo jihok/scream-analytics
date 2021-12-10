@@ -45,8 +45,8 @@
   p {
     @apply text-body font-sans;
   }
-  .metric {
-    @apply text-captionColored;
+  .caption-label {
+    @apply text-caption font-sans-semibold;
   }
   th {
     @apply p-3;

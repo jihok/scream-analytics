@@ -5,11 +5,12 @@ import React from 'react';
 interface Props {
   children: any;
   home?: boolean;
+  className?: string;
 }
 
-export default function Layout({ children, home }: Props) {
+export default function Layout({ children, home, className }: Props) {
   return (
-    <div className="bg-gray opacity-95 text-primary">
+    <div className="bg-gray opacity-95 text-primary w-fit md:w-full">
       <Head>
         <title>SCREAM Analytics</title>
         <meta name="description" content="SCREAM Analytics" />
@@ -32,7 +33,7 @@ export default function Layout({ children, home }: Props) {
           <input type="text" placeholder="Search for an account..."></input>
         </form>
       </header>
-      <main className="flex flex-col md:px-40">{children}</main>
+      <main className={`flex flex-col md:px-40 ${className}`}>{children}</main>
       <footer className="flex pt-40 pb-20 justify-center">scream</footer>
     </div>
   );

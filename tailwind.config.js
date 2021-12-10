@@ -41,6 +41,9 @@ module.exports = {
       boxShadow: {
         '3xl': '0px 4px 4px 0px #00000040',
       },
+      width: {
+        fit: 'fit-content',
+      },
     },
   },
   variants: {
