@@ -1,19 +1,17 @@
 import React, { useMemo } from 'react';
 import Link from 'next/link';
-import { formatAbbrUSD, getPercentChange, Market } from '../utils/Market';
+import { formatAbbrUSD, Market } from '../utils/Market';
 import { useTable, Column, useSortBy, Row } from 'react-table';
 import { useMarketContext } from '../contexts/MarketContext';
+import PercentChange, { MutableData } from './PercentChange';
 
 interface TableData {
-  // [underlyingName, underlyingSymbol]
-  asset: [string, string];
-
-  // [value, percentChange]
-  liquidity: [number, number];
-  supplied: [number, number];
-  supplyAPY: [number, number];
-  borrowed: [number, number];
-  borrowAPY: [number, number];
+  asset: { underlyingName: string; underlyingSymbol: string };
+  liquidity: MutableData;
+  supplied: MutableData;
+  supplyAPY: MutableData;
+  borrowed: MutableData;
+  borrowAPY: MutableData;
 
   // additional metadata for routing
   data: { id: string; todayIndex: number; yesterdayIndex: number };
@@ -21,20 +19,19 @@ interface TableData {
 
 interface CellParams {
   colId: keyof TableData;
-  val: [string, string] | [number, number];
+  val: any; // { underlyingName: string, underlyingSymbol: string} | MutableData
 }
 
 const CustomCell = ({ colId, val }: CellParams) => {
-  // only 'asset' is a string tuple
-  if (typeof val[0] === 'string' || typeof val[1] === 'string') {
+  if (val.underlyingName) {
     return (
       <a>
-        {val[0]} {val[1]}
+        {val.underlyingName} {val.underlyingSymbol}
       </a>
     );
   }
 
-  const [value, percentChange] = val;
+  const { yesterdayVal, todayVal } = val;
 
   switch (colId) {
     case 'liquidity':
@@ -42,15 +39,16 @@ const CustomCell = ({ colId, val }: CellParams) => {
     case 'borrowed':
       return (
         <>
-          {formatAbbrUSD(value)}
-          {percentChange.toFixed(2)}%
+          {formatAbbrUSD(todayVal)}
+          <PercentChange yesterdayVal={yesterdayVal} todayVal={todayVal} />
         </>
       );
     case 'supplyAPY':
     case 'borrowAPY':
       return (
         <>
-          {value.toFixed(2)}%{percentChange.toFixed(2)}%
+          {todayVal.toFixed(2)}%
+          <PercentChange yesterdayVal={yesterdayVal} todayVal={todayVal} />
         </>
       );
     default:
@@ -107,30 +105,30 @@ export default function Table() {
               };
 
         return {
-          asset: [market.underlyingName, market.underlyingSymbol],
-          liquidity: [
-            market.totalSupplyUSD - market.totalBorrowsUSD,
-            getPercentChange(
-              marketYesterday.totalSupplyUSD - marketYesterday.totalBorrowsUSD,
-              market.totalSupplyUSD - market.totalBorrowsUSD
-            ),
-          ],
-          supplied: [
-            market.totalSupplyUSD,
-            getPercentChange(marketYesterday.totalSupplyUSD, market.totalSupplyUSD),
-          ],
-          supplyAPY: [
-            market.supplyAPY,
-            getPercentChange(marketYesterday.supplyAPY, market.supplyAPY),
-          ],
-          borrowed: [
-            market.totalBorrowsUSD,
-            getPercentChange(marketYesterday.totalBorrowsUSD, market.totalBorrowsUSD),
-          ],
-          borrowAPY: [
-            market.borrowAPY,
-            getPercentChange(marketYesterday.borrowAPY, market.borrowAPY),
-          ],
+          asset: {
+            underlyingName: market.underlyingName,
+            underlyingSymbol: market.underlyingSymbol,
+          },
+          liquidity: {
+            todayVal: market.totalSupplyUSD - market.totalBorrowsUSD,
+            yesterdayVal: marketYesterday.totalSupplyUSD - marketYesterday.totalBorrowsUSD,
+          },
+          supplied: {
+            todayVal: market.totalSupplyUSD,
+            yesterdayVal: marketYesterday.totalSupplyUSD,
+          },
+          supplyAPY: {
+            todayVal: market.supplyAPY,
+            yesterdayVal: marketYesterday.supplyAPY,
+          },
+          borrowed: {
+            todayVal: market.totalBorrowsUSD,
+            yesterdayVal: marketYesterday.totalBorrowsUSD,
+          },
+          borrowAPY: {
+            todayVal: market.borrowAPY,
+            yesterdayVal: marketYesterday.borrowAPY,
+          },
           data: {
             id: market.id,
             todayIndex: i,

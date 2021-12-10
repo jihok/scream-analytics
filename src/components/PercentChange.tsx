@@ -1,9 +1,9 @@
-interface Props {
+export interface MutableData {
   yesterdayVal: number;
   todayVal: number;
 }
 
-export default function PercentChange({ yesterdayVal, todayVal }: Props) {
+export default function PercentChange({ yesterdayVal, todayVal }: MutableData) {
   const percentChange = (() => {
     // avoid dividing by 0
     if (yesterdayVal === 0) {

@@ -1,5 +1,6 @@
 import { useMarketContext } from '../contexts/MarketContext';
 import { usdFormatter, Market } from '../utils/Market';
+import PercentChange from './PercentChange';
 
 interface MarketRatio extends Market {
   percentage: number;
@@ -59,7 +60,7 @@ export default function MarketsOverview() {
         <div className="flex justify-between pb-4">
           <div>
             <h3 className="text-body">Total Supply</h3>
-            {usdFormatter.format(todaySupplyUSD - yesterdaySupplyUSD)}
+            <PercentChange yesterdayVal={yesterdaySupplyUSD} todayVal={todaySupplyUSD} />
           </div>
           <h1>{usdFormatter.format(todaySupplyUSD)}</h1>
         </div>
@@ -69,7 +70,7 @@ export default function MarketsOverview() {
         <div className="flex justify-between pb-4">
           <div>
             <h3 className="text-body">Total Borrow</h3>
-            {usdFormatter.format(todayBorrowUSD - yesterdayBorrowUSD)}
+            <PercentChange yesterdayVal={yesterdayBorrowUSD} todayVal={todayBorrowUSD} />
           </div>
           <h1>{usdFormatter.format(todayBorrowUSD)}</h1>
         </div>
