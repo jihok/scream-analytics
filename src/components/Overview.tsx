@@ -54,11 +54,11 @@ export default function MarketsOverview() {
   } as MarketRatio);
 
   return (
-    <div className="flex bg-darkGray rounded-md shadow-lg flex-col lg:flex-row w-full justify-center mx-5">
+    <div className="flex bg-darkGray rounded-md shadow-3xl flex-col lg:flex-row w-full justify-center mx-5">
       <div className="w-full border-border border-b lg:border-b-0 lg:border-r px-5 lg:px-5 py-5 lg:py-0 lg:my-5">
         <div className="flex justify-between pb-4">
           <div>
-            <h3>Total Supply</h3>
+            <h3 className="text-body">Total Supply</h3>
             {usdFormatter.format(todaySupplyUSD - yesterdaySupplyUSD)}
           </div>
           <h1>{usdFormatter.format(todaySupplyUSD)}</h1>
@@ -68,7 +68,7 @@ export default function MarketsOverview() {
       <div className="w-full px-5 my-5">
         <div className="flex justify-between pb-4">
           <div>
-            <h3>Total Borrow</h3>
+            <h3 className="text-body">Total Borrow</h3>
             {usdFormatter.format(todayBorrowUSD - yesterdayBorrowUSD)}
           </div>
           <h1>{usdFormatter.format(todayBorrowUSD)}</h1>
@@ -95,7 +95,7 @@ const MarketRatioBar = (props: { marketRatios: MarketRatio[] }) => (
         <div className="flex mt-2">
           <div className={`rounded-full h-2 w-2 mr-1 mt-0.5 bg-bar-${colorIndex}`} />
           <div className="flex-col text-caption">
-            <div className="font-semibold">{underlyingSymbol}</div>
+            <div className="font-sans-semibold">{underlyingSymbol}</div>
             {percentage.toFixed(2)}%
           </div>
         </div>

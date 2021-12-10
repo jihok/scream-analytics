@@ -22,7 +22,13 @@ module.exports = {
       positive: '#90DDB0',
       negative: '#C84343',
     },
-
+    fontFamily: {
+      sans: 'Graphik',
+      'sans-light': 'Graphik Light',
+      'sans-bold': 'Graphik Bold',
+      'sans-semibold': 'Graphik Semibold',
+      'sans-medium': 'Graphik Medium',
+    },
     fontSize: {
       header: ['28px', '28px'],
       subheading: ['16px', '16px'],
@@ -31,7 +37,11 @@ module.exports = {
       caption: ['10px', '11px'], // weight 600 for label
       captionColored: ['10px', '10px'],
     },
-    extend: {},
+    extend: {
+      boxShadow: {
+        '3xl': '0px 4px 4px 0px #00000040',
+      },
+    },
   },
   variants: {
     extend: {},

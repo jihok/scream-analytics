@@ -16,7 +16,7 @@ export default function Layout({ children, home }: Props) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <header>
+      <header className="flex">
         <div>
           <Link href="/">
             <a>Home</a>
