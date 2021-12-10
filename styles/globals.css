@@ -45,4 +45,7 @@
   p {
     @apply text-body font-sans;
   }
+  .metric {
+    @apply text-captionColored;
+  }
 }

@@ -3,6 +3,7 @@ import { useRouter } from 'next/dist/client/router';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import Layout from '../../src/components/Layout';
+import PercentChange from '../../src/components/PercentChange';
 import UtilizationChart from '../../src/components/UtilizationChart';
 import { useGlobalContext } from '../../src/contexts/GlobalContext';
 import { BLOCKS_IN_A_DAY, useMarketContext } from '../../src/contexts/MarketContext';
@@ -10,7 +11,6 @@ import { MARKET_BASE_BY_BLOCK_QUERY, MARKET_DETAILS_QUERY } from '../../src/quer
 import { getCompSpeeds } from '../../src/utils';
 import {
   formatAbbrUSD,
-  getPercentChange,
   Market,
   MarketDetails,
   RawMarket,
@@ -101,25 +101,30 @@ export default function MarketPage() {
         </div>
         <div>
           <div>
-            Supplied {formatAbbrUSD(market.totalSupplyUSD)}{' '}
-            {getPercentChange(yesterday.totalSupplyUSD, market.totalSupplyUSD).toFixed(2)}%
+            Supplied {formatAbbrUSD(market.totalSupplyUSD)}
+            <PercentChange
+              yesterdayVal={yesterday.totalSupplyUSD}
+              todayVal={market.totalSupplyUSD}
+            />
           </div>
           <div>
             Borrowed {formatAbbrUSD(market.totalBorrowsUSD)}
-            {getPercentChange(yesterday.totalBorrowsUSD, market.totalBorrowsUSD).toFixed(2)}%
+            <PercentChange
+              yesterdayVal={yesterday.totalBorrowsUSD}
+              todayVal={market.totalBorrowsUSD}
+            />
           </div>
           <div>
             Utilization {((market.totalBorrowsUSD / market.totalSupplyUSD) * 100).toFixed(2)}%
-            {getPercentChange(
-              yesterday.totalBorrowsUSD / yesterday.totalSupplyUSD,
-              market.totalBorrowsUSD / market.totalSupplyUSD
-            ).toFixed(2)}
-            %
+            <PercentChange
+              yesterdayVal={yesterday.totalBorrowsUSD / yesterday.totalSupplyUSD}
+              todayVal={market.totalBorrowsUSD / market.totalSupplyUSD}
+            />
           </div>
           <div>
             Liquidity
             {formatAbbrUSD(+market.cash)}
-            {getPercentChange(+yesterday.cash, +market.cash).toFixed(2)}%
+            <PercentChange yesterdayVal={+yesterday.cash} todayVal={+market.cash} />
           </div>
         </div>
       </div>
@@ -137,8 +142,8 @@ export default function MarketPage() {
               <tr>
                 <td>Supply</td>
                 <td>
-                  {market.supplyAPY.toFixed(2)}%{' '}
-                  {getPercentChange(yesterday.supplyAPY, market.supplyAPY).toFixed(2)}%
+                  {market.supplyAPY.toFixed(2)}%
+                  <PercentChange yesterdayVal={yesterday.supplyAPY} todayVal={market.supplyAPY} />
                 </td>
                 <td>{supplyDistribution.toFixed(2)}%</td>
                 <td>{(market.supplyAPY + supplyDistribution).toFixed(2)}%</td>
@@ -146,8 +151,8 @@ export default function MarketPage() {
               <tr>
                 <td>Borrow</td>
                 <td>
-                  {market.borrowAPY.toFixed(2)}%{' '}
-                  {getPercentChange(yesterday.borrowAPY, market.borrowAPY).toFixed(2)}%
+                  {market.borrowAPY.toFixed(2)}%
+                  <PercentChange yesterdayVal={yesterday.borrowAPY} todayVal={market.borrowAPY} />
                 </td>
                 <td>{borrowDistribution.toFixed(2)}%</td>
                 <td>{(market.borrowAPY - borrowDistribution).toFixed(2)}%</td>
