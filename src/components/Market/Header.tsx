@@ -1,14 +1,14 @@
 import React from 'react';
-import { Market, usdFormatter, formatAbbrUSD } from '../../utils/Market';
+import { Market, usdFormatter, formatAbbrUSD, MarketDetails } from '../../utils/Market';
 import Image from 'next/image';
 import PercentChange from '../PercentChange';
 
-interface Props {
+export interface MarketPageProps {
   yesterday: Market;
-  market: Market;
+  market: MarketDetails;
 }
 
-export default function MarketHeader({ yesterday, market }: Props) {
+export default function MarketHeader({ yesterday, market }: MarketPageProps) {
   return (
     <div className="pb-8 flex flex-col lg:flex-row lg:justify-between">
       {/* asset name and price */}
