@@ -53,6 +53,9 @@ export function transformData(rawMarkets: any): any {
       ? +ethers.utils.formatEther(rawMarket.reserveFactor)
       : undefined,
     collateralFactor: +rawMarket.collateralFactor,
+
+    // TBD
+    reserves: +rawMarket.reserves * +rawMarket.underlyingPrice,
   }));
 }
 

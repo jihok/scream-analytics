@@ -63,15 +63,17 @@ export default function MarketPage() {
       );
 
       const historicalRawData = await Promise.all(
-        blocksToQuery.map((blockNumber) =>
-          screamClient.query<{ markets: RawMarket[] }>({
-            query: MARKET_BASE_BY_BLOCK_QUERY,
-            variables: {
-              blockNumber,
-              id: id as string,
-            },
-          })
-        )
+        blocksToQuery
+          .reverse() // reverse so that index 0 is oldest
+          .map((blockNumber) =>
+            screamClient.query<{ markets: RawMarket[] }>({
+              query: MARKET_BASE_BY_BLOCK_QUERY,
+              variables: {
+                blockNumber,
+                id: id as string,
+              },
+            })
+          )
       );
 
       setHistoricalData(historicalRawData.map((raw) => transformData(raw.data.markets)[0]));
@@ -91,7 +93,7 @@ export default function MarketPage() {
         <div className="pb-8 lg:ml-20 lg:flex-1">
           <div className="flex justify-between items-center pb-3 border-b border-border-primary">
             <h3>Historical Utilization</h3>
-            <div className="flex">
+            <div className="flex" style={{ cursor: 'pointer' }}>
               <div
                 className={`border py-1 px-4 ${daysToFetch === 7 && 'bg-border-primary'}`}
                 style={{ borderRadius: '50px 0px 0px 50px' }}
@@ -110,7 +112,7 @@ export default function MarketPage() {
               </div>
             </div>
           </div>
-          <UtilizationChart data={historicalData} />
+          {historicalData.length && <UtilizationChart data={historicalData} />}
         </div>
 
         <MarketState yesterday={yesterday} market={market} />
