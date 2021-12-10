@@ -1,12 +1,8 @@
 import React from 'react';
-import { Market, usdFormatter, formatAbbrUSD, MarketDetails } from '../../utils/Market';
+import { usdFormatter, formatAbbrUSD } from '../../utils/Market';
 import Image from 'next/image';
 import PercentChange from '../PercentChange';
-
-export interface MarketPageProps {
-  yesterday: Market;
-  market: MarketDetails;
-}
+import { MarketPageProps } from '../../../pages/market/[id]';
 
 export default function MarketHeader({ yesterday, market }: MarketPageProps) {
   return (

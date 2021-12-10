@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { MarketPageProps } from '../../../pages/market/[id]';
 import { useGlobalContext } from '../../contexts/GlobalContext';
 import { BLOCKS_IN_A_DAY } from '../../contexts/MarketContext';
 import { getCompSpeeds } from '../../utils';
 import { usdFormatter } from '../../utils/Market';
 import PercentChange from '../PercentChange';
-import { MarketPageProps } from './Header';
 
 export default function MarketState({ yesterday, market }: MarketPageProps) {
   const { screamPrice } = useGlobalContext();
   const [compSpeeds, setCompSpeeds] = useState(0);
 
   useEffect(() => {
-    // fetch compSpeeds with id passed from router
     const getDistributionData = async () => {
       setCompSpeeds(await getCompSpeeds(market.id));
     };

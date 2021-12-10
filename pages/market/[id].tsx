@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/dist/client/router';
-import Link from 'next/link';
 import Layout from '../../src/components/Layout';
 import UtilizationChart from '../../src/components/UtilizationChart';
 import { useGlobalContext } from '../../src/contexts/GlobalContext';
@@ -17,6 +16,14 @@ import {
 import { screamClient } from '../_app';
 import MarketHeader from '../../src/components/Market/Header';
 import MarketState from '../../src/components/Market/State';
+
+/**
+ * props passed down to the child components of this page
+ */
+export interface MarketPageProps {
+  yesterday: Market;
+  market: MarketDetails;
+}
 
 export default function MarketPage() {
   const { latestSyncedBlock } = useGlobalContext();
