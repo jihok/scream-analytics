@@ -153,7 +153,7 @@ export default function Table() {
   );
 
   return (
-    <table {...getTableProps()}>
+    <table {...getTableProps()} className="">
       <thead>
         {headerGroups.map((headerGroup, i) => (
           <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.headers[i].id}>
@@ -166,7 +166,7 @@ export default function Table() {
                 <th {...column.getHeaderProps(column.getSortByToggleProps())} key={column.id}>
                   {column.render('Header')}
                   {/* @ts-ignore - UseSortByColumnProps */}
-                  <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
+                  <span>{column.isSorted ? (column.isSortedDesc ? ' ▼' : ' ▲') : ''}</span>
                 </th>
               );
             })}

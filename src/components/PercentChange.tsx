@@ -15,7 +15,7 @@ export default function PercentChange({ yesterdayVal, todayVal }: MutableData) {
 
   return (
     <div className={`metric ${percentChange < 0 ? 'text-negative' : 'text-positive'}`}>
-      {percentChange < 0 ? '🔽' : '🔼'}
+      <span style={{ fontSize: 6, marginRight: 3 }}>{percentChange < 0 ? '▼' : '▲'}</span>
       {percentChange.toFixed(2)}%
     </div>
   );
