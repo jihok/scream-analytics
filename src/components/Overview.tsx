@@ -55,7 +55,7 @@ export default function MarketsOverview() {
 
   return (
     <div className="flex bg-darkGray rounded-md shadow-lg flex-col lg:flex-row w-full justify-center mx-5">
-      <div className="w-full border-border border-b lg:border-b-0 lg:border-r px-5 lg:mx-0 lg:px-5 py-5 lg:py-0 lg:my-5">
+      <div className="w-full border-border border-b lg:border-b-0 lg:border-r px-5 lg:px-5 py-5 lg:py-0 lg:my-5">
         <div className="flex justify-between pb-4">
           <div>
             <h3>Total Supply</h3>
@@ -65,7 +65,6 @@ export default function MarketsOverview() {
         </div>
         <MarketRatioBar marketRatios={supplyRatios} />
       </div>
-      {/* <div className="h-px" /> */}
       <div className="w-full px-5 my-5">
         <div className="flex justify-between pb-4">
           <div>
