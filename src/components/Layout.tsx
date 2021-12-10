@@ -33,6 +33,7 @@ export default function Layout({ children, home }: Props) {
         </form>
       </header>
       <main className="flex flex-col md:px-40">{children}</main>
+      <footer className="flex pt-40 pb-20 justify-center">scream</footer>
     </div>
   );
 }
