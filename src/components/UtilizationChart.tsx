@@ -99,6 +99,7 @@ export default function UtilizationChart({ data }: Props) {
           <div className="pb-1" style={{ color: BORROW_COLOR }}>
             Reserves
           </div>
+          {/* @ts-ignore TODO */}
           <p>{formatAbbrUSD(data[focusedBar ?? 0].reserves)}</p>
         </div>
       </div>
