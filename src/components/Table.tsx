@@ -166,8 +166,15 @@ export default function Table() {
           >
             {headerGroup.headers.map((column) => {
               // @ts-ignore - UseSortByColumnOptions
-              column.sortType = (a: Row, b: Row, accessor: string) =>
-                a.values[accessor][0] > b.values[accessor][0] ? 1 : -1;
+              column.sortType = (a: Row, b: Row, accessor: string) => {
+                if (accessor === 'asset') {
+                  return a.values[accessor].underlyingSymbol.toLowerCase() >
+                    b.values[accessor].underlyingSymbol.toLowerCase()
+                    ? 1
+                    : -1;
+                }
+                return a.values[accessor].todayVal > b.values[accessor].todayVal ? 1 : -1;
+              };
               return (
                 <th
                   // @ts-ignore - UseSortByColumnProps
