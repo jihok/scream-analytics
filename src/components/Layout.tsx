@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import React from 'react';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
 
 interface Props {
   children: any;
@@ -9,6 +10,9 @@ interface Props {
 }
 
 export default function Layout({ children, home, className }: Props) {
+  const [searchTerm, setSearchTerm] = useState('');
+  const router = useRouter();
+
   return (
     <div className="bg-gray opacity-95 text-primary w-fit md:w-full">
       <Head>
@@ -29,8 +33,13 @@ export default function Layout({ children, home, className }: Props) {
             <div>Protocol Overview</div>
           </>
         )}
-        <form>
-          <input type="text" placeholder="Search for an account..."></input>
+        <form onSubmit={async () => await router.push(`/account/${searchTerm}`)}>
+          <input
+            type="text"
+            placeholder="Search for an account..."
+            value={searchTerm}
+            onChange={(val) => setSearchTerm(val.target.value)}
+          />
         </form>
       </header>
       <main className={`flex flex-col md:px-40 ${className}`}>{children}</main>

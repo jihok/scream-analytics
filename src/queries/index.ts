@@ -77,3 +77,23 @@ export const MARKET_DETAILS_QUERY = gql`
     }
   }
 `;
+
+export const ACCOUNT_QUERY = gql`
+  query Account($id: String!) {
+    accounts(where: { id: $id }) {
+      id
+      countLiquidated
+      countLiquidator
+      tokens {
+        symbol
+        cTokenBalance
+        totalUnderlyingSupplied
+        totalUnderlyingRedeemed
+        totalUnderlyingBorrowed
+        totalUnderlyingRepaid
+        storedBorrowBalance
+        accountBorrowIndex
+      }
+    }
+  }
+`;

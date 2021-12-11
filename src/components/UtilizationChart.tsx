@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { format, subDays } from 'date-fns';
 import {
   Bar,
@@ -23,6 +23,10 @@ interface Props {
 export default function UtilizationChart({ data }: Props) {
   const [focusedBar, setFocusedBar] = useState<number | undefined>(data.length - 1);
 
+  useEffect(() => {
+    setFocusedBar(data.length - 1);
+  }, [data]);
+
   const defaultTooltipPayload = [
     { value: data[data.length - 1].borrowAPY },
     { value: data[data.length - 1].supplyAPY },
@@ -43,25 +47,35 @@ export default function UtilizationChart({ data }: Props) {
               setFocusedBar(undefined);
             }
           }}
-          onClick={({ activeTooltipIndex }: CategoricalChartState) => {
-            setFocusedBar(activeTooltipIndex === focusedBar ? undefined : activeTooltipIndex);
+          onClick={(e?: CategoricalChartState) => {
+            if (e) {
+              setFocusedBar(e.activeTooltipIndex);
+            }
           }}
-          defaultShowTooltip
+          // defaultShowTooltip
         >
           <Tooltip
             wrapperStyle={{ visibility: 'visible' }}
             cursor={{ strokeDasharray: 2 }}
             content={({ payload, active }) => (
-              <CustomToolTip payload={payload || defaultTooltipPayload} active={active} />
+              <CustomToolTip
+                payload={payload || defaultTooltipPayload}
+                active={active && focusedBar !== undefined}
+              />
             )}
           />
 
-          <YAxis yAxisId="bApy" hide padding={{ bottom: 50 }} />
-          <YAxis yAxisId="sApy" hide padding={{ bottom: 55 }} />
+          <YAxis yAxisId="bApy" hide padding={{ bottom: 100 }} />
+          <YAxis yAxisId="sApy" hide padding={{ bottom: 100 }} />
           <Line yAxisId="bApy" dataKey="borrowAPY" stroke={BORROW_COLOR} dot={false} />
           <Line yAxisId="sApy" dataKey="supplyAPY" stroke={SUPPLY_COLOR} dot={false} />
 
-          <YAxis yAxisId="marketSize" hide padding={{ top: 50 }} />
+          <YAxis yAxisId="marketSize" hide padding={{ top: 100 }} />
+          <Bar yAxisId="marketSize" dataKey="reserves" stackId="a" fill={RESERVE_COLOR}>
+            {data.map((entry, i) => (
+              <Cell key={entry.id} fill={focusedBar === i ? RESERVE_COLOR : '#31333799'} />
+            ))}
+          </Bar>
           <Bar yAxisId="marketSize" dataKey="totalBorrowsUSD" stackId="a" fill={BORROW_COLOR}>
             {data.map((entry, i) => (
               <Cell key={entry.id} fill={focusedBar === i ? BORROW_COLOR : '#31333799'} />
@@ -72,35 +86,34 @@ export default function UtilizationChart({ data }: Props) {
               <Cell key={entry.id} fill={focusedBar === i ? SUPPLY_COLOR : '#31333799'} />
             ))}
           </Bar>
-          <Bar yAxisId="marketSize" dataKey="reserves" stackId="a" fill={RESERVE_COLOR}>
-            {data.map((entry, i) => (
-              <Cell key={entry.id} fill={focusedBar === i ? RESERVE_COLOR : '#31333799'} />
-            ))}
-          </Bar>
         </ComposedChart>
       </ResponsiveContainer>
       <div className="flex w-fit items-center bg-darkGray shadow-3xl mt-3 caption-label">
         <div className="px-5">
-          {format(subDays(Date.now(), data.length - 1 - (focusedBar ?? 0)), 'MMM d')}
+          {focusedBar !== undefined
+            ? format(subDays(Date.now(), data.length - 1 - focusedBar), 'MMM d')
+            : '--'}
         </div>
         <div className="px-5 py-3 border-l border-border-secondary">
           <div className="pb-1" style={{ color: SUPPLY_COLOR }}>
             Total supplied
           </div>
-          <p>{formatAbbrUSD(data[focusedBar ?? 0].totalSupplyUSD)}</p>
+          <p>{focusedBar !== undefined ? formatAbbrUSD(data[focusedBar]?.totalSupplyUSD) : '--'}</p>
         </div>
         <div className="px-5 py-3 border-l border-border-secondary">
           <div className="pb-1" style={{ color: BORROW_COLOR }}>
             Total borrowed
           </div>
-          <p>{formatAbbrUSD(data[focusedBar ?? 0].totalBorrowsUSD)}</p>
+          <p>
+            {focusedBar !== undefined ? formatAbbrUSD(data[focusedBar]?.totalBorrowsUSD) : '--'}
+          </p>
         </div>
         <div className="px-5 py-3 border-l border-border-secondary">
           <div className="pb-1" style={{ color: BORROW_COLOR }}>
             Reserves
           </div>
-          {/* @ts-ignore TODO */}
-          <p>{formatAbbrUSD(data[focusedBar ?? 0].reserves)}</p>
+          {/* @ts-ignore TODO reserves */}
+          <p>{focusedBar !== undefined ? formatAbbrUSD(data[focusedBar]?.reserves) : '--'}</p>
         </div>
       </div>
     </>

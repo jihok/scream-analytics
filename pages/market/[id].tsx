@@ -99,7 +99,7 @@ export default function MarketPage() {
                 style={{ borderRadius: '50px 0px 0px 50px' }}
               >
                 <a onClick={() => setDaysToFetch(7)}>
-                  <p>Weekly</p>
+                  <p>Week</p>
                 </a>
               </div>
               <div
@@ -107,7 +107,7 @@ export default function MarketPage() {
                 style={{ borderRadius: '0px 50px 50px 0px' }}
               >
                 <a onClick={() => setDaysToFetch(30)}>
-                  <p>Monthly</p>
+                  <p>Month</p>
                 </a>
               </div>
             </div>
