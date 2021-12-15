@@ -14,7 +14,7 @@ export default function Layout({ children, home, className }: Props) {
   const router = useRouter();
 
   return (
-    <div className="bg-gray opacity-95 text-primary w-fit md:w-full">
+    <>
       <Head>
         <title>SCREAM Analytics</title>
         <meta name="description" content="SCREAM Analytics" />
@@ -38,12 +38,15 @@ export default function Layout({ children, home, className }: Props) {
             type="text"
             placeholder="Search for an account..."
             value={searchTerm}
-            onChange={(val) => setSearchTerm(val.target.value)}
+            onChange={(val) => {
+              console.log(val.target.value);
+              setSearchTerm(val.target.value);
+            }}
           />
         </form>
       </header>
       <main className={`flex flex-col md:px-40 ${className}`}>{children}</main>
       <footer className="flex pt-40 pb-20 justify-center">scream</footer>
-    </div>
+    </>
   );
 }

@@ -33,6 +33,9 @@
     src: url('/fonts/Graphik-Bold-Web.woff') format('woff'),
       url('/fonts/Graphik-Bold-Web.woff2') format('woff2');
   }
+  body {
+    @apply bg-gray text-primary w-full h-full;
+  }
   h1 {
     @apply text-header font-sans-light;
   }
