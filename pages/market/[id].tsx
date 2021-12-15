@@ -34,26 +34,8 @@ export default function MarketPage() {
   const { loading, error, data } = useQuery<{ markets: RawMarketDetails[] }>(MARKET_DETAILS_QUERY, {
     variables: { id },
   });
-
-  const [market, setMarket] = useState<MarketDetails>();
   const [historicalData, setHistoricalData] = useState<Market[]>([]);
   const [daysToFetch, setDaysToFetch] = useState(7);
-  const yesterday =
-    yesterdayMarkets.find((market) => market.id === id) ??
-    ({
-      totalSupplyUSD: 0,
-      totalBorrowsUSD: 0,
-      borrowAPY: 0,
-      supplyAPY: 0,
-      cash: '0',
-    } as Market);
-
-  useEffect(() => {
-    // transform data for state once apollo query returns valid
-    if (data) {
-      setMarket(transformData(data.markets)[0]);
-    }
-  }, [data]);
 
   useEffect(() => {
     // get data for chart
@@ -82,8 +64,19 @@ export default function MarketPage() {
     getHistoricalData();
   }, [latestSyncedBlock, id, daysToFetch]);
 
-  if (loading || !market) return <p>Loading</p>;
+  if (loading || !data) return <p>Loading</p>;
   if (error) return <p>Error :(</p>;
+
+  const market = transformData(data.markets)[0];
+  const yesterday =
+    yesterdayMarkets.find((market) => market.id === id) ??
+    ({
+      totalSupplyUSD: 0,
+      totalBorrowsUSD: 0,
+      borrowAPY: 0,
+      supplyAPY: 0,
+      cash: '0',
+    } as Market);
 
   return (
     <Layout className="p-5">
