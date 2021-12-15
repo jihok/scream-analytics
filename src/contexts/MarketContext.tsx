@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { screamClient } from '../../pages/_app';
 import { MARKETS_BY_BLOCK_QUERY } from '../queries';
-import { Market, RawMarket, transformData } from '../utils/Market';
+import { Market, RawMarket, transformMarketData } from '../utils/Market';
 import { useGlobalContext } from './GlobalContext';
 
 interface MarketContext {
@@ -36,8 +36,8 @@ export default function MarketProvider(props: { children: React.ReactNode }) {
         }),
       ]);
 
-      setYesterdayMarkets(transformData(yesterday.data.markets));
-      setTodayMarkets(transformData(today.data.markets));
+      setYesterdayMarkets(transformMarketData(yesterday.data.markets));
+      setTodayMarkets(transformMarketData(today.data.markets));
     })();
   }, [latestSyncedBlock]);
 

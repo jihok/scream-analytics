@@ -35,9 +35,9 @@ export interface MarketDetails extends Market {
   collateralFactor: number;
 }
 
-export function transformData(rawMarkets: RawMarketDetails[]): MarketDetails[];
-export function transformData(rawMarkets: RawMarket[]): Market[];
-export function transformData(rawMarkets: any): any {
+export function transformMarketData(rawMarkets: RawMarketDetails[]): MarketDetails[];
+export function transformMarketData(rawMarkets: RawMarket[]): Market[];
+export function transformMarketData(rawMarkets: any): any {
   return rawMarkets.map((rawMarket: any) => ({
     ...rawMarket,
     totalSupplyUSD: +rawMarket.exchangeRate * +rawMarket.totalSupply * +rawMarket.underlyingPrice,

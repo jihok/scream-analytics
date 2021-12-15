@@ -11,7 +11,7 @@ import {
   MarketDetails,
   RawMarket,
   RawMarketDetails,
-  transformData,
+  transformMarketData,
 } from '../../src/utils/Market';
 import { screamClient } from '../_app';
 import MarketHeader from '../../src/components/Market/Header';
@@ -58,7 +58,7 @@ export default function MarketPage() {
           )
       );
 
-      setHistoricalData(historicalRawData.map((raw) => transformData(raw.data.markets)[0]));
+      setHistoricalData(historicalRawData.map((raw) => transformMarketData(raw.data.markets)[0]));
     };
 
     getHistoricalData();
@@ -67,7 +67,7 @@ export default function MarketPage() {
   if (loading || !data) return <p>Loading</p>;
   if (error) return <p>Error :(</p>;
 
-  const market = transformData(data.markets)[0];
+  const market = transformMarketData(data.markets)[0];
   const yesterday =
     yesterdayMarkets.find((market) => market.id === id) ??
     ({
