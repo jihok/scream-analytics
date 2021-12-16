@@ -17,6 +17,7 @@ module.exports = {
       border: {
         primary: '#FFFFFF4D', // 30%
         secondary: '#FFFFFF1A', // 10%
+        active: '#FFFFFFE5', // 90%
       },
     },
     textColor: {
@@ -46,6 +47,7 @@ module.exports = {
       },
       width: {
         fit: 'fit-content',
+        half: '50%',
       },
     },
   },

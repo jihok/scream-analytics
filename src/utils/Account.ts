@@ -48,7 +48,7 @@ export interface RawAccount {
   tokens: RawAccountCToken[];
 }
 
-interface Account extends Omit<RawAccount, 'tokens'> {
+export interface Account extends Omit<RawAccount, 'tokens'> {
   tokens: AccountCToken[];
   borrowLimit: number;
   borrowBalance: number;
