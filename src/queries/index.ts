@@ -104,6 +104,7 @@ export const ACCOUNT_QUERY = gql`
           borrowIndex
           exchangeRate
           underlyingSymbol
+          underlyingName
         }
       }
     }

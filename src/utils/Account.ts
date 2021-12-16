@@ -13,6 +13,7 @@ interface RawAccountCToken {
     borrowIndex: string; // we may not need this
     exchangeRate: string;
     underlyingSymbol: string;
+    underlyingName: string;
   };
 }
 
@@ -42,6 +43,7 @@ interface AccountCToken
     borrowIndex: number;
     exchangeRate: number;
     underlyingSymbol: string;
+    underlyingName: string;
   };
 }
 
@@ -56,6 +58,7 @@ export interface Account extends Omit<RawAccount, 'tokens'> {
   tokens: AccountCToken[];
   borrowLimit: number;
   borrowBalance: number;
+  totalSuppliedUSD: number;
 }
 
 export const getHealth = (borrowLimit: number, borrowBalance: number) => {
@@ -86,6 +89,7 @@ export const transformAccountData = (rawAccount: RawAccount): Account => {
             borrowIndex: +token.market.borrowIndex,
             exchangeRate: +token.market.exchangeRate,
             underlyingSymbol: token.market.underlyingSymbol,
+            underlyingName: token.market.underlyingName,
           },
         } as AccountCToken)
     ),
@@ -101,6 +105,11 @@ export const transformAccountData = (rawAccount: RawAccount): Account => {
     ),
     borrowBalance: account.tokens.reduce(
       (prev, curr) => prev + curr.totalUnderlyingBorrowed * curr.market.underlyingPrice,
+      0
+    ),
+    totalSuppliedUSD: account.tokens.reduce(
+      (prev, curr) =>
+        prev + curr.cTokenBalance * curr.market.exchangeRate * curr.market.underlyingPrice,
       0
     ),
   };

@@ -13,8 +13,8 @@ import {
 import { CategoricalChartState } from 'recharts/types/chart/generateCategoricalChart';
 import { formatAbbrUSD, Market } from '../utils/Market';
 
-const BORROW_COLOR = '#FFB158';
-const SUPPLY_COLOR = '#C8A6FF';
+export const BORROW_COLOR = '#FFB158';
+export const SUPPLY_COLOR = '#C8A6FF';
 const RESERVE_COLOR = '#F7C893';
 interface Props {
   data: Market[];
