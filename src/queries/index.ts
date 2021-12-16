@@ -79,7 +79,8 @@ export const MARKET_DETAILS_QUERY = gql`
 `;
 
 /**
- * query account details
+ * query account details.
+ * TODO: we should be able to match market against an existing map of Markets that we store in MarketContext instead of fetching here
  * @returns RawAccount
  */
 export const ACCOUNT_QUERY = gql`
@@ -101,6 +102,8 @@ export const ACCOUNT_QUERY = gql`
           collateralFactor
           underlyingPrice
           borrowIndex
+          exchangeRate
+          underlyingSymbol
         }
       }
     }

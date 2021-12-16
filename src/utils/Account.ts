@@ -11,6 +11,8 @@ interface RawAccountCToken {
     collateralFactor: string;
     underlyingPrice: string;
     borrowIndex: string; // we may not need this
+    exchangeRate: string;
+    underlyingSymbol: string;
   };
 }
 
@@ -38,6 +40,8 @@ interface AccountCToken
     collateralFactor: number;
     underlyingPrice: number;
     borrowIndex: number;
+    exchangeRate: number;
+    underlyingSymbol: string;
   };
 }
 
@@ -80,6 +84,8 @@ export const transformAccountData = (rawAccount: RawAccount): Account => {
             collateralFactor: +token.market.collateralFactor,
             underlyingPrice: +token.market.underlyingPrice,
             borrowIndex: +token.market.borrowIndex,
+            exchangeRate: +token.market.exchangeRate,
+            underlyingSymbol: token.market.underlyingSymbol,
           },
         } as AccountCToken)
     ),

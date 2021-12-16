@@ -49,6 +49,25 @@ export default function Account() {
         </p>
       </div>
       <p>Current state {overviewType}</p>
+
+      <p className="mb-4">Lifetime {overviewType} interest accrued</p>
+      {account.tokens.map((token) => (
+        <div className="flex whitespace-nowrap mb-3" key={token.symbol}>
+          <p>{token.market.underlyingSymbol}</p>
+          <div className="border-b border-border-secondary w-full mb-1 mx-2" />
+          <p className="font-sans-semibold">
+            $
+            {(overviewType === 'supplied'
+              ? token.cTokenBalance * token.market.exchangeRate -
+                token.totalUnderlyingSupplied +
+                token.totalUnderlyingRedeemed
+              : (token.storedBorrowBalance * token.market.borrowIndex) / token.accountBorrowIndex -
+                token.totalUnderlyingBorrowed +
+                token.totalUnderlyingRepaid
+            ).toFixed(2)}
+          </p>
+        </div>
+      ))}
     </Layout>
   );
 }
