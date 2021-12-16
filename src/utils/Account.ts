@@ -10,6 +10,7 @@ interface RawAccountCToken {
   market: {
     collateralFactor: string;
     underlyingPrice: string;
+    borrowIndex: string; // we may not need this
   };
 }
 
@@ -26,6 +27,7 @@ interface AccountCToken
     | 'market'
   > {
   accountBorrowIndex: number;
+  borrowBalanceUnderlying: number;
   cTokenBalance: number;
   storedBorrowBalance: number;
   totalUnderlyingBorrowed: number;
@@ -35,6 +37,7 @@ interface AccountCToken
   market: {
     collateralFactor: number;
     underlyingPrice: number;
+    borrowIndex: number;
   };
 }
 
@@ -50,30 +53,6 @@ interface Account extends Omit<RawAccount, 'tokens'> {
   borrowLimit: number;
   borrowBalance: number;
 }
-
-const getBorrowLimit = (accountCTokens: AccountCToken[]) => {
-  const borrowLimit = accountCTokens.reduce(
-    (prev, curr) =>
-      prev +
-      curr.totalUnderlyingSupplied * curr.market.collateralFactor * curr.market.underlyingPrice,
-    0
-  );
-  accountCTokens.reduce(
-    (prev, curr) => prev + curr.totalUnderlyingBorrowed * curr.market.underlyingPrice,
-    0
-  );
-  // for (const market of markets) {
-  //   tempBorrowLimit = tempBorrowLimit.plus(
-  //     (market?.supplyBalance || new BigNumber(0))
-  //       .times(+market?.collateralFactor || 0)
-  //       .times(market?.underlyingPriceUSD)
-  //   );
-
-  //   tempBorrowBalance = tempBorrowBalance.plus(
-  //     (market?.borrowBalance || new BigNumber(0)).times(market?.underlyingPriceUSD)
-  //   );
-  // }
-};
 
 export const getHealth = (borrowLimit: number, borrowBalance: number) => {
   if (!borrowLimit || !borrowBalance) {
@@ -100,6 +79,7 @@ export const transformAccountData = (rawAccount: RawAccount): Account => {
           market: {
             collateralFactor: +token.market.collateralFactor,
             underlyingPrice: +token.market.underlyingPrice,
+            borrowIndex: +token.market.borrowIndex,
           },
         } as AccountCToken)
     ),

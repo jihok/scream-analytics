@@ -100,6 +100,7 @@ export const ACCOUNT_QUERY = gql`
         market {
           collateralFactor
           underlyingPrice
+          borrowIndex
         }
       }
     }
