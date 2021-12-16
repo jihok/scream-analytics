@@ -3,19 +3,21 @@ import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import Layout from '../../src/components/Layout';
 import { ACCOUNT_QUERY } from '../../src/queries';
+import { getHealth, RawAccount, transformAccountData } from '../../src/utils/Account';
 
 export default function Account() {
   const { query } = useRouter();
   const id = query.id as string;
-  const { loading, error, data } = useQuery(ACCOUNT_QUERY, {
+  const { loading, error, data } = useQuery<{ accounts: RawAccount[] }>(ACCOUNT_QUERY, {
     variables: { id: query.id },
   });
 
-  if (loading || !id) return <p>Loading</p>;
+  if (loading || !data) return <p>Loading</p>;
   if (error) return <p>Error :(</p>;
 
-  const account = data.accounts[0];
+  const account = transformAccountData(data.accounts[0]);
 
+  console.log(account);
   return (
     <Layout className="p-5">
       <div className="flex flex-col lg:flex-row lg:justify-between">
@@ -29,7 +31,10 @@ export default function Account() {
               </button>
             </h1>
             <p className="text-subheading pt-3">
-              Health score <span className="font-sans-semibold">{0.12}</span>
+              Health score{' '}
+              <span className="font-sans-semibold">
+                {getHealth(account.borrowLimit, account.borrowBalance)}
+              </span>
             </p>
           </div>
         </div>

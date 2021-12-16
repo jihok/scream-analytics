@@ -78,6 +78,10 @@ export const MARKET_DETAILS_QUERY = gql`
   }
 `;
 
+/**
+ * query account details
+ * @returns RawAccount
+ */
 export const ACCOUNT_QUERY = gql`
   query Account($id: String!) {
     accounts(where: { id: $id }) {
@@ -93,6 +97,10 @@ export const ACCOUNT_QUERY = gql`
         totalUnderlyingRepaid
         storedBorrowBalance
         accountBorrowIndex
+        market {
+          collateralFactor
+          underlyingPrice
+        }
       }
     }
   }
