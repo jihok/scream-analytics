@@ -53,7 +53,7 @@ export default function Account() {
       <p className="mb-5">Current state {overviewType}</p>
       <div className="flex flex-col mb-8">
         {account.tokens.map((token) => {
-          if (!token.cTokenBalance) return;
+          if (!token.cTokenBalance && overviewType === 'supplied') return;
 
           const valueUSD =
             token.cTokenBalance * token.market.exchangeRate * token.market.underlyingPrice;
@@ -64,7 +64,7 @@ export default function Account() {
                 <p className="font-sans-semibold pb-1">{token.market.underlyingName}</p>
                 <p>{token.market.underlyingSymbol}</p>
               </div>
-              <div className="border-border-primary border-l py-4" style={{ width: '100%' }}>
+              <div className="border-border-primary border-l py-4 w-full">
                 <div style={{ backgroundColor: '#31333799', width: '100%', height: 24 }}>
                   <div
                     style={{
