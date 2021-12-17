@@ -8,8 +8,8 @@ module.exports = {
       bar: {
         0: '#89DFDB',
         1: '#F4BBD1',
-        2: '#F1DC75',
-        3: '#F7C893',
+        2: '#F7C893',
+        3: '#F1DC75',
         4: '#CBC6FB',
         5: '#12ADA6',
         6: '#4F4F50', // 'other' color
