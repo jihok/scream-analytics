@@ -25,7 +25,7 @@ export default function Account() {
 
   console.log(account);
   return (
-    <Layout className="p-5">
+    <Layout className="p-5 lg:px-80">
       <AccountHeader account={account} />
 
       <h3 className="pt-10 pb-4">Account overview</h3>
@@ -151,7 +151,7 @@ export default function Account() {
         return (
           <div className="flex whitespace-nowrap mb-3" key={token.symbol}>
             <p>{token.market.underlyingSymbol}</p>
-            <div className="border-b border-border-secondary w-full mb-1 mx-2" />
+            <div className="border-b border-border-secondary w-full self-center mx-2" />
             <p className="font-sans-semibold">${interest.toFixed(2)}</p>
           </div>
         );
