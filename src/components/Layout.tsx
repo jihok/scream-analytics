@@ -58,13 +58,10 @@ export default function Layout({ children, home, className }: Props) {
           )}
 
           {/* desktop: search bar, tablet/mobile: hamburger */}
-          <form
-            className="hidden lg:flex w-80 border border-border-primary rounded-full text-body py-3 px-6"
-            onSubmit={async () => await router.push(`/account/${searchTerm}`)}
-          >
+          <div className="hidden lg:flex w-80 border border-border-primary rounded-full text-body py-3 px-6">
             <input
               type="text"
-              className="w-full"
+              className="w-full focus:outline-none"
               placeholder="Search for an account..."
               value={searchTerm}
               onChange={(val) => {
@@ -83,7 +80,7 @@ export default function Layout({ children, home, className }: Props) {
                 }}
               />
             </button>
-          </form>
+          </div>
           <div className="block lg:hidden" style={{ cursor: 'pointer' }}>
             <Image
               src="/img/Menu.png"
