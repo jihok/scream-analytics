@@ -60,7 +60,11 @@ export default function MarketPage() {
           )
       );
 
-      setHistoricalData(historicalRawData.map((raw) => transformMarketData(raw.data.markets)[0]));
+      setHistoricalData(
+        historicalRawData
+          .map((raw) => transformMarketData(raw.data.markets)[0])
+          .filter((data) => !!data)
+      );
       setIsloading(false);
     };
 

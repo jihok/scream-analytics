@@ -89,7 +89,7 @@ export default function UtilizationChart({ data, isLoading }: Props) {
               dataKey="totalSupplyUSD"
               stackId="a"
               fill={SUPPLY_COLOR}
-              radius={data.length === 7 ? [5, 5, 0, 0] : [2, 2, 0, 0]}
+              radius={data.length <= 7 ? [5, 5, 0, 0] : [2, 2, 0, 0]}
             >
               {data.map((entry, i) => (
                 <Cell key={entry.id} fill={focusedBar === i ? SUPPLY_COLOR : '#31333799'} />
