@@ -90,24 +90,35 @@ export default function Account() {
       </div>
 
       <p className="mb-4">Lifetime {overviewType} interest accrued</p>
-      {account.tokens.map((token) => (
-        <div className="flex whitespace-nowrap mb-3" key={token.symbol}>
-          <p>{token.market.underlyingSymbol}</p>
-          <div className="border-b border-border-secondary w-full mb-1 mx-2" />
-          <p className="font-sans-semibold">
-            $
-            {(overviewType === 'supplied'
-              ? (token.cTokenBalance * token.market.exchangeRate -
-                  token.totalUnderlyingSupplied +
-                  token.totalUnderlyingRedeemed) *
-                token.market.underlyingPrice
-              : (token.storedBorrowBalance * token.market.borrowIndex) / token.accountBorrowIndex -
-                token.totalUnderlyingBorrowed +
-                token.totalUnderlyingRepaid
-            ).toFixed(2)}
-          </p>
-        </div>
-      ))}
+      {account.tokens.map((token) => {
+        if (overviewType === 'supplied') {
+          const suppliedInterest =
+            (token.cTokenBalance * token.market.exchangeRate -
+              token.totalUnderlyingSupplied +
+              token.totalUnderlyingRedeemed) *
+            token.market.underlyingPrice;
+          if (!suppliedInterest) return;
+        }
+        return (
+          <div className="flex whitespace-nowrap mb-3" key={token.symbol}>
+            <p>{token.market.underlyingSymbol}</p>
+            <div className="border-b border-border-secondary w-full mb-1 mx-2" />
+            <p className="font-sans-semibold">
+              $
+              {(overviewType === 'supplied'
+                ? (token.cTokenBalance * token.market.exchangeRate -
+                    token.totalUnderlyingSupplied +
+                    token.totalUnderlyingRedeemed) *
+                  token.market.underlyingPrice
+                : (token.storedBorrowBalance * token.market.borrowIndex) /
+                    token.accountBorrowIndex -
+                  token.totalUnderlyingBorrowed +
+                  token.totalUnderlyingRepaid
+              ).toFixed(2)}
+            </p>
+          </div>
+        );
+      })}
     </Layout>
   );
 }
