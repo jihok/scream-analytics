@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import Layout from '../../src/components/Layout';
@@ -20,6 +21,20 @@ export default function Account() {
 
   if (loading || !data) return <p>Loading</p>;
   if (error) return <p>Error :(</p>;
+
+  if (!data.accounts.length) {
+    return (
+      <Layout className="p-5 lg:px-80">
+        <div className="flex flex-col items-center justify-center">
+          <div className="flex pb-8">
+            <Image src="/img/User.png" width={33} height={33} alt="account" />
+            <h1 className="pl-5 font-sans-semibold">No user address found.</h1>
+          </div>
+          <p>Please try your search again.</p>
+        </div>
+      </Layout>
+    );
+  }
 
   const account = transformAccountData(data.accounts[0]);
 
