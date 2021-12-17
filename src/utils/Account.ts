@@ -59,6 +59,7 @@ export interface Account extends Omit<RawAccount, 'tokens'> {
   borrowLimit: number;
   borrowBalance: number;
   totalSuppliedUSD: number;
+  totalBorrowedUSD: number;
 }
 
 export const getHealth = (borrowLimit: number, borrowBalance: number) => {
@@ -104,6 +105,10 @@ export const transformAccountData = (rawAccount: RawAccount): Account => {
       0
     ),
     borrowBalance: account.tokens.reduce(
+      (prev, curr) => prev + curr.storedBorrowBalance * curr.market.underlyingPrice,
+      0
+    ),
+    totalBorrowedUSD: account.tokens.reduce(
       (prev, curr) => prev + curr.totalUnderlyingBorrowed * curr.market.underlyingPrice,
       0
     ),

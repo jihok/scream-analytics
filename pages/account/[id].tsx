@@ -7,6 +7,8 @@ import { RawAccount, transformAccountData } from '../../src/utils/Account';
 import AccountHeader from '../../src/components/Account/Header';
 import { BORROW_COLOR, SUPPLY_COLOR } from '../../src/components/UtilizationChart';
 
+const REPAID_COLOR = '#89DFDB'; // also equal to bg-bar-0
+
 export default function Account() {
   const {
     query: { id },
@@ -53,10 +55,18 @@ export default function Account() {
       <div className="flex flex-col mb-8">
         {account.tokens.map((token) => {
           if (!token.cTokenBalance && overviewType === 'supplied') return;
+          if (overviewType === 'borrowed' && !token.storedBorrowBalance) return;
 
           const valueUSD =
-            token.cTokenBalance * token.market.exchangeRate * token.market.underlyingPrice;
-          const barWidthPercent = (valueUSD / account.totalSuppliedUSD) * 100;
+            overviewType === 'supplied'
+              ? token.cTokenBalance * token.market.exchangeRate * token.market.underlyingPrice
+              : token.storedBorrowBalance * token.market.underlyingPrice;
+          const barWidthPercent =
+            overviewType === 'supplied'
+              ? (valueUSD / account.totalSuppliedUSD) * 100
+              : ((token.totalUnderlyingBorrowed * token.market.underlyingPrice) /
+                  account.totalBorrowedUSD) *
+                100;
 
           return (
             <div className="flex flex-row items-center" key={token.symbol}>
@@ -69,18 +79,21 @@ export default function Account() {
               </div>
               <div className="border-border-primary border-l py-4 w-full">
                 <div className="flex">
-                  <div
-                    style={{
-                      backgroundColor: SUPPLY_COLOR,
-                      borderRadius: '0px 3px 3px 0px',
-                      width: `${barWidthPercent}%`,
-                      height: 24,
-                    }}
-                  />
-                  <div style={{ width: `${1 - barWidthPercent}%` }}>
+                  {overviewType === 'borrowed' && (
                     <div
                       style={{
-                        backgroundColor: '#31333799',
+                        width: `${
+                          (token.totalUnderlyingRepaid / token.totalUnderlyingBorrowed) * 100
+                        }%`,
+                        backgroundColor: REPAID_COLOR,
+                        height: 24,
+                      }}
+                    />
+                  )}
+                  <div style={{ width: `${barWidthPercent}%` }}>
+                    <div
+                      style={{
+                        backgroundColor: overviewType === 'supplied' ? SUPPLY_COLOR : BORROW_COLOR,
                         borderRadius: '0px 3px 3px 0px',
                         height: 24,
                       }}
@@ -94,16 +107,24 @@ export default function Account() {
                       </>
                     )}
                   </div>
+                  <div
+                    style={{
+                      backgroundColor: '#31333799',
+                      borderRadius: '0px 3px 3px 0px',
+                      height: 24,
+                      width: `${100 - barWidthPercent}%`,
+                    }}
+                  />
                 </div>
               </div>
               <div
                 className={`flex flex-col items-end pl-3 ${overviewType === 'borrowed' && 'pb-11'}`}
                 style={{ minWidth: 80, width: 'fit-content' }}
               >
-                {overviewType === 'borrowed' && <p className="text-caption pt-2 pb-1">Borrowed</p>}
-                <p className={`font-sans-semibold`}>
-                  {overviewType === 'borrowed'}${valueUSD.toFixed(2)}
-                </p>
+                {overviewType === 'borrowed' && (
+                  <p className="text-caption pt-2 pb-1 text-right">Remaining</p>
+                )}
+                <p className={`font-sans-semibold`}>${valueUSD.toFixed(2)}</p>
               </div>
             </div>
           );
@@ -117,21 +138,19 @@ export default function Account() {
             token.totalUnderlyingSupplied +
             token.totalUnderlyingRedeemed) *
           token.market.underlyingPrice;
+        const borrowedInterest =
+          (token.storedBorrowBalance * token.market.borrowIndex) / token.accountBorrowIndex -
+          token.totalUnderlyingBorrowed +
+          token.totalUnderlyingRepaid;
         if (!suppliedInterest && overviewType === 'supplied') return;
+        if (!borrowedInterest && overviewType === 'borrowed') return;
 
         return (
           <div className="flex whitespace-nowrap mb-3" key={token.symbol}>
             <p>{token.market.underlyingSymbol}</p>
             <div className="border-b border-border-secondary w-full mb-1 mx-2" />
             <p className="font-sans-semibold">
-              $
-              {(overviewType === 'supplied'
-                ? suppliedInterest
-                : (token.storedBorrowBalance * token.market.borrowIndex) /
-                    token.accountBorrowIndex -
-                  token.totalUnderlyingBorrowed +
-                  token.totalUnderlyingRepaid
-              ).toFixed(2)}
+              ${(overviewType === 'supplied' ? suppliedInterest : borrowedInterest).toFixed(2)}
             </p>
           </div>
         );
