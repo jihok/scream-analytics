@@ -65,7 +65,7 @@ export default function MarketState({ yesterday, market }: MarketPageProps) {
 
         <div className="flex whitespace-nowrap mb-3">
           <p>Interest paid per day</p>
-          <div className="border-b border-border-secondary w-full mb-1 mx-2" />
+          <div className="border-b border-border-secondary w-full self-center mx-2" />
           <p className="font-sans-semibold">
             {usdFormatter.format(
               (market.borrowAPY * market.underlyingPrice * market.totalBorrowsUSD) / 365
@@ -74,21 +74,21 @@ export default function MarketState({ yesterday, market }: MarketPageProps) {
         </div>
         <div className="flex whitespace-nowrap mb-3">
           <p>Total interest accumulated</p>
-          <div className="border-b border-border-secondary w-full mb-1 mx-2" />
+          <div className="border-b border-border-secondary w-full self-center mx-2" />
           <p className="font-sans-semibold">
             {usdFormatter.format(market.totalInterestAccumulated)}
           </p>
         </div>
         <div className="flex whitespace-nowrap mb-3">
           <p>Exchange rate </p>
-          <div className="border-b border-border-secondary w-full mb-1 mx-2" />
+          <div className="border-b border-border-secondary w-full self-center mx-2" />
           <p className="font-sans-semibold">
             1 {market.underlyingSymbol} = {market.exchangeRate.toFixed(6)} {market.symbol}
           </p>
         </div>
         <div className="flex whitespace-nowrap">
           <p>{market.symbol} Minted</p>
-          <div className="border-b border-border-secondary w-full mb-1 mx-2" />
+          <div className="border-b border-border-secondary w-full self-center mx-2" />
           <p className="font-sans-semibold">{(+market.totalSupply).toLocaleString()}</p>
         </div>
       </div>
