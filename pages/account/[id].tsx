@@ -74,7 +74,7 @@ export default function Account() {
                 className={`pr-6 ${overviewType === 'borrowed' && 'pb-8'}`}
                 style={{ minWidth: 100, maxWidth: 100 }}
               >
-                <p className="font-sans-semibold pb-1">{token.market.underlyingName}</p>
+                <p className="font-sans-semibold">{token.market.underlyingName}</p>
                 <p>{token.market.underlyingSymbol}</p>
               </div>
               <div className="border-border-primary border-l py-4 w-full">
@@ -83,7 +83,9 @@ export default function Account() {
                     <div
                       style={{
                         width: `${
-                          (token.totalUnderlyingRepaid / token.totalUnderlyingBorrowed) * 100
+                          ((token.totalUnderlyingRepaid * token.market.underlyingPrice) /
+                            account.totalBorrowedUSD) *
+                          100
                         }%`,
                         backgroundColor: REPAID_COLOR,
                         height: 24,
@@ -100,7 +102,7 @@ export default function Account() {
                     />
                     {overviewType === 'borrowed' && (
                       <>
-                        <p className="text-caption pt-2 pb-1">Repaid</p>
+                        <p className="text-caption pt-2">Repaid</p>
                         <p className="font-sans-semibold">
                           ${(token.totalUnderlyingRepaid * token.market.underlyingPrice).toFixed(2)}
                         </p>
@@ -122,9 +124,9 @@ export default function Account() {
                 style={{ minWidth: 80, width: 'fit-content' }}
               >
                 {overviewType === 'borrowed' && (
-                  <p className="text-caption pt-2 pb-1 text-right">Remaining</p>
+                  <p className="text-caption pt-2 text-right">Remaining</p>
                 )}
-                <p className={`font-sans-semibold`}>${valueUSD.toFixed(2)}</p>
+                <p className="font-sans-semibold">${valueUSD.toFixed(2)}</p>
               </div>
             </div>
           );
@@ -133,25 +135,22 @@ export default function Account() {
 
       <p className="mb-4">Lifetime {overviewType} interest accrued</p>
       {account.tokens.map((token) => {
-        const suppliedInterest =
-          (token.cTokenBalance * token.market.exchangeRate -
-            token.totalUnderlyingSupplied +
-            token.totalUnderlyingRedeemed) *
-          token.market.underlyingPrice;
-        const borrowedInterest =
-          (token.storedBorrowBalance * token.market.borrowIndex) / token.accountBorrowIndex -
-          token.totalUnderlyingBorrowed +
-          token.totalUnderlyingRepaid;
-        if (!suppliedInterest && overviewType === 'supplied') return;
-        if (!borrowedInterest && overviewType === 'borrowed') return;
+        const interest =
+          overviewType === 'supplied'
+            ? (token.cTokenBalance * token.market.exchangeRate -
+                token.totalUnderlyingSupplied +
+                token.totalUnderlyingRedeemed) *
+              token.market.underlyingPrice
+            : (token.storedBorrowBalance * token.market.borrowIndex) / token.accountBorrowIndex -
+              token.totalUnderlyingBorrowed +
+              token.totalUnderlyingRepaid;
+        if (!interest) return;
 
         return (
           <div className="flex whitespace-nowrap mb-3" key={token.symbol}>
             <p>{token.market.underlyingSymbol}</p>
             <div className="border-b border-border-secondary w-full mb-1 mx-2" />
-            <p className="font-sans-semibold">
-              ${(overviewType === 'supplied' ? suppliedInterest : borrowedInterest).toFixed(2)}
-            </p>
+            <p className="font-sans-semibold">${interest.toFixed(2)}</p>
           </div>
         );
       })}

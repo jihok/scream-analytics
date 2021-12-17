@@ -126,13 +126,13 @@ const CustomToolTip = ({ payload, active }: TooltipProps<any, any>) => {
   return (
     <div className="flex bg-darkGray p-3 shadow-3xl">
       <div className="mr-4">
-        <p className="caption-label pb-1" style={{ color: SUPPLY_COLOR }}>
+        <p className="caption-label" style={{ color: SUPPLY_COLOR }}>
           Supply APY
         </p>
         <p>{payload[1].value.toFixed(2)}%</p>
       </div>
       <div>
-        <p className="caption-label pb-1" style={{ color: BORROW_COLOR }}>
+        <p className="caption-label" style={{ color: BORROW_COLOR }}>
           Borrow APY
         </p>
         <p>{payload[0].value.toFixed(2)}%</p>
