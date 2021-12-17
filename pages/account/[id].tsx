@@ -65,21 +65,31 @@ export default function Account() {
                 <p>{token.market.underlyingSymbol}</p>
               </div>
               <div className="border-border-primary border-l py-4 w-full">
-                <div style={{ backgroundColor: '#31333799', width: '100%', height: 24 }}>
+                <div className="flex">
                   <div
                     style={{
                       backgroundColor: SUPPLY_COLOR,
+                      borderRadius: '0px 3px 3px 0px',
                       width: `${(valueUSD / account.totalSuppliedUSD) * 100}%`,
-                      height: '100%',
+                      height: 24,
                     }}
                   />
+                  <div style={{ width: `${(1 - valueUSD / account.totalSuppliedUSD) * 100}%` }}>
+                    <div
+                      style={{
+                        backgroundColor: '#31333799',
+                        borderRadius: '0px 3px 3px 0px',
+                        height: 24,
+                      }}
+                    />
+                    {overviewType === 'borrowed' && (
+                      <>
+                        <p className="text-caption pt-2 pb-1">Repaid</p>
+                        <p className="font-sans-semibold">$609</p>
+                      </>
+                    )}
+                  </div>
                 </div>
-                {overviewType === 'borrowed' && (
-                  <>
-                    <p className="text-caption pt-2 pb-1">Repaid</p>
-                    <p className="font-sans-semibold">$609</p>
-                  </>
-                )}
               </div>
               <p className="pl-2" style={{ width: 80 }}>
                 ${valueUSD.toFixed(2)}
