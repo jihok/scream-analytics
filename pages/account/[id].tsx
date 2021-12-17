@@ -91,14 +91,13 @@ export default function Account() {
 
       <p className="mb-4">Lifetime {overviewType} interest accrued</p>
       {account.tokens.map((token) => {
-        if (overviewType === 'supplied') {
-          const suppliedInterest =
-            (token.cTokenBalance * token.market.exchangeRate -
-              token.totalUnderlyingSupplied +
-              token.totalUnderlyingRedeemed) *
-            token.market.underlyingPrice;
-          if (!suppliedInterest) return;
-        }
+        const suppliedInterest =
+          (token.cTokenBalance * token.market.exchangeRate -
+            token.totalUnderlyingSupplied +
+            token.totalUnderlyingRedeemed) *
+          token.market.underlyingPrice;
+        if (!suppliedInterest && overviewType === 'supplied') return;
+
         return (
           <div className="flex whitespace-nowrap mb-3" key={token.symbol}>
             <p>{token.market.underlyingSymbol}</p>
@@ -106,10 +105,7 @@ export default function Account() {
             <p className="font-sans-semibold">
               $
               {(overviewType === 'supplied'
-                ? (token.cTokenBalance * token.market.exchangeRate -
-                    token.totalUnderlyingSupplied +
-                    token.totalUnderlyingRedeemed) *
-                  token.market.underlyingPrice
+                ? suppliedInterest
                 : (token.storedBorrowBalance * token.market.borrowIndex) /
                     token.accountBorrowIndex -
                   token.totalUnderlyingBorrowed +
