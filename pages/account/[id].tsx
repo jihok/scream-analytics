@@ -6,6 +6,7 @@ import { ACCOUNT_QUERY } from '../../src/queries';
 import { RawAccount, transformAccountData } from '../../src/utils/Account';
 import AccountHeader from '../../src/components/Account/Header';
 import MarketHeader from '../../src/components/Market/Header';
+import { BORROW_COLOR, SUPPLY_COLOR } from '../../src/components/UtilizationChart';
 
 export default function Account() {
   const {
@@ -51,31 +52,39 @@ export default function Account() {
       </div>
       <p className="mb-5">Current state {overviewType}</p>
       <div className="flex flex-col mb-8">
-        {account.tokens.map((token) => (
-          <div className="flex flex-row items-center" key={token.symbol}>
-            <div className="pr-6" style={{ minWidth: 100, maxWidth: 100 }}>
-              <p className="font-sans-semibold pb-1">{token.market.underlyingName}</p>
-              <p>{token.market.underlyingSymbol}</p>
+        {account.tokens.map((token) => {
+          const valueUSD =
+            token.cTokenBalance * token.market.exchangeRate * token.market.underlyingPrice;
+
+          return (
+            <div className="flex flex-row items-center" key={token.symbol}>
+              <div className="pr-6" style={{ minWidth: 100, maxWidth: 100 }}>
+                <p className="font-sans-semibold pb-1">{token.market.underlyingName}</p>
+                <p>{token.market.underlyingSymbol}</p>
+              </div>
+              <div className="border-border-primary border-l py-4" style={{ width: '100%' }}>
+                <div style={{ backgroundColor: '#31333799', width: '100%', height: 24 }}>
+                  <div
+                    style={{
+                      backgroundColor: SUPPLY_COLOR,
+                      width: `${(valueUSD / account.totalSuppliedUSD) * 100}%`,
+                      height: '100%',
+                    }}
+                  />
+                </div>
+                {overviewType === 'borrowed' && (
+                  <>
+                    <p className="text-caption pt-2 pb-1">Repaid</p>
+                    <p className="font-sans-semibold">$609</p>
+                  </>
+                )}
+              </div>
+              <p className="pl-2" style={{ width: 80 }}>
+                ${valueUSD.toFixed(2)}
+              </p>
             </div>
-            <div className="border-border-primary border-l py-4" style={{ width: '100%' }}>
-              <div style={{ backgroundColor: '#31333799', width: '100%', height: 24 }}></div>
-              {overviewType === 'borrowed' && (
-                <>
-                  <p className="text-caption pt-2 pb-1">Repaid</p>
-                  <p className="font-sans-semibold">$609</p>
-                </>
-              )}
-            </div>
-            <p className="pl-2" style={{ width: 80 }}>
-              $
-              {(
-                token.cTokenBalance *
-                token.market.exchangeRate *
-                token.market.underlyingPrice
-              ).toFixed(2)}
-            </p>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <p className="mb-4">Lifetime {overviewType} interest accrued</p>
