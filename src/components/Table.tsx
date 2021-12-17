@@ -162,7 +162,7 @@ export default function Table() {
           <tr
             {...headerGroup.getHeaderGroupProps()}
             key={headerGroup.headers[i].id}
-            className="border-border-primary border-b"
+            className="border-border-primary border-b text-left"
           >
             {headerGroup.headers.map((column) => {
               // @ts-ignore - UseSortByColumnOptions
