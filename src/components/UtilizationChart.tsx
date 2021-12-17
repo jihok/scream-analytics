@@ -52,7 +52,6 @@ export default function UtilizationChart({ data }: Props) {
               setFocusedBar(e.activeTooltipIndex);
             }
           }}
-          // defaultShowTooltip
         >
           <Tooltip
             wrapperStyle={{ visibility: 'visible' }}
@@ -65,11 +64,13 @@ export default function UtilizationChart({ data }: Props) {
             )}
           />
 
+          {/* arbitrary bottom padding to align lines above bars */}
           <YAxis yAxisId="bApy" hide padding={{ bottom: 100 }} />
           <YAxis yAxisId="sApy" hide padding={{ bottom: 100 }} />
           <Line yAxisId="bApy" dataKey="borrowAPY" stroke={BORROW_COLOR} dot={false} />
           <Line yAxisId="sApy" dataKey="supplyAPY" stroke={SUPPLY_COLOR} dot={false} />
 
+          {/* arbitrary top padding to align bars below lines */}
           <YAxis yAxisId="marketSize" hide padding={{ top: 100 }} />
           <Bar yAxisId="marketSize" dataKey="reserves" stackId="a" fill={RESERVE_COLOR}>
             {data.map((entry, i) => (
@@ -81,7 +82,13 @@ export default function UtilizationChart({ data }: Props) {
               <Cell key={entry.id} fill={focusedBar === i ? BORROW_COLOR : '#31333799'} />
             ))}
           </Bar>
-          <Bar yAxisId="marketSize" dataKey="totalSupplyUSD" stackId="a" fill={SUPPLY_COLOR}>
+          <Bar
+            yAxisId="marketSize"
+            dataKey="totalSupplyUSD"
+            stackId="a"
+            fill={SUPPLY_COLOR}
+            radius={data.length === 7 ? [5, 5, 0, 0] : [2, 2, 0, 0]}
+          >
             {data.map((entry, i) => (
               <Cell key={entry.id} fill={focusedBar === i ? SUPPLY_COLOR : '#31333799'} />
             ))}
