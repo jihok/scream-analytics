@@ -58,7 +58,7 @@ export default function Layout({ children, home, className }: Props) {
           )}
 
           {/* desktop: search bar, tablet/mobile: hamburger */}
-          <div className="hidden lg:flex w-80 border border-border-primary rounded-full text-body py-3 px-6">
+          <div className="hidden lg:flex w-80 border border-border-active rounded-full text-body py-1 px-6">
             <input
               type="text"
               className="w-full focus:outline-none"

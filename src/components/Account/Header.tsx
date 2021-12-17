@@ -5,7 +5,9 @@ export default function AccountHeader({ account }: { account: Account }) {
   return (
     <div className="flex flex-col lg:flex-row lg:justify-between">
       <div className="flex pb-7">
-        <Image src="/img/User.png" width={33} height={33} alt="account" />
+        <div style={{ width: 33, height: 33, position: 'relative' }}>
+          <Image src="/img/User.png" layout="fill" objectFit="contain" alt="account" />
+        </div>
         <div className="pl-5">
           <h1>
             {`${account.id.slice(0, 6)}...${account.id.slice(-4)}`}
