@@ -88,7 +88,7 @@ export default function MarketPage() {
             <h3>Historical Utilization</h3>
             <div className="flex" style={{ cursor: 'pointer' }}>
               <div
-                className={`border py-1 px-4 ${daysToFetch === 7 && 'bg-border-primary'}`}
+                className={`border pt-1 px-4 ${daysToFetch === 7 && 'bg-border-primary'}`}
                 style={{ borderRadius: '50px 0px 0px 50px' }}
               >
                 <a onClick={() => setDaysToFetch(7)}>
@@ -96,7 +96,7 @@ export default function MarketPage() {
                 </a>
               </div>
               <div
-                className={`border py-1 px-4 ${daysToFetch === 30 && 'bg-border-primary'}`}
+                className={`border pt-1 px-4 ${daysToFetch === 30 && 'bg-border-primary'}`}
                 style={{ borderRadius: '0px 50px 50px 0px' }}
               >
                 <a onClick={() => setDaysToFetch(30)}>
