@@ -79,7 +79,7 @@ export default function Table() {
         accessor: 'liquidity',
       },
       {
-        Header: 'Total Supply',
+        Header: 'Supplied',
         accessor: 'supplied',
       },
       {
@@ -87,7 +87,7 @@ export default function Table() {
         accessor: 'supplyAPY',
       },
       {
-        Header: 'Total Borrows',
+        Header: 'Borrowed',
         accessor: 'borrowed',
       },
       {
@@ -180,16 +180,23 @@ export default function Table() {
                   // @ts-ignore - UseSortByColumnProps
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                   key={column.id}
+                  className={`${
+                    column.id === 'liquidity' ? 'hidden lg:table-cell' : ''
+                  } w-fit whitespace-nowrap`}
                 >
                   {column.render('Header')}
-
-                  {/* @ts-ignore - UseSortByColumnProps */}
-                  {column.isSorted && (
-                    <span style={{ fontSize: 6, marginLeft: 3 }}>
-                      {/* @ts-ignore - UseSortByColumnProps */}
-                      {column.isSortedDesc ? ' ▼' : ' ▲'}
-                    </span>
-                  )}
+                  <span
+                    style={{
+                      fontSize: 6,
+                      marginLeft: 3,
+                      width: 10,
+                      height: 10,
+                      display: 'inline-block',
+                    }}
+                  >
+                    {/* @ts-ignore - UseSortByColumnProps */}
+                    {column.isSorted ? (column.isSortedDesc ? ' ▼' : ' ▲') : ' '}
+                  </span>
                 </th>
               );
             })}
@@ -207,7 +214,11 @@ export default function Table() {
                 className="border-border-secondary border-b"
               >
                 {row.cells.map((cell) => (
-                  <td {...cell.getCellProps()} key={`${cell.row.id}-${cell.column.id}`}>
+                  <td
+                    {...cell.getCellProps()}
+                    className={cell.column.id === 'liquidity' ? 'hidden lg:table-cell' : ''}
+                    key={`${cell.row.id}-${cell.column.id}`}
+                  >
                     {
                       // @ts-ignore - type def should but doesn't include JSX.Element
                       cell.render(<CustomCell colId={cell.column.id} val={cell.value} />)
