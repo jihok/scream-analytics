@@ -5,7 +5,7 @@ import Layout from '../src/components/Layout';
 
 const Home: NextPage = () => {
   return (
-    <Layout home>
+    <Layout home="markets">
       <div className="px-5 lg:px-10">
         <Overview />
       </div>

@@ -19,6 +19,7 @@ module.exports = {
         secondary: '#FFFFFF1A', // 10%
         active: '#FFFFFFE5', // 90%
       },
+      transparent: 'transparent',
     },
     textColor: {
       primary: '#FFFFFF',

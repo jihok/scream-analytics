@@ -57,4 +57,7 @@
   td {
     @apply p-3;
   }
+  input {
+    @apply bg-transparent;
+  }
 }
