@@ -88,7 +88,9 @@ export default function Account() {
                     {overviewType === 'borrowed' && (
                       <>
                         <p className="text-caption pt-2 pb-1">Repaid</p>
-                        <p className="font-sans-semibold">$609</p>
+                        <p className="font-sans-semibold">
+                          ${(token.totalUnderlyingRepaid * token.market.underlyingPrice).toFixed(2)}
+                        </p>
                       </>
                     )}
                   </div>
