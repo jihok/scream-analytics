@@ -21,8 +21,8 @@ export default function AccountHeader({ account }: { account: Account }) {
           </p>
         </div>
       </div>
-      <div className="lg:flex lg:flex-col-reverse">
-        <h3 className="pb-3 border-b border-border-primary lg:invisible">Account stats</h3>
+      <div>
+        <h3 className="pb-3 border-b border-border-primary lg:hidden">Account stats</h3>
         <div className="flex pt-4">
           <div className="pr-6" style={{ maxWidth: 100 }}>
             <div className="caption-label">Times liquidated</div>
