@@ -5,7 +5,6 @@ import Layout from '../../src/components/Layout';
 import { ACCOUNT_QUERY } from '../../src/queries';
 import { RawAccount, transformAccountData } from '../../src/utils/Account';
 import AccountHeader from '../../src/components/Account/Header';
-import MarketHeader from '../../src/components/Market/Header';
 import { BORROW_COLOR, SUPPLY_COLOR } from '../../src/components/UtilizationChart';
 
 export default function Account() {
@@ -57,10 +56,14 @@ export default function Account() {
 
           const valueUSD =
             token.cTokenBalance * token.market.exchangeRate * token.market.underlyingPrice;
+          const barWidthPercent = (valueUSD / account.totalSuppliedUSD) * 100;
 
           return (
             <div className="flex flex-row items-center" key={token.symbol}>
-              <div className="pr-6" style={{ minWidth: 100, maxWidth: 100 }}>
+              <div
+                className={`pr-6 ${overviewType === 'borrowed' && 'pb-8'}`}
+                style={{ minWidth: 100, maxWidth: 100 }}
+              >
                 <p className="font-sans-semibold pb-1">{token.market.underlyingName}</p>
                 <p>{token.market.underlyingSymbol}</p>
               </div>
@@ -70,11 +73,11 @@ export default function Account() {
                     style={{
                       backgroundColor: SUPPLY_COLOR,
                       borderRadius: '0px 3px 3px 0px',
-                      width: `${(valueUSD / account.totalSuppliedUSD) * 100}%`,
+                      width: `${barWidthPercent}%`,
                       height: 24,
                     }}
                   />
-                  <div style={{ width: `${(1 - valueUSD / account.totalSuppliedUSD) * 100}%` }}>
+                  <div style={{ width: `${1 - barWidthPercent}%` }}>
                     <div
                       style={{
                         backgroundColor: '#31333799',
@@ -91,9 +94,15 @@ export default function Account() {
                   </div>
                 </div>
               </div>
-              <p className="pl-2" style={{ width: 80 }}>
-                ${valueUSD.toFixed(2)}
-              </p>
+              <div
+                className={`flex flex-col items-end pl-3 ${overviewType === 'borrowed' && 'pb-11'}`}
+                style={{ minWidth: 80, width: 'fit-content' }}
+              >
+                {overviewType === 'borrowed' && <p className="text-caption pt-2 pb-1">Borrowed</p>}
+                <p className={`font-sans-semibold`}>
+                  {overviewType === 'borrowed'}${valueUSD.toFixed(2)}
+                </p>
+              </div>
             </div>
           );
         })}
