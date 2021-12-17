@@ -53,6 +53,8 @@ export default function Account() {
       <p className="mb-5">Current state {overviewType}</p>
       <div className="flex flex-col mb-8">
         {account.tokens.map((token) => {
+          if (!token.cTokenBalance) return;
+
           const valueUSD =
             token.cTokenBalance * token.market.exchangeRate * token.market.underlyingPrice;
 
