@@ -36,10 +36,12 @@ export default function MarketPage() {
   });
   const [historicalData, setHistoricalData] = useState<Market[]>([]);
   const [daysToFetch, setDaysToFetch] = useState(7);
+  const [isLoading, setIsloading] = useState(true);
 
   useEffect(() => {
     // get data for chart
     const getHistoricalData = async () => {
+      setIsloading(true);
       const blocksToQuery = [...Array(daysToFetch)].map(
         (_, i) => latestSyncedBlock - BLOCKS_IN_A_DAY * i
       );
@@ -59,6 +61,7 @@ export default function MarketPage() {
       );
 
       setHistoricalData(historicalRawData.map((raw) => transformMarketData(raw.data.markets)[0]));
+      setIsloading(false);
     };
 
     getHistoricalData();
@@ -105,7 +108,9 @@ export default function MarketPage() {
               </div>
             </div>
           </div>
-          {historicalData.length && <UtilizationChart data={historicalData} />}
+          {!!historicalData.length && (
+            <UtilizationChart data={historicalData} isLoading={isLoading} />
+          )}
         </div>
 
         <MarketState yesterday={yesterday} market={market} />

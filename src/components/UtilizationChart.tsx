@@ -18,9 +18,10 @@ export const SUPPLY_COLOR = '#C8A6FF';
 const RESERVE_COLOR = '#F7C893';
 interface Props {
   data: Market[];
+  isLoading: boolean;
 }
 
-export default function UtilizationChart({ data }: Props) {
+export default function UtilizationChart({ data, isLoading }: Props) {
   const [focusedBar, setFocusedBar] = useState<number | undefined>(data.length - 1);
 
   useEffect(() => {
@@ -37,63 +38,67 @@ export default function UtilizationChart({ data }: Props) {
   return (
     <>
       <ResponsiveContainer width="100%" height={300}>
-        <ComposedChart
-          margin={{ top: 100 }}
-          data={data}
-          onMouseMove={({ isTooltipActive, activeTooltipIndex }: CategoricalChartState) => {
-            if (isTooltipActive) {
-              setFocusedBar(activeTooltipIndex);
-            } else {
-              setFocusedBar(undefined);
-            }
-          }}
-          onClick={(e?: CategoricalChartState) => {
-            if (e) {
-              setFocusedBar(e.activeTooltipIndex);
-            }
-          }}
-        >
-          <Tooltip
-            wrapperStyle={{ visibility: 'visible' }}
-            cursor={{ strokeDasharray: 2 }}
-            content={({ payload, active }) => (
-              <CustomToolTip
-                payload={payload || defaultTooltipPayload}
-                active={active && focusedBar !== undefined}
-              />
-            )}
-          />
-
-          {/* arbitrary bottom padding to align lines above bars */}
-          <YAxis yAxisId="bApy" hide padding={{ bottom: 100 }} />
-          <YAxis yAxisId="sApy" hide padding={{ bottom: 100 }} />
-          <Line yAxisId="bApy" dataKey="borrowAPY" stroke={BORROW_COLOR} dot={false} />
-          <Line yAxisId="sApy" dataKey="supplyAPY" stroke={SUPPLY_COLOR} dot={false} />
-
-          {/* arbitrary top padding to align bars below lines */}
-          <YAxis yAxisId="marketSize" hide padding={{ top: 100 }} />
-          <Bar yAxisId="marketSize" dataKey="reserves" stackId="a" fill={RESERVE_COLOR}>
-            {data.map((entry, i) => (
-              <Cell key={entry.id} fill={focusedBar === i ? RESERVE_COLOR : '#31333799'} />
-            ))}
-          </Bar>
-          <Bar yAxisId="marketSize" dataKey="totalBorrowsUSD" stackId="a" fill={BORROW_COLOR}>
-            {data.map((entry, i) => (
-              <Cell key={entry.id} fill={focusedBar === i ? BORROW_COLOR : '#31333799'} />
-            ))}
-          </Bar>
-          <Bar
-            yAxisId="marketSize"
-            dataKey="totalSupplyUSD"
-            stackId="a"
-            fill={SUPPLY_COLOR}
-            radius={data.length === 7 ? [5, 5, 0, 0] : [2, 2, 0, 0]}
+        {!isLoading ? (
+          <ComposedChart
+            margin={{ top: 100 }}
+            data={data}
+            onMouseMove={({ isTooltipActive, activeTooltipIndex }: CategoricalChartState) => {
+              if (isTooltipActive) {
+                setFocusedBar(activeTooltipIndex);
+              } else {
+                setFocusedBar(undefined);
+              }
+            }}
+            onClick={(e?: CategoricalChartState) => {
+              if (e) {
+                setFocusedBar(e.activeTooltipIndex);
+              }
+            }}
           >
-            {data.map((entry, i) => (
-              <Cell key={entry.id} fill={focusedBar === i ? SUPPLY_COLOR : '#31333799'} />
-            ))}
-          </Bar>
-        </ComposedChart>
+            <Tooltip
+              wrapperStyle={{ visibility: 'visible' }}
+              cursor={{ strokeDasharray: 2 }}
+              content={({ payload, active }) => (
+                <CustomToolTip
+                  payload={payload || defaultTooltipPayload}
+                  active={active && focusedBar !== undefined}
+                />
+              )}
+            />
+
+            {/* arbitrary bottom padding to align lines above bars */}
+            <YAxis yAxisId="bApy" hide padding={{ bottom: 100 }} />
+            <YAxis yAxisId="sApy" hide padding={{ bottom: 100 }} />
+            <Line yAxisId="bApy" dataKey="borrowAPY" stroke={BORROW_COLOR} dot={false} />
+            <Line yAxisId="sApy" dataKey="supplyAPY" stroke={SUPPLY_COLOR} dot={false} />
+
+            {/* arbitrary top padding to align bars below lines */}
+            <YAxis yAxisId="marketSize" hide padding={{ top: 100 }} />
+            <Bar yAxisId="marketSize" dataKey="reserves" stackId="a" fill={RESERVE_COLOR}>
+              {data.map((entry, i) => (
+                <Cell key={entry.id} fill={focusedBar === i ? RESERVE_COLOR : '#31333799'} />
+              ))}
+            </Bar>
+            <Bar yAxisId="marketSize" dataKey="totalBorrowsUSD" stackId="a" fill={BORROW_COLOR}>
+              {data.map((entry, i) => (
+                <Cell key={entry.id} fill={focusedBar === i ? BORROW_COLOR : '#31333799'} />
+              ))}
+            </Bar>
+            <Bar
+              yAxisId="marketSize"
+              dataKey="totalSupplyUSD"
+              stackId="a"
+              fill={SUPPLY_COLOR}
+              radius={data.length === 7 ? [5, 5, 0, 0] : [2, 2, 0, 0]}
+            >
+              {data.map((entry, i) => (
+                <Cell key={entry.id} fill={focusedBar === i ? SUPPLY_COLOR : '#31333799'} />
+              ))}
+            </Bar>
+          </ComposedChart>
+        ) : (
+          <div />
+        )}
       </ResponsiveContainer>
       <div className="flex w-fit items-center bg-darkGray shadow-3xl mt-3 caption-label">
         <div className="px-5">
