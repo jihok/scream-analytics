@@ -61,12 +61,18 @@ export default function Account() {
             overviewType === 'supplied'
               ? token.cTokenBalance * token.market.exchangeRate * token.market.underlyingPrice
               : token.storedBorrowBalance * token.market.underlyingPrice;
+
+          const repaid =
+            ((token.totalUnderlyingRepaid * token.market.underlyingPrice) /
+              account.totalBorrowedUSD) *
+            100;
           const barWidthPercent =
             overviewType === 'supplied'
               ? (valueUSD / account.totalSuppliedUSD) * 100
               : ((token.totalUnderlyingBorrowed * token.market.underlyingPrice) /
                   account.totalBorrowedUSD) *
-                100;
+                  100 -
+                repaid;
 
           return (
             <div className="flex flex-row items-center" key={token.symbol}>
@@ -82,11 +88,7 @@ export default function Account() {
                   {overviewType === 'borrowed' && (
                     <div
                       style={{
-                        width: `${
-                          ((token.totalUnderlyingRepaid * token.market.underlyingPrice) /
-                            account.totalBorrowedUSD) *
-                          100
-                        }%`,
+                        width: `${repaid}%`,
                         backgroundColor: REPAID_COLOR,
                         height: 24,
                       }}
@@ -114,7 +116,7 @@ export default function Account() {
                       backgroundColor: '#31333799',
                       borderRadius: '0px 3px 3px 0px',
                       height: 24,
-                      width: `${100 - barWidthPercent}%`,
+                      width: `${100 - barWidthPercent - repaid}%`,
                     }}
                   />
                 </div>
