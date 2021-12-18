@@ -86,7 +86,7 @@ export default function Layout({ children, home, className }: Props) {
                 style={{
                   backgroundColor: '#1E1F22',
                   position: 'fixed',
-                  top: 100,
+                  top: 80,
                   left: 0,
                   bottom: 0,
                   right: 0,

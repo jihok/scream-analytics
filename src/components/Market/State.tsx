@@ -74,9 +74,7 @@ export default function MarketState({ yesterday, market }: MarketPageProps) {
           <p>Total interest accumulated</p>
           <div className="border-b border-border-secondary w-full self-center mx-2" />
           <p className="font-sans-semibold">
-            {usdFormatter.format(
-              market.totalInterestAccumulated * market.exchangeRate * market.underlyingPrice
-            )}
+            {usdFormatter.format(market.totalInterestAccumulated * market.underlyingPrice)}
           </p>
         </div>
         <div className="flex whitespace-nowrap mb-3">
