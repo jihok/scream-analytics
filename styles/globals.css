@@ -34,7 +34,7 @@
       url('/fonts/Graphik-Bold-Web.woff2') format('woff2');
   }
   body {
-    @apply bg-gray text-primary w-full h-full;
+    @apply bg-gray text-primary min-w-fit h-full;
   }
   h1 {
     @apply text-header font-sans-light;

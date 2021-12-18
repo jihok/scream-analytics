@@ -50,6 +50,9 @@ module.exports = {
         fit: 'fit-content',
         half: '50%',
       },
+      minWidth: {
+        fit: 'fit-content',
+      },
     },
   },
   variants: {
