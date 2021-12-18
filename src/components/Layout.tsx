@@ -1,8 +1,8 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import SearchBar from './SearchBar';
 
 interface Props {
   children: any;
@@ -10,10 +10,10 @@ interface Props {
   className?: string;
 }
 
-export default function Layout({ children, home, className }: Props) {
-  const [searchTerm, setSearchTerm] = useState('');
-  const router = useRouter();
+const ICON_HEIGHT = 24;
 
+export default function Layout({ children, home, className }: Props) {
+  const [showMenu, setShowMenu] = useState(false);
   return (
     <>
       <Head>
@@ -57,42 +57,67 @@ export default function Layout({ children, home, className }: Props) {
             </div>
           )}
 
-          {/* desktop: search bar, tablet/mobile: hamburger */}
-          <div className="hidden lg:flex w-80 border border-border-active rounded-full text-body py-1 px-6">
-            <input
-              type="text"
-              className="w-full focus:outline-none"
-              placeholder="Search for an account..."
-              value={searchTerm}
-              onChange={(val) => {
-                console.log(val.target.value);
-                setSearchTerm(val.target.value);
-              }}
-            />
-            <button type="submit" disabled={!searchTerm}>
-              <Image
-                src="/img/Search.png"
-                alt="menu"
-                width={23}
-                height={23}
-                onClick={async () => {
-                  if (searchTerm) await router.push(`/account/${searchTerm}`);
-                }}
-              />
-            </button>
+          <div className="hidden lg:flex w-80">
+            <SearchBar />
           </div>
           <div className="block lg:hidden" style={{ cursor: 'pointer' }}>
-            <Image
-              src="/img/Menu.png"
-              alt="menu"
-              width={24}
-              height={16}
-              onClick={() => console.log('TODO')}
-            />
+            {showMenu ? (
+              <div style={{ width: 20, height: ICON_HEIGHT, position: 'relative' }}>
+                <Image
+                  src="/img/Cancel.png"
+                  alt="cancel"
+                  layout="fill"
+                  objectFit="contain"
+                  onClick={() => setShowMenu(false)}
+                />
+              </div>
+            ) : (
+              <Image
+                src="/img/Menu.png"
+                alt="menu"
+                width={ICON_HEIGHT}
+                height={16}
+                onClick={() => setShowMenu(true)}
+              />
+            )}
+            {showMenu && (
+              <div
+                className="flex flex-col px-5 pt-8 shadow-3xl"
+                style={{
+                  backgroundColor: '#1E1F22',
+                  position: 'fixed',
+                  top: 100,
+                  left: 0,
+                  bottom: 0,
+                  right: 0,
+                  zIndex: 50,
+                }}
+              >
+                <SearchBar />
+                <Link href="/">
+                  <a className="px-5 pt-10 pb-5">
+                    <h2>Market Analytics</h2>
+                  </a>
+                </Link>
+                <Link href="/">
+                  <a className="px-5">
+                    <h2>Protocol Overview</h2>
+                  </a>
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </header>
-      <main className={`flex flex-col md:px-40 ${className}`}>{children}</main>
+
+      {/*
+        {showMenu && 'fixed'} is to disable scrolling for the mobile menu.
+        It's not ideal due to the following edge case: a desktop window could be small, open the menu,
+        then resized to large, which would disable scrolling but hide the menu.
+      */}
+      <main className={`flex flex-col md:px-40 ${className} ${showMenu && 'fixed'}`}>
+        {children}
+      </main>
       <footer className="flex pt-40 pb-20 justify-center">scream</footer>
     </>
   );
