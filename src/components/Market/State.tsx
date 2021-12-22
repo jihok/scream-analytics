@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import React, { useEffect, useState } from 'react';
 import { MarketPageProps } from '../../../pages/market/[id]';
 import { useGlobalContext } from '../../contexts/GlobalContext';
@@ -17,10 +18,24 @@ export default function MarketState({ yesterday, market }: MarketPageProps) {
     getDistributionData();
   }, [market]);
 
-  const supplyDistribution =
-    ((BLOCKS_IN_A_DAY * 365) / market.totalSupplyUSD) * compSpeeds * screamPrice * 100;
-  const borrowDistribution =
-    ((BLOCKS_IN_A_DAY * 365) / market.totalBorrowsUSD) * compSpeeds * screamPrice * 100;
+  const supplyDistribution = new BigNumber(compSpeeds)
+    .times(screamPrice)
+    .times(BLOCKS_IN_A_DAY)
+    .div(market.totalSupplyUSD)
+    .plus(1)
+    .pow(365)
+    .minus(1)
+    .times(100)
+    .toNumber();
+  const borrowDistribution = new BigNumber(compSpeeds)
+    .times(screamPrice)
+    .times(BLOCKS_IN_A_DAY)
+    .div(market.totalBorrowsUSD)
+    .plus(1)
+    .pow(365)
+    .minus(1)
+    .times(100)
+    .toNumber();
 
   return (
     <div style={{ minWidth: 'fit-content' }}>
@@ -66,9 +81,14 @@ export default function MarketState({ yesterday, market }: MarketPageProps) {
         </table>
 
         <div className="flex whitespace-nowrap mb-3">
-          <p>Interest paid per day</p>
+          <p>Approximate interest paid per day</p>
           <div className="border-b border-border-secondary w-full self-center mx-2" />
           <p className="font-sans-semibold">
+            {/*
+              this is just an approximation since the subgraph's `borrowRate` is the compounded APY.
+              to truly get the rate for a given day, we should either take the APY^(1/365)
+              or fetch the per block rate from the scToken contract
+            */}
             {usdFormatter.format((market.borrowAPY / 100 / 365) * market.totalBorrowsUSD)}
           </p>
         </div>
