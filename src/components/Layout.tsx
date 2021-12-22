@@ -45,7 +45,7 @@ export default function Layout({ children, home, className }: Props) {
                   Market Analytics
                 </a>
               </Link>
-              <Link href="/">
+              <Link href="/protocol">
                 <a
                   className={`${
                     home === 'protocol' ? 'font-sans-bold border-b border-border-primary' : ''
@@ -99,7 +99,7 @@ export default function Layout({ children, home, className }: Props) {
                     <h2>Market Analytics</h2>
                   </a>
                 </Link>
-                <Link href="/">
+                <Link href="/protocol">
                   <a className="px-5">
                     <h2>Protocol Overview</h2>
                   </a>
