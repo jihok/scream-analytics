@@ -7,6 +7,7 @@ import { ACCOUNT_QUERY } from '../../src/queries';
 import { RawAccount, transformAccountData } from '../../src/utils/Account';
 import AccountHeader from '../../src/components/Account/Header';
 import { BORROW_COLOR, SUPPLY_COLOR } from '../../src/components/UtilizationChart';
+import { usdFormatter } from '../../src/utils/Market';
 
 const REPAID_COLOR = '#89DFDB'; // also equal to bg-bar-0
 
@@ -121,7 +122,9 @@ export default function Account() {
                       <>
                         <p className="text-caption pt-2">Repaid</p>
                         <p className="font-sans-semibold">
-                          ${(token.totalUnderlyingRepaid * token.market.underlyingPrice).toFixed(2)}
+                          {usdFormatter.format(
+                            token.totalUnderlyingRepaid * token.market.underlyingPrice
+                          )}
                         </p>
                       </>
                     )}
