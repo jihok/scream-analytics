@@ -60,4 +60,10 @@
   input {
     @apply bg-transparent;
   }
+  tbody tr {
+    @apply border-border-secondary border-b;
+  }
+  tbody tr:last-child {
+    @apply border-border-primary;
+  }
 }

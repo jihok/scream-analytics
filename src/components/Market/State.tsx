@@ -35,32 +35,34 @@ export default function MarketState({ yesterday, market }: MarketPageProps) {
               <th>Net APY</th>
             </tr>
           </thead>
-          <tr className="border-border-secondary border-b">
-            <td className="caption-label">Supply</td>
-            <td>
-              <h2 className="pb-1">{market.supplyAPY.toFixed(2)}%</h2>
-              <PercentChange yesterdayVal={yesterday.supplyAPY} todayVal={market.supplyAPY} />
-            </td>
-            <td>
-              <h2>{supplyDistribution.toFixed(2)}%</h2>
-            </td>
-            <td>
-              <h2>{(market.supplyAPY + supplyDistribution).toFixed(2)}%</h2>
-            </td>
-          </tr>
-          <tr className="border-border-primary border-b">
-            <td className="caption-label">Borrow</td>
-            <td>
-              <h2 className="pb-1">{market.borrowAPY.toFixed(2)}%</h2>
-              <PercentChange yesterdayVal={yesterday.borrowAPY} todayVal={market.borrowAPY} />
-            </td>
-            <td>
-              <h2>{borrowDistribution.toFixed(2)}%</h2>
-            </td>
-            <td>
-              <h2>{(market.borrowAPY - borrowDistribution).toFixed(2)}%</h2>
-            </td>
-          </tr>
+          <tbody>
+            <tr>
+              <td className="caption-label">Supply</td>
+              <td>
+                <h2 className="pb-1">{market.supplyAPY.toFixed(2)}%</h2>
+                <PercentChange yesterdayVal={yesterday.supplyAPY} todayVal={market.supplyAPY} />
+              </td>
+              <td>
+                <h2>{supplyDistribution.toFixed(2)}%</h2>
+              </td>
+              <td>
+                <h2>{(market.supplyAPY + supplyDistribution).toFixed(2)}%</h2>
+              </td>
+            </tr>
+            <tr>
+              <td className="caption-label">Borrow</td>
+              <td>
+                <h2 className="pb-1">{market.borrowAPY.toFixed(2)}%</h2>
+                <PercentChange yesterdayVal={yesterday.borrowAPY} todayVal={market.borrowAPY} />
+              </td>
+              <td>
+                <h2>{borrowDistribution.toFixed(2)}%</h2>
+              </td>
+              <td>
+                <h2>{(market.borrowAPY - borrowDistribution).toFixed(2)}%</h2>
+              </td>
+            </tr>
+          </tbody>
         </table>
 
         <div className="flex whitespace-nowrap mb-3">
