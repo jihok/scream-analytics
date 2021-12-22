@@ -208,11 +208,7 @@ export default function Table() {
           prepareRow(row);
           return (
             <Link href={`market/${row.id}`} key={row.id} passHref>
-              <tr
-                {...row.getRowProps()}
-                style={{ cursor: 'pointer' }}
-                className="border-border-secondary border-b"
-              >
+              <tr {...row.getRowProps()} style={{ cursor: 'pointer' }}>
                 {row.cells.map((cell) => (
                   <td
                     {...cell.getCellProps()}
