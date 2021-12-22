@@ -67,6 +67,7 @@ export const MARKET_DETAILS_QUERY = gql`
   query MarketDetails($id: String!) {
     markets(where: { id: $id }) {
       ${MARKET_BASE_VARS}
+      id
       totalInterestAccumulated
       reserveFactor
       collateralFactor
