@@ -74,12 +74,17 @@ export default function UtilizationChart({ data, isLoading }: Props) {
 
             {/* arbitrary top padding to align bars below lines */}
             <YAxis yAxisId="marketSize" hide padding={{ top: 100 }} />
-            <Bar yAxisId="marketSize" dataKey="reserves" stackId="a" fill={RESERVE_COLOR}>
+            <Bar yAxisId="marketSize" dataKey="reserves" stackId="marketDay" fill={RESERVE_COLOR}>
               {data.map((entry, i) => (
                 <Cell key={entry.id} fill={focusedBar === i ? RESERVE_COLOR : '#31333799'} />
               ))}
             </Bar>
-            <Bar yAxisId="marketSize" dataKey="totalBorrowsUSD" stackId="a" fill={BORROW_COLOR}>
+            <Bar
+              yAxisId="marketSize"
+              dataKey="totalBorrowsUSD"
+              stackId="marketDay"
+              fill={BORROW_COLOR}
+            >
               {data.map((entry, i) => (
                 <Cell key={entry.id} fill={focusedBar === i ? BORROW_COLOR : '#31333799'} />
               ))}
@@ -87,7 +92,7 @@ export default function UtilizationChart({ data, isLoading }: Props) {
             <Bar
               yAxisId="marketSize"
               dataKey="totalSupplyUSD"
-              stackId="a"
+              stackId="marketDay"
               fill={SUPPLY_COLOR}
               radius={data.length <= 7 ? [5, 5, 0, 0] : [2, 2, 0, 0]}
             >
