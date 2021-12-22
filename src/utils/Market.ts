@@ -11,6 +11,7 @@ export interface RawMarket {
   supplyRate: string;
   id: string;
   cash: string;
+  reserves: string;
 }
 
 export interface Market extends Omit<RawMarket, 'underlyingPrice' | 'exchangeRate'> {
@@ -46,6 +47,7 @@ export function transformMarketData(rawMarkets: any): any {
     exchangeRate: +rawMarket.exchangeRate,
     borrowAPY: +rawMarket.borrowRate * 100,
     supplyAPY: +rawMarket.supplyRate * 100,
+    reserves: +rawMarket.reserves * +rawMarket.underlyingPrice,
 
     // MarketDetails
     totalInterestAccumulated: +rawMarket.totalInterestAccumulated,
@@ -53,9 +55,6 @@ export function transformMarketData(rawMarkets: any): any {
       ? +ethers.utils.formatEther(rawMarket.reserveFactor)
       : undefined,
     collateralFactor: +rawMarket.collateralFactor,
-
-    // TBD
-    reserves: +rawMarket.reserves * +rawMarket.underlyingPrice,
   }));
 }
 

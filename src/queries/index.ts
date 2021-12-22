@@ -20,11 +20,12 @@ export const LATEST_BLOCK_QUERY = gql`
 
 // might be able to do this in a type safe way that links to defined interfaces
 const MARKET_BASE_VARS = `
-totalSupply
-totalBorrows
 borrowRate
-supplyRate
 exchangeRate
+reserves
+supplyRate
+totalBorrows
+totalSupply
 underlyingPrice
 `;
 
@@ -54,7 +55,6 @@ export const MARKET_BASE_BY_BLOCK_QUERY = gql`
   query MarketBaseByBlock($id: String!, $blockNumber: Int!) {
     markets(block: { number: $blockNumber }, where: { id: $id }) {
       ${MARKET_BASE_VARS}
-      reserves
     }
   }
 `;

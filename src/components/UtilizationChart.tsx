@@ -76,7 +76,10 @@ export default function UtilizationChart({ data, isLoading }: Props) {
             <YAxis yAxisId="marketSize" hide padding={{ top: 100 }} />
             <Bar yAxisId="marketSize" dataKey="reserves" stackId="marketDay" fill={RESERVE_COLOR}>
               {data.map((entry, i) => (
-                <Cell key={entry.id} fill={focusedBar === i ? RESERVE_COLOR : '#31333799'} />
+                <Cell
+                  key={`${entry.reserves}-${entry.underlyingPrice}`}
+                  fill={focusedBar === i ? RESERVE_COLOR : '#31333799'}
+                />
               ))}
             </Bar>
             <Bar
@@ -86,7 +89,10 @@ export default function UtilizationChart({ data, isLoading }: Props) {
               fill={BORROW_COLOR}
             >
               {data.map((entry, i) => (
-                <Cell key={entry.id} fill={focusedBar === i ? BORROW_COLOR : '#31333799'} />
+                <Cell
+                  key={`${entry.borrowRate}-${entry.totalBorrowsUSD}`}
+                  fill={focusedBar === i ? BORROW_COLOR : '#31333799'}
+                />
               ))}
             </Bar>
             <Bar
@@ -97,7 +103,10 @@ export default function UtilizationChart({ data, isLoading }: Props) {
               radius={data.length <= 7 ? [5, 5, 0, 0] : [2, 2, 0, 0]}
             >
               {data.map((entry, i) => (
-                <Cell key={entry.id} fill={focusedBar === i ? SUPPLY_COLOR : '#31333799'} />
+                <Cell
+                  key={`${entry.supplyRate}-${entry.totalSupplyUSD}`}
+                  fill={focusedBar === i ? SUPPLY_COLOR : '#31333799'}
+                />
               ))}
             </Bar>
           </ComposedChart>
