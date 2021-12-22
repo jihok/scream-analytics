@@ -37,13 +37,23 @@ export default function MarketProvider(props: { children: React.ReactNode }) {
       ]);
 
       setYesterdayMarkets(transformMarketData(yesterday.data.markets));
-      setTodayMarkets(transformMarketData(today.data.markets));
+      setTodayMarkets(
+        transformMarketData(
+          today.data.markets.filter(
+            (market) => market.id !== '0x383d965c8d2ac0a9c1f6930ad10943606bca4cb7' // filter out fake FRAX
+          )
+        )
+      );
     })();
   }, [latestSyncedBlock]);
 
   return (
     <MarketContext.Provider value={{ yesterdayMarkets, todayMarkets }}>
-      {props.children}
+      {!todayMarkets.length || !yesterdayMarkets.length ? (
+        <div>{/** TODO: LOADING */}</div>
+      ) : (
+        props.children
+      )}
     </MarketContext.Provider>
   );
 }
