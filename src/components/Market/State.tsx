@@ -26,7 +26,7 @@ export default function MarketState({ yesterday, market }: MarketPageProps) {
     <div style={{ minWidth: 'fit-content' }}>
       <div className="pb-8">
         <h3 className="pb-3">Current State</h3>
-        <table className="w-full border-t border-border-primary mb-4">
+        <table className="w-full border-t border-border-primary mb-4 text-left">
           <thead className="caption-label">
             <tr className="border-border-secondary border-b">
               <th />
@@ -38,7 +38,7 @@ export default function MarketState({ yesterday, market }: MarketPageProps) {
           <tr className="border-border-secondary border-b">
             <td className="caption-label">Supply</td>
             <td>
-              <h2>{market.supplyAPY.toFixed(2)}%</h2>
+              <h2 className="pb-1">{market.supplyAPY.toFixed(2)}%</h2>
               <PercentChange yesterdayVal={yesterday.supplyAPY} todayVal={market.supplyAPY} />
             </td>
             <td>
@@ -51,7 +51,7 @@ export default function MarketState({ yesterday, market }: MarketPageProps) {
           <tr className="border-border-primary border-b">
             <td className="caption-label">Borrow</td>
             <td>
-              <h2>{market.borrowAPY.toFixed(2)}%</h2>
+              <h2 className="pb-1">{market.borrowAPY.toFixed(2)}%</h2>
               <PercentChange yesterdayVal={yesterday.borrowAPY} todayVal={market.borrowAPY} />
             </td>
             <td>
@@ -67,7 +67,7 @@ export default function MarketState({ yesterday, market }: MarketPageProps) {
           <p>Interest paid per day</p>
           <div className="border-b border-border-secondary w-full self-center mx-2" />
           <p className="font-sans-semibold">
-            {usdFormatter.format(((market.borrowAPY / 100) * market.totalBorrowsUSD) / 365)}
+            {usdFormatter.format((market.borrowAPY / 100 / 365) * market.totalBorrowsUSD)}
           </p>
         </div>
         <div className="flex whitespace-nowrap mb-3">
