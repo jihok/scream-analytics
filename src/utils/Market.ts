@@ -14,13 +14,14 @@ export interface RawMarket {
   reserves: string;
 }
 
-export interface Market extends Omit<RawMarket, 'underlyingPrice' | 'exchangeRate'> {
+export interface Market extends Omit<RawMarket, 'underlyingPrice' | 'exchangeRate' | 'reserves'> {
   totalSupplyUSD: number;
   totalBorrowsUSD: number;
   underlyingPrice: number;
   exchangeRate: number;
   borrowAPY: number;
   supplyAPY: number;
+  reserves: number;
 }
 
 export interface RawMarketDetails extends RawMarket {
