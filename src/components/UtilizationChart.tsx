@@ -13,8 +13,8 @@ import {
 import { CategoricalChartState } from 'recharts/types/chart/generateCategoricalChart';
 import { formatAbbrUSD, Market } from '../utils/Market';
 
-export const BORROW_COLOR = '#FFB158';
-export const SUPPLY_COLOR = '#C8A6FF';
+export const BORROW_COLOR = '#FF9900';
+export const SUPPLY_COLOR = '#FF26B2';
 const RESERVE_COLOR = '#F7C893';
 interface Props {
   data: Market[];
@@ -135,10 +135,18 @@ export default function UtilizationChart({ data, isLoading }: Props) {
           </p>
         </div>
         <div className="px-5 py-3 border-l border-border-secondary">
-          <div className="pb-1" style={{ color: BORROW_COLOR }}>
+          <div className="pb-1" style={{ color: RESERVE_COLOR }}>
             Reserves
           </div>
           <p>{focusedBar !== undefined ? formatAbbrUSD(data[focusedBar]?.reserves) : '--'}</p>
+        </div>
+        <div className="px-5 py-3 border-l border-border-secondary">
+          <div className="pb-1">Liquidity</div>
+          <p>
+            {focusedBar !== undefined
+              ? formatAbbrUSD(+data[focusedBar]?.cash * data[focusedBar].underlyingPrice)
+              : '--'}
+          </p>
         </div>
       </div>
     </>

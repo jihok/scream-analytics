@@ -6,12 +6,12 @@ module.exports = {
       gray: '#1E1F22F2',
       darkGray: '#1E1F2280',
       bar: {
-        0: '#89DFDB',
-        1: '#F4BBD1',
-        2: '#F7C893',
-        3: '#F1DC75',
-        4: '#CBC6FB',
-        5: '#12ADA6',
+        0: '#00FFFF',
+        1: '#FF0F6C',
+        2: '#A20BFF',
+        3: '#6CFFBD',
+        4: '#FF26B2',
+        5: '#FF9900',
         6: '#4F4F50', // 'other' color
       },
       border: {
@@ -24,8 +24,8 @@ module.exports = {
     textColor: {
       primary: '#FFFFFF',
       secondary: '#D3D3D3',
-      positive: '#90DDB0',
-      negative: '#C84343',
+      positive: '#4EFC97',
+      negative: '#FF3939',
     },
     fontFamily: {
       sans: 'Graphik',

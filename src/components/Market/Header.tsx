@@ -56,7 +56,7 @@ export default function MarketHeader({ yesterday, market }: MarketPageProps) {
         </div>
         <div>
           <div className="caption-label">Liquidity</div>
-          <h2 className="py-1">{formatAbbrUSD(+market.cash)}</h2>
+          <h2 className="py-1">{formatAbbrUSD(+market.cash * market.underlyingPrice)}</h2>
           <PercentChange yesterdayVal={+yesterday.cash} todayVal={+market.cash} />
         </div>
       </div>

@@ -21,6 +21,7 @@ export const LATEST_BLOCK_QUERY = gql`
 // might be able to do this in a type safe way that links to defined interfaces
 const MARKET_BASE_VARS = `
 borrowRate
+cash
 exchangeRate
 reserves
 supplyRate
@@ -41,7 +42,6 @@ export const MARKETS_BY_BLOCK_QUERY = gql`
       underlyingSymbol
       underlyingName
       id
-      cash
     }
   }
 `;
@@ -74,7 +74,6 @@ export const MARKET_DETAILS_QUERY = gql`
       symbol
       underlyingName
       underlyingSymbol
-      cash
     }
   }
 `;

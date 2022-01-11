@@ -81,7 +81,7 @@ export default function MarketState({ yesterday, market }: MarketPageProps) {
         </table>
 
         <div className="flex whitespace-nowrap mb-3">
-          <p>Approximate interest paid per day</p>
+          <p>Estimated daily interest</p>
           <div className="border-b border-border-secondary w-full self-center mx-2" />
           <p className="font-sans-semibold">
             {/*
