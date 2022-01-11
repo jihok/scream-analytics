@@ -29,7 +29,7 @@ const CustomCell = ({ colId, val }: CellParams) => {
       <div className="flex">
         <div style={{ width: 24, marginRight: 8, position: 'relative' }}>
           <Image
-            src={`/static/images/tokens/${val.underlyingSymbol}.png`}
+            src={`/images/tokens/${val.underlyingSymbol}.png`}
             layout="fill"
             objectFit="contain"
             alt={val.underlyingSymbol}

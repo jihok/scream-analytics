@@ -20,7 +20,7 @@ export default function SearchBar() {
       />
       <button type="submit" disabled={!searchTerm}>
         <Image
-          src="/static/images/Search.png"
+          src="/images/Search.png"
           alt="menu"
           width={23}
           height={23}

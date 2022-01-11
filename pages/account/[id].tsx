@@ -28,7 +28,7 @@ export default function Account() {
       <Layout className="p-5 lg:px-80">
         <div className="flex flex-col items-center justify-center">
           <div className="flex pb-8">
-            <Image src="/static/images/User.png" width={33} height={33} alt="account" />
+            <Image src="/images/User.png" width={33} height={33} alt="account" />
             <h1 className="pl-5 font-sans-semibold">No user address found.</h1>
           </div>
           <p>Please try your search again.</p>
