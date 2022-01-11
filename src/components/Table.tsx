@@ -27,12 +27,14 @@ const CustomCell = ({ colId, val }: CellParams) => {
   if (val.underlyingName) {
     return (
       <div className="flex">
-        <Image
-          src={`/img/tokens/${val.underlyingSymbol}.svg`}
-          width={16}
-          height={16}
-          alt={val.underlyingSymbol}
-        />
+        <div style={{ width: 24, marginRight: 8, position: 'relative' }}>
+          <Image
+            src={`/img/tokens/${val.underlyingSymbol}.png`}
+            layout="fill"
+            objectFit="contain"
+            alt={val.underlyingSymbol}
+          />
+        </div>
         <span className="ml-1 lg:ml-5">
           <p>{val.underlyingSymbol}</p>
           <p className="font-sans-semibold">{val.underlyingName}</p>

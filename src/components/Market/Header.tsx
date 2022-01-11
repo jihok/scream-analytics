@@ -10,12 +10,14 @@ export default function MarketHeader({ yesterday, market }: MarketPageProps) {
       {/* asset name and price */}
       <div className="flex flex-row justify-between lg:flex-col">
         <div className="flex flex-row">
-          <Image
-            src={`/img/tokens/${market.underlyingSymbol}.svg`}
-            width={33}
-            height={33}
-            alt={market.underlyingSymbol}
-          />
+          <div style={{ width: 33, position: 'relative' }}>
+            <Image
+              src={`/img/tokens/${market.underlyingSymbol}.png`}
+              layout="fill"
+              objectFit="contain"
+              alt={market.underlyingSymbol}
+            />
+          </div>
           <div className="ml-3 lg:ml-5">
             <span className="lg:flex lg:flex-row-reverse lg:justify-end lg:items-baseline">
               <p className="lg:ml-2">{market.underlyingSymbol}</p>
