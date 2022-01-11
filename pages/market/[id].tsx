@@ -89,8 +89,8 @@ export default function MarketPage() {
     <Layout className="p-5">
       <MarketHeader yesterday={yesterday} market={market} />
 
-      <div className="flex flex-col lg:flex-row-reverse lg:justify-between">
-        <div className="pb-8 lg:ml-20 lg:flex-1">
+      <div className="flex flex-col lg:flex-row lg:justify-between">
+        <div className="pb-8 lg:mr-20 lg:flex-1">
           <div className="flex justify-between items-center pb-3 border-b border-border-primary">
             <h3>Historical Utilization</h3>
             <div className="flex" style={{ cursor: 'pointer' }}>

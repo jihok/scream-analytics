@@ -6,7 +6,7 @@ import { MarketPageProps } from '../../../pages/market/[id]';
 
 export default function MarketHeader({ yesterday, market }: MarketPageProps) {
   return (
-    <div className="pb-8 flex flex-col lg:flex-row lg:justify-between">
+    <div className="pb-12 flex flex-col lg:flex-row lg:justify-between">
       {/* asset name and price */}
       <div className="flex flex-row justify-between lg:flex-col">
         <div className="flex flex-row">

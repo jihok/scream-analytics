@@ -11,7 +11,7 @@ export default function AccountHeader({ account }: { account: Account }) {
         <div className="pl-5">
           <h1>
             {`${account.id.slice(0, 6)}...${account.id.slice(-4)}`}
-            <button className="pl-8" onClick={() => navigator.clipboard.writeText(account.id)}>
+            <button className="pl-5" onClick={() => navigator.clipboard.writeText(account.id)}>
               <Image src="/images/Copy.png" width={13} height={15} alt="copy" />
             </button>
           </h1>
