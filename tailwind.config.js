@@ -5,7 +5,7 @@ module.exports = {
     colors: {
       gradientFrom: '#0E0F10',
       gradientTo: '#1B2729',
-      darkGray: '#1E1F2280',
+      darkGray: '#0E0F1080',
       bar: {
         0: '#00FFFF',
         1: '#FF0F6C',
