@@ -12,7 +12,7 @@ export default function MarketHeader({ yesterday, market }: MarketPageProps) {
         <div className="flex flex-row">
           <div style={{ width: 33, position: 'relative' }}>
             <Image
-              src={`/images/${market.underlyingSymbol}.png`}
+              src={`/images/tokens/${market.underlyingSymbol.toLowerCase()}.png`}
               layout="fill"
               objectFit="contain"
               alt={market.underlyingSymbol}

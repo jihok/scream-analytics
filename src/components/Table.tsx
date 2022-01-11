@@ -29,7 +29,7 @@ const CustomCell = ({ colId, val }: CellParams) => {
       <div className="flex">
         <div style={{ width: 24, marginRight: 8, position: 'relative' }}>
           <Image
-            src={`/images/${val.underlyingSymbol.toLowerCase()}.png`}
+            src={`/images/tokens/${val.underlyingSymbol.toLowerCase()}.png`}
             layout="fill"
             objectFit="contain"
             alt={val.underlyingSymbol}
@@ -177,14 +177,23 @@ export default function Table() {
                 }
                 return a.values[accessor].todayVal > b.values[accessor].todayVal ? 1 : -1;
               };
+
+              const getClassName = () => {
+                let res = 'w-fit whitespace-nowrap';
+                if (column.id === 'asset') {
+                  res += ' shadow-tableAsset';
+                }
+                if (column.id === 'liquidity') {
+                  res += ' hidden lg:table-cell';
+                }
+                return res;
+              };
               return (
                 <th
                   // @ts-ignore - UseSortByColumnProps
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                   key={column.id}
-                  className={`${
-                    column.id === 'liquidity' ? 'hidden lg:table-cell' : ''
-                  } w-fit whitespace-nowrap`}
+                  className={getClassName()}
                 >
                   {column.render('Header')}
                   <span
@@ -211,18 +220,26 @@ export default function Table() {
           return (
             <Link href={`market/${row.id}`} key={row.id} passHref>
               <tr {...row.getRowProps()} style={{ cursor: 'pointer' }}>
-                {row.cells.map((cell) => (
-                  <td
-                    {...cell.getCellProps()}
-                    className={cell.column.id === 'liquidity' ? 'hidden lg:table-cell' : ''}
-                    key={`${cell.row.id}-${cell.column.id}`}
-                  >
-                    {
-                      // @ts-ignore - type def should but doesn't include JSX.Element
-                      cell.render(<CustomCell colId={cell.column.id} val={cell.value} />)
+                {row.cells.map((cell) => {
+                  const getClassName = () => {
+                    if (cell.column.id === 'asset') {
+                      return 'shadow-tableAsset';
                     }
-                  </td>
-                ))}
+                    return cell.column.id === 'liquidity' ? 'hidden lg:table-cell' : '';
+                  };
+                  return (
+                    <td
+                      {...cell.getCellProps()}
+                      className={getClassName()}
+                      key={`${cell.row.id}-${cell.column.id}`}
+                    >
+                      {
+                        // @ts-ignore - type def should but doesn't include JSX.Element
+                        cell.render(<CustomCell colId={cell.column.id} val={cell.value} />)
+                      }
+                    </td>
+                  );
+                })}
               </tr>
             </Link>
           );

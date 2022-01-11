@@ -46,6 +46,7 @@ module.exports = {
     extend: {
       boxShadow: {
         '3xl': '0px 4px 4px 0px #00000040',
+        tableAsset: '3px 0px 15px -2px #00000066',
       },
       width: {
         fit: 'fit-content',
