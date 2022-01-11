@@ -28,7 +28,7 @@ export default function Layout({ children, home, className }: Props) {
             {home ? (
               <div>{/** TODO */}</div>
             ) : (
-              <Image src="/img/Back.png" alt="home" width={20} height={15} />
+              <Image src="/static/images/Back.png" alt="home" width={20} height={15} />
             )}
           </a>
         </Link>
@@ -64,7 +64,7 @@ export default function Layout({ children, home, className }: Props) {
             {showMenu ? (
               <div style={{ width: 20, height: ICON_HEIGHT, position: 'relative' }}>
                 <Image
-                  src="/img/Cancel.png"
+                  src="/static/images/Cancel.png"
                   alt="cancel"
                   layout="fill"
                   objectFit="contain"
@@ -73,7 +73,7 @@ export default function Layout({ children, home, className }: Props) {
               </div>
             ) : (
               <Image
-                src="/img/Menu.png"
+                src="/static/images/Menu.png"
                 alt="menu"
                 width={ICON_HEIGHT}
                 height={16}

@@ -6,13 +6,13 @@ export default function AccountHeader({ account }: { account: Account }) {
     <div className="flex flex-col lg:flex-row lg:justify-between">
       <div className="flex pb-7">
         <div style={{ width: 33, height: 33, position: 'relative' }}>
-          <Image src="/img/User.png" layout="fill" objectFit="contain" alt="account" />
+          <Image src="/static/images/User.png" layout="fill" objectFit="contain" alt="account" />
         </div>
         <div className="pl-5">
           <h1>
             {`${account.id.slice(0, 6)}...${account.id.slice(-4)}`}
             <button className="pl-8" onClick={() => navigator.clipboard.writeText(account.id)}>
-              <Image src="/img/Copy.png" width={13} height={15} alt="copy" />
+              <Image src="/static/images/Copy.png" width={13} height={15} alt="copy" />
             </button>
           </h1>
           <p className="text-subheading pt-3">

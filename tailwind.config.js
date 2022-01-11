@@ -1,8 +1,7 @@
 module.exports = {
-  content: ['./pages/**/*.{js,ts,jsx,tsx}', './src/**/*.{js,ts,jsx,tsx}', './public/**/*.png'],
+  content: ['./pages/**/*.{js,ts,jsx,tsx}', './src/**/*.{js,ts,jsx,tsx}'],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    // gray: 'linear-gradient(180deg, #1B2729 0%, #0E0F10 100%)',
     colors: {
       gradientFrom: '#0E0F10',
       gradientTo: '#1B2729',
