@@ -54,10 +54,10 @@ export default function ProtocolOverview() {
               {data.slice(0, 6).map((d, i) => (
                 <div className="flex mt-2" key={d.name}>
                   <div className={`rounded-full h-2 w-2 mr-1 mt-0.5 bg-bar-${i}`} />
-                  <div className="flex-col text-caption">
+                  <p className="flex-col">
                     <div className="font-sans-semibold">{d.name}</div>
                     {d.percent.toFixed(2)}%
-                  </div>
+                  </p>
                 </div>
               ))}
             </div>
@@ -75,20 +75,20 @@ export default function ProtocolOverview() {
             <div className="flex flex-col">
               <div className="flex mt-2">
                 <div className="rounded-full h-2 w-2 mr-1 mt-0.5 bg-bar-6" />
-                <div className="flex-col text-caption pb-2 border-b border-border-primary">
+                <p className="flex-col pb-2 border-b border-border-primary">
                   <div className="font-sans-semibold">Other</div>
                   {otherPercent.toFixed(2)}%
-                </div>
+                </p>
               </div>
               {data.slice(6, 10).map((d) => (
                 <div className="flex mt-2 pl-3" key={d.name}>
-                  <div className="flex-col text-caption">
+                  <p className="flex-col">
                     <div className="font-sans-semibold">{d.name}</div>
                     {d.percent.toFixed(2)}%
-                  </div>
+                  </p>
                 </div>
               ))}
-              <div className="text-caption pt-2 pl-3">+ {data.length - 10} more</div>
+              <p className="pt-2 pl-3">+ {data.length - 10} more</p>
             </div>
           </div>
         </div>
