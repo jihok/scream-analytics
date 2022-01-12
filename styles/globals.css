@@ -78,4 +78,27 @@
     background-color: #ffffff1a;
     color: #ffffff4d;
   }
+
+  input:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+
+  /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type='number'] {
+    /* Firefox */
+    -moz-appearance: textfield;
+
+    border: 1px solid white;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    text-align: right;
+    max-width: 150px;
+  }
 }

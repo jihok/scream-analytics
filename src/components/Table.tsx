@@ -225,7 +225,7 @@ export default function Table() {
         <div className="flex w-full lg:w-52 border border-border-active rounded-full text-body py-1 px-6 mx-3 lg:mx-0">
           <input
             type="text"
-            className="w-full focus:outline-none"
+            className="w-full"
             placeholder="Search for a token..."
             value={globalFilter}
             onChange={(val) => setGlobalFilter(val.target.value)}

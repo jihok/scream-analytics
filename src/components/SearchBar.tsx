@@ -10,7 +10,7 @@ export default function SearchBar() {
     <div className="flex w-full border border-border-active rounded-full text-body py-1 px-6">
       <input
         type="text"
-        className="w-full focus:outline-none"
+        className="w-full"
         placeholder="Search for an account..."
         value={searchTerm}
         onChange={(val) => {
