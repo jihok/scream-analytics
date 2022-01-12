@@ -22,7 +22,7 @@ export default function Layout({ children, home, className }: Props) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <header className="flex justify-between p-5">
+      <header className="flex justify-between p-5 mb-10">
         <Link href="/">
           <a>
             {home ? (
