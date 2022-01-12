@@ -42,7 +42,7 @@ export default function HealthSimulator({
 
   return (
     <div
-      className="flex flex-col px-5 pt-8 pb-12 simulator"
+      className="flex flex-col px-5 pt-8 pb-12 overflow-scroll simulator"
       style={{
         position: 'fixed',
         top: 0,
@@ -138,6 +138,7 @@ export default function HealthSimulator({
                 </label>
                 <input
                   type="number"
+                  value={token.quantity}
                   onChange={
                     ({ target: { value } }) =>
                       tokens.splice(i, 1, { ...tokens[i], underlyingPrice: +value }) // TODO: check that this works
