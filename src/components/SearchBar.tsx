@@ -23,7 +23,9 @@ export default function SearchBar() {
           alt="menu"
           width={23}
           height={23}
-          onClick={async () => await router.push(`/account/${searchTerm}`)}
+          onClick={async () => {
+            if (searchTerm) await router.push(`/account/${searchTerm}`);
+          }}
         />
       </button>
     </div>
