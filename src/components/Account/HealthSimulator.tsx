@@ -5,8 +5,7 @@ import { usdFormatter } from '../../utils/Market';
 
 interface SimToken {
   collateralFactor: number;
-  cTokenBalance: number;
-  exchangeRate: number;
+  quantity: number;
   underlyingPrice: number;
   underlyingSymbol: string;
   underlyingName: string;
@@ -23,8 +22,7 @@ export default function HealthSimulator({
   const [tokens, setTokens] = useState<SimToken[]>(
     account.tokens.map((token) => ({
       collateralFactor: token.market.collateralFactor,
-      cTokenBalance: token.cTokenBalance,
-      exchangeRate: token.market.exchangeRate,
+      quantity: token.cTokenBalance * token.market.exchangeRate,
       underlyingPrice: token.market.underlyingPrice,
       underlyingSymbol: token.market.underlyingSymbol,
       underlyingName: token.market.underlyingName,
@@ -33,8 +31,7 @@ export default function HealthSimulator({
   );
 
   const borrowLimitUSD = tokens.reduce(
-    (prev, curr) =>
-      prev + curr.collateralFactor * curr.cTokenBalance * curr.exchangeRate * curr.underlyingPrice,
+    (prev, curr) => prev + curr.collateralFactor * curr.quantity * curr.underlyingPrice,
     0
   );
   const borrowBalanceUSD = tokens.reduce(
@@ -101,15 +98,12 @@ export default function HealthSimulator({
         <h3>Supply</h3>
         <p className="text-title">
           {usdFormatter.format(
-            tokens.reduce(
-              (prev, curr) => prev + curr.cTokenBalance * curr.exchangeRate * curr.underlyingPrice,
-              0
-            )
+            tokens.reduce((prev, curr) => prev + curr.quantity * curr.underlyingPrice, 0)
           )}
         </p>
       </div>
       {tokens
-        .filter((token) => !!token.cTokenBalance)
+        .filter((token) => !!token.quantity)
         .map((token, i) => (
           <div className="py-4" key={token.underlyingSymbol}>
             <div className="flex items-end pb-4">
@@ -152,11 +146,7 @@ export default function HealthSimulator({
               </span>
               <span>
                 <p className="pb-5">Total USD</p>
-                <h2>
-                  {usdFormatter.format(
-                    token.cTokenBalance * token.exchangeRate * token.underlyingPrice
-                  )}
-                </h2>
+                <h2>{usdFormatter.format(token.quantity * token.underlyingPrice)}</h2>
               </span>
             </div>
           </div>
