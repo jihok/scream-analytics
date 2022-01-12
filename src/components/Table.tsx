@@ -2,14 +2,7 @@ import React, { useMemo, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { formatAbbrUSD } from '../utils/Market';
-import {
-  useTable,
-  Column,
-  useSortBy,
-  Row,
-  usePagination,
-  UsePaginationInstanceProps,
-} from 'react-table';
+import { useTable, Column, useSortBy, Row, usePagination, useGlobalFilter } from 'react-table';
 import { useMarketContext } from '../contexts/MarketContext';
 import PercentChange, { MutableData } from './PercentChange';
 
@@ -77,7 +70,6 @@ const CustomCell = ({ colId, val }: CellParams) => {
 
 export default function Table() {
   const { yesterdayMarkets, todayMarkets } = useMarketContext();
-  const [searchTerm, setSearchTerm] = useState('');
 
   const columns = useMemo<Column<TableData>[]>(
     () => [
@@ -153,6 +145,16 @@ export default function Table() {
     [todayMarkets, yesterdayMarkets]
   );
 
+  const nameOrSymbolFilter = (rows: any[], _id: any[], filterValue: string) => {
+    return rows.filter((row) => {
+      const rowName: string = row.values.asset.underlyingName.toLowerCase();
+      const rowSymbol: string = row.values.asset.underlyingSymbol.toLowerCase();
+      return (
+        rowName.includes(filterValue.toLowerCase()) || rowSymbol.includes(filterValue.toLowerCase())
+      );
+    });
+  };
+
   const PageTurner = () => (
     <>
       <button
@@ -197,7 +199,9 @@ export default function Table() {
     // @ts-ignore
     previousPage,
     // @ts-ignore
-    state: { pageIndex, pageSize },
+    state: { pageIndex, pageSize, globalFilter },
+    // @ts-ignore
+    setGlobalFilter,
   } = useTable<TableData>(
     {
       columns,
@@ -208,7 +212,9 @@ export default function Table() {
         pageSize: 7,
       },
       getRowId: (row) => row.id,
+      globalFilter: nameOrSymbolFilter,
     },
+    useGlobalFilter,
     useSortBy,
     usePagination
   );
@@ -221,18 +227,16 @@ export default function Table() {
             type="text"
             className="w-full focus:outline-none"
             placeholder="Search for a token..."
-            value={searchTerm}
-            onChange={(val) => setSearchTerm(val.target.value)}
+            value={globalFilter}
+            onChange={(val) => setGlobalFilter(val.target.value)}
           />
-          <button type="submit" disabled={!searchTerm}>
+          <button type="submit" disabled={!globalFilter}>
             <Image
               src="/images/Search.png"
               alt="menu"
               width={23}
               height={23}
-              onClick={() => {
-                if (searchTerm) console.log(searchTerm);
-              }}
+              onClick={() => setGlobalFilter(globalFilter)}
             />
           </button>
         </div>
