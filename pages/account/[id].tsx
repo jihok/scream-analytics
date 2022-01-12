@@ -43,7 +43,7 @@ export default function Account() {
 
   return (
     <>
-      <Layout className="p-5 lg:px-80">
+      <Layout className={`p-5 lg:px-80 ${showSimulator && 'fixed'}`}>
         <AccountHeader account={account} />
 
         <h3 className="pt-10 pb-4">Account overview</h3>
