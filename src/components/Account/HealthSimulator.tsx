@@ -125,10 +125,11 @@ export default function HealthSimulator({
                 </label>
                 <input
                   type="number"
-                  value={token.underlyingPrice}
+                  value={tokens[i].underlyingPrice}
                   onChange={({ target: { value } }) => {
-                    console.log(value);
-                    tokens.splice(i, 1, { ...tokens[i] }); // TODO: check that this works
+                    const temp = [...tokens];
+                    temp.splice(i, 1, { ...tokens[i], underlyingPrice: +value });
+                    setTokens(temp);
                   }}
                 />
               </span>
