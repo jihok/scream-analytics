@@ -60,7 +60,7 @@ export default function Layout({ children, home, className }: Props) {
           <div className="hidden lg:flex w-80">
             <SearchBar />
           </div>
-          <div className="block lg:hidden" style={{ cursor: 'pointer' }}>
+          <div className="block lg:hidden cursor-pointer">
             {showMenu ? (
               <div style={{ width: 20, height: ICON_HEIGHT, position: 'relative' }}>
                 <Image

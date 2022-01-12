@@ -48,7 +48,7 @@ export default function Account() {
 
         <h3 className="pt-10 pb-4">Account overview</h3>
         <button onClick={() => setShowSimulator(true)}>Simulator</button>
-        <div className="flex text-center mb-4" style={{ cursor: 'pointer' }}>
+        <div className="flex text-center mb-4 cursor-pointer">
           <p
             className={`${
               overviewType === 'supplied'

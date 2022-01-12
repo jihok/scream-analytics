@@ -93,7 +93,7 @@ export default function MarketPage() {
         <div className="pb-8 lg:mr-20 lg:flex-1">
           <div className="flex justify-between items-center pb-3 border-b border-border-primary">
             <h3>Historical Utilization</h3>
-            <div className="flex" style={{ cursor: 'pointer' }}>
+            <div className="flex cursor-pointer">
               <div
                 className={`border pt-1 px-4 ${daysToFetch === 7 && 'bg-border-primary'}`}
                 style={{ borderRadius: '50px 0px 0px 50px' }}

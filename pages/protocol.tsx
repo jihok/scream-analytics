@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import React from 'react';
 import { Cell, Pie, PieChart, ResponsiveContainer } from 'recharts';
 import Layout from '../src/components/Layout';
@@ -14,24 +15,30 @@ const COLORS = [
   '#4F4F50', // 'other' color
 ];
 
+interface ChartData {
+  name: string;
+  percent: number;
+  id?: string;
+}
+
 export default function ProtocolOverview() {
   const { todayMarkets } = useMarketContext();
+  const router = useRouter();
 
   const totalReservesUSD = todayMarkets.reduce((prev, curr) => prev + curr.reserves, 0);
-  const data = todayMarkets
+  const data: ChartData[] = todayMarkets
     .map((market) => ({
       name: market.underlyingSymbol,
       percent: (market.reserves / totalReservesUSD) * 100,
+      id: market.id,
     }))
     .sort((a, b) => b.percent - a.percent);
-  const chartData = data.slice(0, 6);
+  const chartData: ChartData[] = data.slice(0, 6);
   const otherPercent = 100 - chartData.reduce((prev, curr) => prev + curr.percent, 0);
   chartData.push({
     name: 'Other',
     percent: otherPercent,
   });
-
-  console.log(totalReservesUSD, data);
 
   return (
     <Layout home="protocol">
@@ -52,7 +59,11 @@ export default function ProtocolOverview() {
           <div className="flex justify-between">
             <div className="flex flex-col">
               {data.slice(0, 6).map((d, i) => (
-                <div className="flex mt-2" key={d.name}>
+                <div
+                  className="flex mt-2 cursor-pointer"
+                  key={d.name}
+                  onClick={async () => await router.push(`/market/${d.id}`)}
+                >
                   <div className={`rounded-full h-2 w-2 mr-1 mt-0.5 bg-bar-${i}`} />
                   <p className="flex-col">
                     <div className="font-sans-semibold">{d.name}</div>
@@ -81,7 +92,11 @@ export default function ProtocolOverview() {
                 </p>
               </div>
               {data.slice(6, 10).map((d) => (
-                <div className="flex mt-2 pl-3" key={d.name}>
+                <div
+                  className="flex mt-2 pl-3 cursor-pointer"
+                  key={d.name}
+                  onClick={async () => await router.push(`/market/${d.id}`)}
+                >
                   <p className="flex-col">
                     <div className="font-sans-semibold">{d.name}</div>
                     {d.percent.toFixed(2)}%
