@@ -37,7 +37,8 @@
   body {
     @apply min-h-screen min-w-fit;
   }
-  body {
+  body,
+  .simulator {
     @apply bg-no-repeat bg-gradient-to-t from-gradientFrom to-gradientTo text-primary;
   }
   h1 {

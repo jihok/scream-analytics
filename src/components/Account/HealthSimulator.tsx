@@ -43,9 +43,8 @@ export default function HealthSimulator({
 
   return (
     <div
-      className="flex flex-col px-5 pt-8"
+      className="flex flex-col px-5 pt-8 simulator"
       style={{
-        backgroundColor: '#0E0F10',
         position: 'fixed',
         top: 0,
         left: 0,
