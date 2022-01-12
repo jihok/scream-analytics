@@ -34,7 +34,7 @@
       url('/fonts/Graphik-Bold-Web.woff2') format('woff2');
   }
   body {
-    @apply bg-no-repeat min-h-screen h-full	bg-gradient-to-t from-gradientFrom to-gradientTo text-primary min-w-fit;
+    @apply bg-no-repeat min-h-screen h-full	bg-gradient-to-t from-gradientFrom to-gradientTo text-primary;
   }
   h1 {
     @apply text-header font-sans-semibold;
@@ -66,8 +66,10 @@
   tbody tr:last-child {
     @apply border-border-primary;
   }
-  .page-button:disabled {
+  button:disabled {
     cursor: initial;
+  }
+  .page-button:disabled {
     background-color: #ffffff1a;
     color: #ffffff4d;
   }

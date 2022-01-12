@@ -216,7 +216,7 @@ export default function Table() {
   return (
     <>
       <div className="flex justify-between mt-10">
-        <div className="flex w-full lg:w-52 border border-border-active rounded-full text-body py-1 px-6">
+        <div className="flex w-full lg:w-52 border border-border-active rounded-full text-body py-1 px-6 mx-3 lg:mx-0">
           <input
             type="text"
             className="w-full focus:outline-none"
@@ -230,7 +230,7 @@ export default function Table() {
               alt="menu"
               width={23}
               height={23}
-              onClick={async () => {
+              onClick={() => {
                 if (searchTerm) console.log(searchTerm);
               }}
             />
