@@ -23,10 +23,12 @@ export default function MarketHeader({ yesterday, market }: MarketPageProps) {
               <p className="lg:ml-2">{market.underlyingSymbol}</p>
               <p className="font-sans-semibold text-subheading">{market.underlyingName}</p>
             </span>
-            <h2 className="hidden lg:block">{usdFormatter.format(market.underlyingPrice)}</h2>
+            <h1 className="font-sans-light hidden lg:block">
+              {usdFormatter.format(market.underlyingPrice)}
+            </h1>
           </div>
         </div>
-        <h2 className="lg:hidden">{usdFormatter.format(market.underlyingPrice)}</h2>
+        <h1 className="font-sans-light lg:hidden">{usdFormatter.format(market.underlyingPrice)}</h1>
       </div>
 
       {/* mutable asset metrics */}

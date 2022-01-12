@@ -37,7 +37,7 @@ module.exports = {
     },
     fontSize: {
       header: ['24px', '24px'],
-      subheading: ['16px', '16px'],
+      subheading: ['20px', '20px'],
       title: ['14px', '14px'],
       body: ['12px', '13.2px'],
       caption: ['10px', '11px'], // weight 600 for label
