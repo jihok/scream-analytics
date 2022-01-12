@@ -39,7 +39,7 @@ export default function HealthSimulator({
     0
   );
   const health = getHealth(borrowLimitUSD, borrowBalanceUSD);
-
+  console.log(tokens);
   return (
     <div
       className="flex flex-col px-5 pt-8 pb-12 overflow-scroll simulator"
@@ -104,55 +104,58 @@ export default function HealthSimulator({
       </div>
       {tokens
         .filter((token) => !!token.quantity)
-        .map((token, i) => (
-          <div className="py-4" key={token.underlyingSymbol}>
-            <div className="flex items-end pb-4">
-              <span style={{ width: 18, height: 18, marginRight: 12, position: 'relative' }}>
-                <Image
-                  src={`/images/tokens/${token.underlyingSymbol.toLowerCase()}.png`}
-                  layout="fill"
-                  objectFit="contain"
-                  alt={token.underlyingSymbol}
-                />
-              </span>
-              <h3 className="pr-2">{token.underlyingName}</h3>
-              <p className="p-0">{token.underlyingSymbol}</p>
+        .map((token) => {
+          const i = tokens.findIndex((t) => token.underlyingSymbol === t.underlyingSymbol);
+          return (
+            <div className="py-4" key={token.underlyingSymbol}>
+              <div className="flex items-end pb-4">
+                <span style={{ width: 18, height: 18, marginRight: 12, position: 'relative' }}>
+                  <Image
+                    src={`/images/tokens/${token.underlyingSymbol.toLowerCase()}.png`}
+                    layout="fill"
+                    objectFit="contain"
+                    alt={token.underlyingSymbol}
+                  />
+                </span>
+                <h3 className="pr-2">{token.underlyingName}</h3>
+                <p className="p-0">{token.underlyingSymbol}</p>
+              </div>
+              <div className="flex justify-between">
+                <span className="flex flex-col items-end pr-10">
+                  <label className="pb-2">
+                    <p>Price (USD)</p>
+                  </label>
+                  <input
+                    type="number"
+                    value={tokens[i].underlyingPrice}
+                    onChange={({ target: { value } }) => {
+                      const temp = [...tokens];
+                      temp.splice(i, 1, { ...tokens[i], underlyingPrice: +value });
+                      setTokens(temp);
+                    }}
+                  />
+                </span>
+                <span className="flex flex-col items-end pr-10">
+                  <label className="pb-2">
+                    <p>Quantity</p>
+                  </label>
+                  <input
+                    type="number"
+                    value={token.quantity}
+                    onChange={
+                      ({ target: { value } }) =>
+                        tokens.splice(i, 1, { ...tokens[i], underlyingPrice: +value }) // TODO: check that this works
+                    }
+                  />
+                </span>
+                <span>
+                  <p className="pb-5">Total USD</p>
+                  <h2>{usdFormatter.format(token.quantity * token.underlyingPrice)}</h2>
+                </span>
+              </div>
             </div>
-            <div className="flex justify-between">
-              <span className="flex flex-col items-end pr-10">
-                <label className="pb-2">
-                  <p>Price (USD)</p>
-                </label>
-                <input
-                  type="number"
-                  value={tokens[i].underlyingPrice}
-                  onChange={({ target: { value } }) => {
-                    const temp = [...tokens];
-                    temp.splice(i, 1, { ...tokens[i], underlyingPrice: +value });
-                    setTokens(temp);
-                  }}
-                />
-              </span>
-              <span className="flex flex-col items-end pr-10">
-                <label className="pb-2">
-                  <p>Quantity</p>
-                </label>
-                <input
-                  type="number"
-                  value={token.quantity}
-                  onChange={
-                    ({ target: { value } }) =>
-                      tokens.splice(i, 1, { ...tokens[i], underlyingPrice: +value }) // TODO: check that this works
-                  }
-                />
-              </span>
-              <span>
-                <p className="pb-5">Total USD</p>
-                <h2>{usdFormatter.format(token.quantity * token.underlyingPrice)}</h2>
-              </span>
-            </div>
-          </div>
-        ))}
+          );
+        })}
     </div>
   );
 }
