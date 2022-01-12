@@ -29,7 +29,7 @@ export default function Account() {
         <div className="flex flex-col items-center justify-center">
           <div className="flex pb-8">
             <Image src="/images/User.png" width={33} height={33} alt="account" />
-            <h1 className="pl-5 font-sans-semibold">No user address found.</h1>
+            <h1 className="pl-5">No user address found.</h1>
           </div>
           <p>Please try your search again.</p>
         </div>

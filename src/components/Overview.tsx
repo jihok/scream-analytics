@@ -62,7 +62,7 @@ export default function MarketsOverview() {
             <p className="font-sans-semibold">Total Supply</p>
             <PercentChange yesterdayVal={yesterdaySupplyUSD} todayVal={todaySupplyUSD} />
           </div>
-          <h1>{usdFormatter.format(todaySupplyUSD)}</h1>
+          <h1 className="font-sans-light">{usdFormatter.format(todaySupplyUSD)}</h1>
         </div>
         <MarketRatioBar marketRatios={supplyRatios} />
       </div>
@@ -72,7 +72,7 @@ export default function MarketsOverview() {
             <p className="font-sans-semibold">Total Borrow</p>
             <PercentChange yesterdayVal={yesterdayBorrowUSD} todayVal={todayBorrowUSD} />
           </div>
-          <h1>{usdFormatter.format(todayBorrowUSD)}</h1>
+          <h1 className="font-sans-light">{usdFormatter.format(todayBorrowUSD)}</h1>
         </div>
         <MarketRatioBar marketRatios={borrowRatios} />
       </div>

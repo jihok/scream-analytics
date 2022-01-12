@@ -36,9 +36,7 @@ export default function ProtocolOverview() {
   return (
     <Layout home="protocol">
       <div className="lg:px-10">
-        <h1 className="font-sans-semibold pb-6 border-border-primary border-b m-5 lg:hidden">
-          Protocol Overview
-        </h1>
+        <h1 className="pb-6 border-border-primary border-b m-5 lg:hidden">Protocol Overview</h1>
         <div className="flex flex-col p-4 bg-darkGray shadow-3xl" style={{ height: 500 }}>
           <h3 className="pb-3 mb-3 border-b border-border-secondary">Scream Price</h3>
           <iframe

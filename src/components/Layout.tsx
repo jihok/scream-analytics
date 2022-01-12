@@ -22,7 +22,7 @@ export default function Layout({ children, home, className }: Props) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <header className="flex justify-between p-5 mb-10">
+      <header className="flex justify-between p-5">
         <Link href="/">
           <a>
             {home ? (
@@ -84,7 +84,7 @@ export default function Layout({ children, home, className }: Props) {
               <div
                 className="flex flex-col px-5 pt-8 shadow-3xl"
                 style={{
-                  backgroundColor: '#1E1F22',
+                  backgroundColor: '#0E0F10',
                   position: 'fixed',
                   top: 80,
                   left: 0,
@@ -96,12 +96,12 @@ export default function Layout({ children, home, className }: Props) {
                 <SearchBar />
                 <Link href="/">
                   <a className="px-5 pt-10 pb-5">
-                    <h2>Market Analytics</h2>
+                    <h1 className="font-sans">Market Analytics</h1>
                   </a>
                 </Link>
                 <Link href="/protocol">
                   <a className="px-5">
-                    <h2>Protocol Overview</h2>
+                    <h1 className="font-sans">Protocol Overview</h1>
                   </a>
                 </Link>
               </div>

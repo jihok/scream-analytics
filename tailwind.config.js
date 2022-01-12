@@ -36,7 +36,7 @@ module.exports = {
       'sans-medium': 'Graphik Medium',
     },
     fontSize: {
-      header: ['28px', '28px'],
+      header: ['24px', '24px'],
       subheading: ['16px', '16px'],
       title: ['14px', '14px'],
       body: ['12px', '13.2px'],
