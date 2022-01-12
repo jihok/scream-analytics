@@ -151,6 +151,34 @@ export default function Table() {
     [todayMarkets, yesterdayMarkets]
   );
 
+  const PageTurner = () => (
+    <>
+      <button
+        className="px-3 bg-border-primary rounded-l-full border border-white disabled:bg-border-secondary"
+        style={{ fontSize: 10 }}
+        onClick={() => previousPage()}
+        disabled={!canPreviousPage}
+      >
+        ◀
+      </button>
+      <span
+        className="px-4 py-3 border-t border-b border-border-primary text-center text-body"
+        style={{ minWidth: 110 }}
+      >
+        {pageIndex * pageSize + 1} - {Math.min(pageIndex * pageSize + 7, tableData.length)} of{' '}
+        {tableData.length}
+      </span>
+      <button
+        className="px-3 bg-bar-6 rounded-r-full border border-white"
+        style={{ fontSize: 10 }}
+        onClick={() => nextPage()}
+        disabled={!canNextPage}
+      >
+        ▶
+      </button>
+    </>
+  );
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -162,12 +190,6 @@ export default function Table() {
     canPreviousPage,
     // @ts-ignore
     canNextPage,
-    // @ts-ignore
-    pageOptions,
-    // @ts-ignore
-    pageCount,
-    // @ts-ignore
-    gotoPage,
     // @ts-ignore
     nextPage,
     // @ts-ignore
@@ -188,9 +210,15 @@ export default function Table() {
     useSortBy,
     usePagination
   );
-  console.log(canPreviousPage);
+
   return (
     <>
+      <div className="flex justify-between mt-10">
+        <div style={{ height: 20, width: 100, backgroundColor: 'black' }} />
+        <div className="hidden lg:flex">
+          <PageTurner />
+        </div>
+      </div>
       <table {...getTableProps()} className="mt-7 bg-darkGray rounded-md shadow-3xl">
         <thead className="caption-label">
           {headerGroups.map((headerGroup, i) => (
@@ -277,28 +305,9 @@ export default function Table() {
           })}
         </tbody>
       </table>
-      <div className="flex justify-center mt-5">
-        <button
-          className="px-3 bg-border-primary rounded-l-full border border-white disabled:bg-border-secondary"
-          onClick={() => previousPage()}
-          disabled={!canPreviousPage}
-        >
-          ◀
-        </button>
-        <span className="px-4 py-3 border-t border-b border-border-primary">
-          {pageIndex * pageSize + 1} - {Math.min(pageIndex * pageSize + 7, tableData.length)} of{' '}
-          {tableData.length}
-        </span>
-        <button
-          className="px-3 bg-bar-6 rounded-r-full border border-white"
-          onClick={() => nextPage()}
-          disabled={!canNextPage}
-        >
-          ▶
-        </button>
+      <div className="flex justify-center mt-5 lg:hidden">
+        <PageTurner />
       </div>
     </>
   );
 }
-
-const PageTurner = () => {};
