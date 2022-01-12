@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import { Account, getHealth } from '../../utils/Account';
 import { usdFormatter } from '../../utils/Market';
