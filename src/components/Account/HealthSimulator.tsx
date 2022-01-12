@@ -4,7 +4,8 @@ import { Account, getHealth } from '../../utils/Account';
 
 interface SimToken {
   collateralFactor: number;
-  totalUnderlyingSupplied: number;
+  cTokenBalance: number;
+  exchangeRate: number;
   underlyingPrice: number;
   underlyingSymbol: string;
   storedBorrowBalance: number;
@@ -20,7 +21,8 @@ export default function HealthSimulator({
   const [tokens, setTokens] = useState<SimToken[]>(
     account.tokens.map((token) => ({
       collateralFactor: token.market.collateralFactor,
-      totalUnderlyingSupplied: token.totalUnderlyingSupplied,
+      cTokenBalance: token.cTokenBalance,
+      exchangeRate: token.market.exchangeRate,
       underlyingPrice: token.market.underlyingPrice,
       underlyingSymbol: token.market.underlyingSymbol,
       storedBorrowBalance: token.storedBorrowBalance,
@@ -29,10 +31,7 @@ export default function HealthSimulator({
 
   const borrowLimitUSD = tokens.reduce(
     (prev, curr) =>
-      prev +
-      curr.collateralFactor *
-        curr.totalUnderlyingSupplied * // TODO: check that this works
-        curr.underlyingPrice,
+      prev + curr.collateralFactor * curr.cTokenBalance * curr.exchangeRate * curr.underlyingPrice,
     0
   );
   const borrowBalanceUSD = tokens.reduce(
