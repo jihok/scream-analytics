@@ -33,8 +33,12 @@
     src: url('/fonts/Graphik-Bold-Web.woff') format('woff'),
       url('/fonts/Graphik-Bold-Web.woff2') format('woff2');
   }
+  html,
   body {
-    @apply bg-no-repeat min-h-screen h-full	bg-gradient-to-t from-gradientFrom to-gradientTo text-primary;
+    @apply min-h-screen min-w-fit;
+  }
+  body {
+    @apply bg-no-repeat bg-gradient-to-t from-gradientFrom to-gradientTo text-primary;
   }
   h1 {
     @apply text-header font-sans-semibold;
