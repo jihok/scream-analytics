@@ -58,7 +58,7 @@ const CustomCell = ({ colId, val }: CellParams) => {
     case 'borrowed':
       return (
         <>
-          <span className="text-title font-sans-light">{formatAbbrUSD(todayVal)}</span>
+          <span className="text-body font-sans-light">{formatAbbrUSD(todayVal)}</span>
           <PercentChange yesterdayVal={yesterdayVal} todayVal={todayVal} />
         </>
       );
@@ -66,7 +66,7 @@ const CustomCell = ({ colId, val }: CellParams) => {
     case 'borrowAPY':
       return (
         <>
-          <span className="text-title font-sans-light">{todayVal.toFixed(2)}%</span>
+          <span className="text-body font-sans-light">{todayVal.toFixed(2)}%</span>
           <PercentChange yesterdayVal={yesterdayVal} todayVal={todayVal} />
         </>
       );
