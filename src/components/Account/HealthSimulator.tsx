@@ -39,7 +39,7 @@ export default function HealthSimulator({
     0
   );
   const health = getHealth(borrowLimitUSD, borrowBalanceUSD);
-  console.log(tokens);
+
   return (
     <div
       className="flex flex-col px-5 pt-8 pb-12 overflow-scroll simulator"
@@ -107,7 +107,7 @@ export default function HealthSimulator({
         .map((token) => {
           const i = tokens.findIndex((t) => token.underlyingSymbol === t.underlyingSymbol);
           return (
-            <div className="py-4" key={token.underlyingSymbol}>
+            <div className="py-4 border-b border-border-secondary" key={token.underlyingSymbol}>
               <div className="flex items-end pb-4">
                 <span style={{ width: 18, height: 18, marginRight: 12, position: 'relative' }}>
                   <Image
@@ -152,6 +152,70 @@ export default function HealthSimulator({
                 <span>
                   <p className="pb-5">Total USD</p>
                   <h2>{usdFormatter.format(token.supplyQuantity * token.underlyingPrice)}</h2>
+                </span>
+              </div>
+            </div>
+          );
+        })}
+
+      <div className="flex justify-between pt-10 pb-3 border-b border-border-primary">
+        <h3>Borrow</h3>
+        <p className="text-title">
+          {usdFormatter.format(
+            tokens.reduce((prev, curr) => prev + curr.storedBorrowBalance * curr.underlyingPrice, 0)
+          )}
+        </p>
+      </div>
+      {tokens
+        .filter((_, i) => !!account.tokens[i].storedBorrowBalance)
+        .map((token) => {
+          const i = tokens.findIndex((t) => token.underlyingSymbol === t.underlyingSymbol);
+          return (
+            <div className="py-4 border-b border-border-secondary" key={token.underlyingSymbol}>
+              <div className="flex items-end pb-4">
+                <span style={{ width: 18, height: 18, marginRight: 12, position: 'relative' }}>
+                  <Image
+                    src={`/images/tokens/${token.underlyingSymbol.toLowerCase()}.png`}
+                    layout="fill"
+                    objectFit="contain"
+                    alt={token.underlyingSymbol}
+                  />
+                </span>
+                <h3 className="pr-2">{token.underlyingName}</h3>
+                <p className="p-0">{token.underlyingSymbol}</p>
+              </div>
+              <div className="flex justify-between">
+                <span className="flex flex-col items-end pr-10">
+                  <label className="pb-2">
+                    <p>Price (USD)</p>
+                  </label>
+                  <input
+                    type="number"
+                    value={tokens[i].underlyingPrice}
+                    onChange={({ target: { value } }) => {
+                      const temp = [...tokens];
+                      temp.splice(i, 1, { ...tokens[i], underlyingPrice: +value });
+                      setTokens(temp);
+                    }}
+                  />
+                </span>
+                <span className="flex flex-col items-end pr-10">
+                  <label className="pb-2">
+                    <p>Quantity</p>
+                  </label>
+                  <input
+                    type="number"
+                    value={tokens[i].storedBorrowBalance}
+                    onChange={({ target: { value } }) => {
+                      const temp = [...tokens];
+                      temp.splice(i, 1, { ...tokens[i], storedBorrowBalance: +value });
+                      setTokens(temp);
+                    }}
+                  />
+                </span>
+                <span>
+                  <p className="pb-5">Total USD</p>
+                  <h2>{usdFormatter.format(token.storedBorrowBalance * token.underlyingPrice)}</h2>
                 </span>
               </div>
             </div>
