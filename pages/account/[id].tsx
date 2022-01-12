@@ -6,7 +6,7 @@ import Layout from '../../src/components/Layout';
 import { ACCOUNT_QUERY } from '../../src/queries';
 import { RawAccount, transformAccountData } from '../../src/utils/Account';
 import AccountHeader from '../../src/components/Account/Header';
-import { BORROW_COLOR, SUPPLY_COLOR } from '../../src/components/UtilizationChart';
+import { BORROW_COLOR, SUPPLY_COLOR } from '../../src/components/Market/UtilizationChart';
 import { usdFormatter } from '../../src/utils/Market';
 import HealthSimulator from '../../src/components/Account/HealthSimulator';
 

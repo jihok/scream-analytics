@@ -11,7 +11,7 @@ import {
   YAxis,
 } from 'recharts';
 import { CategoricalChartState } from 'recharts/types/chart/generateCategoricalChart';
-import { formatAbbrUSD, Market } from '../utils/Market';
+import { formatAbbrUSD, Market } from '../../utils/Market';
 
 export const BORROW_COLOR = '#FF9900';
 export const SUPPLY_COLOR = '#FF26B2';
