@@ -5,7 +5,7 @@ import { usdFormatter } from '../../utils/Market';
 
 interface SimToken {
   collateralFactor: number;
-  quantity: number;
+  supplyQuantity: number;
   underlyingPrice: number;
   underlyingSymbol: string;
   underlyingName: string;
@@ -22,7 +22,7 @@ export default function HealthSimulator({
   const [tokens, setTokens] = useState<SimToken[]>(
     account.tokens.map((token) => ({
       collateralFactor: token.market.collateralFactor,
-      quantity: token.cTokenBalance * token.market.exchangeRate,
+      supplyQuantity: token.cTokenBalance * token.market.exchangeRate,
       underlyingPrice: token.market.underlyingPrice,
       underlyingSymbol: token.market.underlyingSymbol,
       underlyingName: token.market.underlyingName,
@@ -31,7 +31,7 @@ export default function HealthSimulator({
   );
 
   const borrowLimitUSD = tokens.reduce(
-    (prev, curr) => prev + curr.collateralFactor * curr.quantity * curr.underlyingPrice,
+    (prev, curr) => prev + curr.collateralFactor * curr.supplyQuantity * curr.underlyingPrice,
     0
   );
   const borrowBalanceUSD = tokens.reduce(
@@ -98,12 +98,12 @@ export default function HealthSimulator({
         <h3>Supply</h3>
         <p className="text-title">
           {usdFormatter.format(
-            tokens.reduce((prev, curr) => prev + curr.quantity * curr.underlyingPrice, 0)
+            tokens.reduce((prev, curr) => prev + curr.supplyQuantity * curr.underlyingPrice, 0)
           )}
         </p>
       </div>
       {tokens
-        .filter((token) => !!token.quantity)
+        .filter((_, i) => !!account.tokens[i].cTokenBalance)
         .map((token) => {
           const i = tokens.findIndex((t) => token.underlyingSymbol === t.underlyingSymbol);
           return (
@@ -141,16 +141,17 @@ export default function HealthSimulator({
                   </label>
                   <input
                     type="number"
-                    value={token.quantity}
-                    onChange={
-                      ({ target: { value } }) =>
-                        tokens.splice(i, 1, { ...tokens[i], underlyingPrice: +value }) // TODO: check that this works
-                    }
+                    value={tokens[i].supplyQuantity}
+                    onChange={({ target: { value } }) => {
+                      const temp = [...tokens];
+                      temp.splice(i, 1, { ...tokens[i], supplyQuantity: +value });
+                      setTokens(temp);
+                    }}
                   />
                 </span>
                 <span>
                   <p className="pb-5">Total USD</p>
-                  <h2>{usdFormatter.format(token.quantity * token.underlyingPrice)}</h2>
+                  <h2>{usdFormatter.format(token.supplyQuantity * token.underlyingPrice)}</h2>
                 </span>
               </div>
             </div>
