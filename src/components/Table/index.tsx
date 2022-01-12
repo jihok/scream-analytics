@@ -1,17 +1,11 @@
 import React, { useMemo, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { formatAbbrUSD } from '../utils/Market';
-import {
-  useTable,
-  Column,
-  useSortBy,
-  Row,
-  usePagination,
-  UsePaginationInstanceProps,
-} from 'react-table';
-import { useMarketContext } from '../contexts/MarketContext';
-import PercentChange, { MutableData } from './PercentChange';
+import { formatAbbrUSD } from '../../utils/Market';
+import { useTable, Column, useSortBy, Row, usePagination } from 'react-table';
+import { useMarketContext } from '../../contexts/MarketContext';
+import PercentChange, { MutableData } from '../PercentChange';
+import PageTurner from './PageTurner';
 
 interface TableData {
   asset: { underlyingName: string; underlyingSymbol: string };
@@ -153,34 +147,6 @@ export default function Table() {
     [todayMarkets, yesterdayMarkets]
   );
 
-  const PageTurner = () => (
-    <>
-      <button
-        className="px-3 bg-border-primary rounded-l-full border border-white disabled:bg-border-secondary page-button"
-        style={{ fontSize: 10 }}
-        onClick={() => previousPage()}
-        disabled={!canPreviousPage}
-      >
-        ◀
-      </button>
-      <span
-        className="px-4 py-3 border-t border-b border-border-primary text-center text-body"
-        style={{ minWidth: 110 }}
-      >
-        {pageIndex * pageSize + 1} - {Math.min(pageIndex * pageSize + 7, tableData.length)} of{' '}
-        {tableData.length}
-      </span>
-      <button
-        className="px-3 bg-bar-6 rounded-r-full border border-white page-button"
-        style={{ fontSize: 10 }}
-        onClick={() => nextPage()}
-        disabled={!canNextPage}
-      >
-        ▶
-      </button>
-    </>
-  );
-
   const {
     getTableProps,
     getTableBodyProps,
@@ -237,7 +203,15 @@ export default function Table() {
           </button>
         </div>
         <div className="hidden lg:flex">
-          <PageTurner />
+          <PageTurner
+            previousPage={previousPage}
+            canPreviousPage={canPreviousPage}
+            pageIndex={pageIndex}
+            pageSize={pageSize}
+            tableData={tableData}
+            nextPage={nextPage}
+            canNextPage={canNextPage}
+          />
         </div>
       </div>
       <table {...getTableProps()} className="mt-7 bg-darkGray rounded-md shadow-3xl">
@@ -327,7 +301,15 @@ export default function Table() {
         </tbody>
       </table>
       <div className="flex justify-center mt-5 lg:hidden">
-        <PageTurner />
+        <PageTurner
+          previousPage={previousPage}
+          canPreviousPage={canPreviousPage}
+          pageIndex={pageIndex}
+          pageSize={pageSize}
+          tableData={tableData}
+          nextPage={nextPage}
+          canNextPage={canNextPage}
+        />
       </div>
     </>
   );
