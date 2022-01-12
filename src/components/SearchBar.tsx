@@ -14,7 +14,6 @@ export default function SearchBar() {
         placeholder="Search for an account..."
         value={searchTerm}
         onChange={(val) => {
-          console.log(val.target.value);
           setSearchTerm(val.target.value);
         }}
       />

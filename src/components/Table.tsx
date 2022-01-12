@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { formatAbbrUSD } from '../utils/Market';
@@ -77,6 +77,8 @@ const CustomCell = ({ colId, val }: CellParams) => {
 
 export default function Table() {
   const { yesterdayMarkets, todayMarkets } = useMarketContext();
+  const [searchTerm, setSearchTerm] = useState('');
+
   const columns = useMemo<Column<TableData>[]>(
     () => [
       {
@@ -154,7 +156,7 @@ export default function Table() {
   const PageTurner = () => (
     <>
       <button
-        className="px-3 bg-border-primary rounded-l-full border border-white disabled:bg-border-secondary"
+        className="px-3 bg-border-primary rounded-l-full border border-white disabled:bg-border-secondary page-button"
         style={{ fontSize: 10 }}
         onClick={() => previousPage()}
         disabled={!canPreviousPage}
@@ -169,7 +171,7 @@ export default function Table() {
         {tableData.length}
       </span>
       <button
-        className="px-3 bg-bar-6 rounded-r-full border border-white"
+        className="px-3 bg-bar-6 rounded-r-full border border-white page-button"
         style={{ fontSize: 10 }}
         onClick={() => nextPage()}
         disabled={!canNextPage}
@@ -214,7 +216,26 @@ export default function Table() {
   return (
     <>
       <div className="flex justify-between mt-10">
-        <div style={{ height: 20, width: 100, backgroundColor: 'black' }} />
+        <div className="flex w-full lg:w-52 border border-border-active rounded-full text-body py-1 px-6">
+          <input
+            type="text"
+            className="w-full focus:outline-none"
+            placeholder="Search for a token..."
+            value={searchTerm}
+            onChange={(val) => setSearchTerm(val.target.value)}
+          />
+          <button type="submit" disabled={!searchTerm}>
+            <Image
+              src="/images/Search.png"
+              alt="menu"
+              width={23}
+              height={23}
+              onClick={async () => {
+                if (searchTerm) console.log(searchTerm);
+              }}
+            />
+          </button>
+        </div>
         <div className="hidden lg:flex">
           <PageTurner />
         </div>
