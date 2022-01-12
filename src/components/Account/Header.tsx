@@ -15,7 +15,7 @@ export default function AccountHeader({ account }: { account: Account }) {
               <Image src="/images/Copy.png" width={13} height={15} alt="copy" />
             </button>
           </h1>
-          <p className="text-subheading pt-3">
+          <p className="pt-3">
             Health score{' '}
             <span className="font-sans-semibold">
               {getHealth(account.borrowLimitUSD, account.borrowBalanceUSD)}

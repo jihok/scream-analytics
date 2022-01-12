@@ -21,7 +21,7 @@ export default function MarketHeader({ yesterday, market }: MarketPageProps) {
           <div className="ml-3 lg:ml-5">
             <span className="lg:flex lg:flex-row-reverse lg:justify-end lg:items-baseline">
               <p className="lg:ml-2">{market.underlyingSymbol}</p>
-              <p className="font-sans-semibold text-subheading">{market.underlyingName}</p>
+              <p className="font-sans-semibold text-title">{market.underlyingName}</p>
             </span>
             <h1 className="font-sans-light hidden lg:block">
               {usdFormatter.format(market.underlyingPrice)}

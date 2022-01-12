@@ -46,7 +46,7 @@
     @apply text-title font-sans-bold;
   }
   p {
-    @apply text-body font-sans pb-1;
+    @apply text-body lg:text-title font-sans pb-1;
   }
   .caption-label {
     @apply text-caption font-sans-semibold;
