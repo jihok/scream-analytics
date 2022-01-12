@@ -67,7 +67,7 @@ export const getHealth = (borrowLimit: number, borrowBalance: number) => {
     return 2;
   }
 
-  return Math.min(2, borrowLimit / borrowBalance).toFixed(2);
+  return Math.min(2, borrowLimit / borrowBalance);
 };
 
 export const transformAccountData = (rawAccount: RawAccount): Account => {

@@ -18,7 +18,7 @@ export default function AccountHeader({ account }: { account: Account }) {
           <p className="pt-3">
             Health score{' '}
             <span className="font-sans-semibold">
-              {getHealth(account.borrowLimitUSD, account.borrowBalanceUSD)}
+              {getHealth(account.borrowLimitUSD, account.borrowBalanceUSD).toFixed(2)}
             </span>
           </p>
         </div>

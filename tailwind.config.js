@@ -21,6 +21,11 @@ module.exports = {
         active: '#FFFFFFE5', // 90%
       },
       transparent: 'transparent',
+      health: {
+        bad: '#FF3939',
+        ok: '#FBFF26',
+        good: '#4EFC97',
+      },
     },
     textColor: {
       primary: '#FFFFFF',
