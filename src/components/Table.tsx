@@ -169,8 +169,8 @@ export default function Table() {
         className="px-4 py-3 border-t border-b border-border-primary text-center text-body"
         style={{ minWidth: 110 }}
       >
-        {pageIndex * pageSize + 1} - {Math.min(pageIndex * pageSize + 7, tableData.length)} of{' '}
-        {tableData.length}
+        {rows.length ? pageIndex * pageSize + 1 : 0} -{' '}
+        {Math.min(pageIndex * pageSize + 7, rows.length)} of {rows.length}
       </span>
       <button
         className="px-3 bg-bar-6 rounded-r-full border border-white page-button"
@@ -189,6 +189,7 @@ export default function Table() {
     headerGroups,
     // @ts-ignore
     page,
+    rows,
     prepareRow,
     // @ts-ignore
     canPreviousPage,
