@@ -96,8 +96,8 @@ export default function Account() {
                 className={`pr-6 ${overviewType === 'borrowed' && 'pb-8'}`}
                 style={{ minWidth: 100, maxWidth: 100 }}
               >
+                <p className="text-label lg:text-body">{token.market.underlyingSymbol}</p>
                 <p className="font-sans-semibold">{token.market.underlyingName}</p>
-                <p>{token.market.underlyingSymbol}</p>
               </div>
               <div className="border-border-primary border-l py-4 w-full">
                 <div className="flex">
@@ -120,8 +120,8 @@ export default function Account() {
                     />
                     {overviewType === 'borrowed' && (
                       <>
-                        <p className="text-caption pt-2">Repaid</p>
-                        <p className="font-sans-semibold">
+                        <p className="text-caption font-sans-semibold pt-2">Repaid</p>
+                        <p className="text-label">
                           {usdFormatter.format(
                             token.totalUnderlyingRepaid * token.market.underlyingPrice
                           )}
@@ -144,9 +144,9 @@ export default function Account() {
                 style={{ minWidth: 80, width: 'fit-content' }}
               >
                 {overviewType === 'borrowed' && (
-                  <p className="text-caption pt-2 text-right">Remaining</p>
+                  <p className="text-caption font-sans-semibold pt-2 text-right">Remaining</p>
                 )}
-                <p className="font-sans-semibold">${valueUSD.toFixed(2)}</p>
+                <p className="text-label">${valueUSD.toFixed(2)}</p>
               </div>
             </div>
           );
