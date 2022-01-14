@@ -36,8 +36,8 @@ const CustomCell = ({ colId, val }: CellParams) => {
           />
         </div>
         <span className="ml-1 lg:ml-5">
-          <p>{val.underlyingSymbol}</p>
-          <p className="font-sans-semibold">{val.underlyingName}</p>
+          <p className="label-body">{val.underlyingSymbol}</p>
+          <p className="label-body font-sans-semibold">{val.underlyingName}</p>
         </span>
       </div>
     );
@@ -51,7 +51,7 @@ const CustomCell = ({ colId, val }: CellParams) => {
     case 'borrowed':
       return (
         <>
-          <span className="text-body font-sans-light">{formatAbbrUSD(todayVal)}</span>
+          <p className="font-sans-semibold">{formatAbbrUSD(todayVal)}</p>
           <PercentChange yesterdayVal={yesterdayVal} todayVal={todayVal} />
         </>
       );
@@ -59,7 +59,7 @@ const CustomCell = ({ colId, val }: CellParams) => {
     case 'borrowAPY':
       return (
         <>
-          <span className="text-body font-sans-light">{todayVal.toFixed(2)}%</span>
+          <p className="font-sans-semibold">{todayVal.toFixed(2)}%</p>
           <PercentChange yesterdayVal={yesterdayVal} todayVal={todayVal} />
         </>
       );
@@ -246,7 +246,7 @@ export default function Table() {
         </div>
       </div>
       <table {...getTableProps()} className="mt-7 bg-darkGray rounded-md shadow-3xl">
-        <thead className="caption-label">
+        <thead className="caption-body font-sans-semibold">
           {headerGroups.map((headerGroup, i) => (
             <tr
               {...headerGroup.getHeaderGroupProps()}

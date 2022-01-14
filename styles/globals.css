@@ -53,6 +53,12 @@
   p {
     @apply text-body lg:text-title font-sans pb-1;
   }
+  .caption-body {
+    @apply text-caption lg:text-body;
+  }
+  .label-body {
+    @apply text-label lg:text-body;
+  }
   .caption-label {
     @apply text-caption font-sans-semibold;
   }
