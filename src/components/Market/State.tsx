@@ -6,6 +6,7 @@ import { BLOCKS_IN_A_DAY } from '../../contexts/MarketContext';
 import { getCompSpeeds } from '../../utils';
 import { usdFormatter } from '../../utils/Market';
 import PercentChange from '../PercentChange';
+import ValueWithLabel from '../ValueWithLabel';
 
 export default function MarketState({ yesterday, market }: MarketPageProps) {
   const { screamPrice } = useGlobalContext();
@@ -118,20 +119,23 @@ export default function MarketState({ yesterday, market }: MarketPageProps) {
       <div>
         <h3 className="pb-3 border-b border-border-primary">Market Parameters</h3>
         <div className="flex mt-5">
-          <div className="pr-6">
-            <div className="text-body font-sans-semibold pb-1">Reserve Factor</div>
-            <h2 className="py-1">{market.reserveFactor * 100}%</h2>
-          </div>
-          <div className="pr-6">
-            <div className="text-body font-sans-semibold pb-1">Collateral Factor</div>
-            <h2 className="py-1">{market.collateralFactor * 100}%</h2>
-          </div>
-          <div className="pr-6">
-            <div className="text-body font-sans-semibold pb-1">
-              {market.underlyingSymbol} borrow cap
-            </div>
-            <h2 className="py-1">No Limit</h2>
-          </div>
+          <ValueWithLabel
+            label="Reserve Factor"
+            type="percent"
+            value={market.reserveFactor * 100}
+            className="pr-6"
+          />
+          <ValueWithLabel
+            label="Collateral Factor"
+            type="percent"
+            value={market.collateralFactor * 100}
+            className="pr-6"
+          />
+          <ValueWithLabel
+            label={`${market.underlyingSymbol} borrow cap`}
+            type="percent"
+            value="No Limit" // hardcoded for now
+          />
         </div>
       </div>
     </div>

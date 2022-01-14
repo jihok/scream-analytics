@@ -3,6 +3,7 @@ import { usdFormatter, formatAbbrUSD } from '../../utils/Market';
 import Image from 'next/image';
 import PercentChange from '../PercentChange';
 import { MarketPageProps } from '../../../pages/market/[id]';
+import ValueWithLabel from '../ValueWithLabel';
 
 export default function MarketHeader({ yesterday, market }: MarketPageProps) {
   return (
@@ -33,34 +34,33 @@ export default function MarketHeader({ yesterday, market }: MarketPageProps) {
 
       {/* mutable asset metrics */}
       <div className="flex justify-between px-16 lg:px-0 mt-7 lg:mt-1">
-        <div className="pr-6">
-          <div className="text-body font-sans-semibold pb-1">Supplied</div>
-          <h2 className="py-1">{formatAbbrUSD(market.totalSupplyUSD)}</h2>
-          <PercentChange yesterdayVal={yesterday.totalSupplyUSD} todayVal={market.totalSupplyUSD} />
-        </div>
-        <div className="pr-6">
-          <div className="text-body font-sans-semibold pb-1">Borrowed</div>
-          <h2 className="py-1">{formatAbbrUSD(market.totalBorrowsUSD)}</h2>
-          <PercentChange
-            yesterdayVal={yesterday.totalBorrowsUSD}
-            todayVal={market.totalBorrowsUSD}
-          />
-        </div>
-        <div className="pr-6">
-          <div className="text-body font-sans-semibold pb-1">Utilization</div>
-          <h2 className="py-1">
-            {((market.totalBorrowsUSD / market.totalSupplyUSD) * 100).toFixed(2)}%
-          </h2>
-          <PercentChange
-            yesterdayVal={yesterday.totalBorrowsUSD / yesterday.totalSupplyUSD}
-            todayVal={market.totalBorrowsUSD / market.totalSupplyUSD}
-          />
-        </div>
-        <div>
-          <div className="text-body font-sans-semibold pb-1">Liquidity</div>
-          <h2 className="py-1">{formatAbbrUSD(+market.cash * market.underlyingPrice)}</h2>
-          <PercentChange yesterdayVal={+yesterday.cash} todayVal={+market.cash} />
-        </div>
+        <ValueWithLabel
+          label="Supplied"
+          type="dollars"
+          value={market.totalSupplyUSD}
+          yesterdayValue={yesterday.totalSupplyUSD}
+          className="pr-6"
+        />
+        <ValueWithLabel
+          label="Borrowed"
+          type="dollars"
+          value={market.totalBorrowsUSD}
+          yesterdayValue={yesterday.totalBorrowsUSD}
+          className="pr-6"
+        />
+        <ValueWithLabel
+          label="Utilization"
+          type="percent"
+          value={market.totalBorrowsUSD / market.totalSupplyUSD}
+          yesterdayValue={yesterday.totalBorrowsUSD / yesterday.totalSupplyUSD}
+          className="pr-6"
+        />
+        <ValueWithLabel
+          label="Liquidity"
+          type="dollars"
+          value={+market.cash}
+          yesterdayValue={+yesterday.cash}
+        />
       </div>
     </div>
   );
