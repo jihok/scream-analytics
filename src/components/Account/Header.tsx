@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { Account, getHealth } from '../../utils/Account';
+import ValueWithLabel from '../ValueWithLabel';
 import HealthSimulator from './HealthSimulator';
 
 export default function AccountHeader({ account }: { account: Account }) {
@@ -37,14 +38,12 @@ export default function AccountHeader({ account }: { account: Account }) {
         </div>
         <div>
           <div className="flex pt-4">
-            <div className="pr-6" style={{ maxWidth: 150 }}>
-              <div className="caption-body">Times liquidated</div>
-              <h2 className="py-1">{account.countLiquidated}</h2>
-            </div>
-            <div className="pr-6" style={{ maxWidth: 150 }}>
-              <div className="caption-body">Liquidation count</div>
-              <h2 className="py-1">{account.countLiquidator}</h2>
-            </div>
+            <ValueWithLabel
+              label="Times Liquidated"
+              value={account.countLiquidated}
+              className="pr-6"
+            />
+            <ValueWithLabel label="Liquidator Count" value={account.countLiquidator} />
           </div>
         </div>
       </div>
