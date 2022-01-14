@@ -91,11 +91,11 @@ export default function Account() {
           return (
             <div className="flex flex-row items-center" key={token.symbol}>
               <div
-                className={`pr-6 ${overviewType === 'borrowed' && 'pb-8'}`}
+                className={`label-body pr-6 ${overviewType === 'borrowed' && 'pb-8'}`}
                 style={{ minWidth: 100, maxWidth: 100 }}
               >
-                <p className="text-label lg:text-body">{token.market.underlyingSymbol}</p>
-                <p className="font-sans-semibold">{token.market.underlyingName}</p>
+                {token.market.underlyingSymbol}
+                <div className="font-sans-semibold lg:pt-1">{token.market.underlyingName}</div>
               </div>
               <div className="border-border-primary border-l py-4 w-full">
                 <div className="flex">
@@ -144,7 +144,7 @@ export default function Account() {
                 {overviewType === 'borrowed' && (
                   <p className="text-caption font-sans-semibold pt-2 text-right">Remaining</p>
                 )}
-                <p className="text-label">${valueUSD.toFixed(2)}</p>
+                <p className="label-body">${valueUSD.toFixed(2)}</p>
               </div>
             </div>
           );
