@@ -42,7 +42,7 @@ export default function MarketState({ yesterday, market }: MarketPageProps) {
       <div className="pb-8">
         <h3 className="pb-3">Current State</h3>
         <table className="w-full border-t border-border-primary mb-4 text-left">
-          <thead className="caption-label">
+          <thead className="text-body font-sans-semibold">
             <tr className="border-border-secondary border-b">
               <th />
               <th>APY</th>
@@ -52,7 +52,7 @@ export default function MarketState({ yesterday, market }: MarketPageProps) {
           </thead>
           <tbody>
             <tr>
-              <td className="caption-label">Supply</td>
+              <td className="text-body font-sans-semibold">Supply</td>
               <td>
                 <h2 className="pb-1">{market.supplyAPY.toFixed(2)}%</h2>
                 <PercentChange yesterdayVal={yesterday.supplyAPY} todayVal={market.supplyAPY} />
@@ -65,7 +65,7 @@ export default function MarketState({ yesterday, market }: MarketPageProps) {
               </td>
             </tr>
             <tr>
-              <td className="caption-label">Borrow</td>
+              <td className="text-body font-sans-semibold">Borrow</td>
               <td>
                 <h2 className="pb-1">{market.borrowAPY.toFixed(2)}%</h2>
                 <PercentChange yesterdayVal={yesterday.borrowAPY} todayVal={market.borrowAPY} />
@@ -93,23 +93,25 @@ export default function MarketState({ yesterday, market }: MarketPageProps) {
           </p>
         </div>
         <div className="flex whitespace-nowrap mb-3">
-          <p>Total interest accumulated</p>
+          <span className="text-body">Total interest accumulated</span>
           <div className="border-b border-border-secondary w-full self-center mx-2" />
-          <p className="font-sans-semibold">
+          <span className="text-body font-sans-semibold">
             {usdFormatter.format(market.totalInterestAccumulated * market.underlyingPrice)}
-          </p>
+          </span>
         </div>
         <div className="flex whitespace-nowrap mb-3">
-          <p>Exchange rate </p>
+          <span className="text-body">Exchange rate </span>
           <div className="border-b border-border-secondary w-full self-center mx-2" />
-          <p className="font-sans-semibold">
+          <span className="text-body font-sans-semibold">
             1 {market.underlyingSymbol} = {market.exchangeRate.toFixed(6)} {market.symbol}
-          </p>
+          </span>
         </div>
         <div className="flex whitespace-nowrap">
-          <p>{market.symbol} Minted</p>
+          <span className="text-body">{market.symbol} Minted</span>
           <div className="border-b border-border-secondary w-full self-center mx-2" />
-          <p className="font-sans-semibold">{(+market.totalSupply).toLocaleString()}</p>
+          <span className="text-body font-sans-semibold">
+            {(+market.totalSupply).toLocaleString()}
+          </span>
         </div>
       </div>
 
@@ -117,15 +119,17 @@ export default function MarketState({ yesterday, market }: MarketPageProps) {
         <h3 className="pb-3 border-b border-border-primary">Market Parameters</h3>
         <div className="flex mt-5">
           <div className="pr-6">
-            <div className="caption-label">Reserve Factor</div>
+            <div className="text-body font-sans-semibold pb-1">Reserve Factor</div>
             <h2 className="py-1">{market.reserveFactor * 100}%</h2>
           </div>
           <div className="pr-6">
-            <div className="caption-label">Collateral Factor</div>
+            <div className="text-body font-sans-semibold pb-1">Collateral Factor</div>
             <h2 className="py-1">{market.collateralFactor * 100}%</h2>
           </div>
           <div className="pr-6">
-            <div className="caption-label">{market.underlyingSymbol} borrow cap</div>
+            <div className="text-body font-sans-semibold pb-1">
+              {market.underlyingSymbol} borrow cap
+            </div>
             <h2 className="py-1">No Limit</h2>
           </div>
         </div>

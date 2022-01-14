@@ -34,12 +34,12 @@ export default function MarketHeader({ yesterday, market }: MarketPageProps) {
       {/* mutable asset metrics */}
       <div className="flex justify-between px-16 lg:px-0 mt-7 lg:mt-1">
         <div className="pr-6">
-          <div className="caption-label">Supplied</div>
+          <div className="text-body font-sans-semibold pb-1">Supplied</div>
           <h2 className="py-1">{formatAbbrUSD(market.totalSupplyUSD)}</h2>
           <PercentChange yesterdayVal={yesterday.totalSupplyUSD} todayVal={market.totalSupplyUSD} />
         </div>
         <div className="pr-6">
-          <div className="caption-label">Borrowed</div>
+          <div className="text-body font-sans-semibold pb-1">Borrowed</div>
           <h2 className="py-1">{formatAbbrUSD(market.totalBorrowsUSD)}</h2>
           <PercentChange
             yesterdayVal={yesterday.totalBorrowsUSD}
@@ -47,7 +47,7 @@ export default function MarketHeader({ yesterday, market }: MarketPageProps) {
           />
         </div>
         <div className="pr-6">
-          <div className="caption-label">Utilization</div>
+          <div className="text-body font-sans-semibold pb-1">Utilization</div>
           <h2 className="py-1">
             {((market.totalBorrowsUSD / market.totalSupplyUSD) * 100).toFixed(2)}%
           </h2>
@@ -57,7 +57,7 @@ export default function MarketHeader({ yesterday, market }: MarketPageProps) {
           />
         </div>
         <div>
-          <div className="caption-label">Liquidity</div>
+          <div className="text-body font-sans-semibold pb-1">Liquidity</div>
           <h2 className="py-1">{formatAbbrUSD(+market.cash * market.underlyingPrice)}</h2>
           <PercentChange yesterdayVal={+yesterday.cash} todayVal={+market.cash} />
         </div>
