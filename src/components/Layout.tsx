@@ -95,23 +95,27 @@ export default function Layout({ children, home, className }: Props) {
               >
                 <SearchBar />
                 <Link href="/">
-                  <a
-                    className="px-5 pt-10 pb-5"
-                    onClick={() => {
-                      if (home === 'markets') setShowMenu(false);
-                    }}
-                  >
-                    <h1 className="font-sans">Market Analytics</h1>
+                  <a className="px-5 pt-10 pb-5">
+                    <h1
+                      className="font-sans"
+                      onClick={() => {
+                        if (home === 'markets') setShowMenu(false);
+                      }}
+                    >
+                      Market Analytics
+                    </h1>
                   </a>
                 </Link>
                 <Link href="/protocol">
-                  <a
-                    className="px-5"
-                    onClick={() => {
-                      if (home === 'protocol') setShowMenu(false);
-                    }}
-                  >
-                    <h1 className="font-sans">Protocol Overview</h1>
+                  <a className="px-5">
+                    <h1
+                      className="font-sans"
+                      onClick={() => {
+                        if (home === 'protocol') setShowMenu(false);
+                      }}
+                    >
+                      Protocol Overview
+                    </h1>
                   </a>
                 </Link>
               </div>
