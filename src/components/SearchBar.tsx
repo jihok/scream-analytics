@@ -17,7 +17,7 @@ export default function SearchBar() {
           setSearchTerm(val.target.value);
         }}
       />
-      <button type="submit" disabled={!searchTerm}>
+      <button className="pl-2" type="submit" disabled={!searchTerm}>
         <Image
           src="/images/Search.png"
           alt="menu"
