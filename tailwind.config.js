@@ -6,6 +6,7 @@ module.exports = {
       gradientFrom: '#0E0F10',
       gradientTo: '#1B2729',
       darkGray: '#0E0F1080',
+      modalOverlay: '#000000E5',
       bar: {
         0: '#00FFFF',
         1: '#FF0F6C',
@@ -60,6 +61,10 @@ module.exports = {
       },
       minWidth: {
         fit: 'fit-content',
+      },
+      maxWidth: {
+        inputSm: 80,
+        inputMd: 100,
       },
     },
   },
