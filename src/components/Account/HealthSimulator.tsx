@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Account, getHealth } from '../../utils/Account';
 import { usdFormatter } from '../../utils/Market';
@@ -25,6 +25,20 @@ export default function HealthSimulator({ account }: { account: Account }) {
     }))
   );
 
+  const escFunction = useCallback((event) => {
+    if (event.key === 'Esc' || event.key === 'Escape') {
+      setShowModal(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener('keydown', escFunction, false);
+
+    return () => {
+      document.removeEventListener('keydown', escFunction, false);
+    };
+  }, [escFunction]);
+
   const borrowLimitUSD = tokens.reduce(
     (prev, curr) => prev + curr.collateralFactor * curr.supplyQuantity * curr.underlyingPrice,
     0
@@ -44,8 +58,14 @@ export default function HealthSimulator({ account }: { account: Account }) {
         Try Simulator →
       </button>
       {showModal && (
-        <div className="flex bg-modalOverlay justify-center fixed top-0 left-0 right-0 bottom-0 z-10 md:pt-10 md:pb-10">
-          <div className="flex flex-col px-5 pt-8 pb-12 overflow-scroll simulator">
+        <div
+          className="flex bg-modalOverlay justify-center fixed top-0 left-0 right-0 bottom-0 z-10 md:pt-10 md:pb-10"
+          onClick={() => setShowModal(false)}
+        >
+          <div
+            className="flex flex-col px-5 pt-8 pb-12 overflow-scroll simulator"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex justify-between pb-4">
               <h1 className="font-sans-light">Health score simulator</h1>
               <div style={{ width: 15, position: 'relative', cursor: 'pointer' }}>
