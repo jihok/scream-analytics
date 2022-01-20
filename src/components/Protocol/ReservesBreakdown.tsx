@@ -46,8 +46,8 @@ export default function ReservesBreakdown() {
 
   return (
     <div className="flex flex-col">
-      <ResponsiveContainer width="100%">
-        <PieChart width={300} height={300}>
+      <ResponsiveContainer width="100%" height={300}>
+        <PieChart>
           <Pie data={chartData} dataKey="percent">
             {chartData.map((_entry, index) => (
               <Cell key={`cell-${index}`} fill={COLORS[index]} />
