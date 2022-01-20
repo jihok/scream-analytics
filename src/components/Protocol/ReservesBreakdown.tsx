@@ -2,6 +2,8 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { PieChart, Pie, Cell } from 'recharts';
 import { useMarketContext } from '../../contexts/MarketContext';
+import Image from 'next/image';
+import { formatAbbrUSD } from '../../utils/Market';
 
 // TODO: shareable with tailwind.config?
 const COLORS = [
@@ -17,6 +19,7 @@ const COLORS = [
 interface ChartData {
   name: string;
   percent: number;
+  usd?: number;
   id?: string;
 }
 
@@ -30,6 +33,7 @@ export default function ReservesBreakdown() {
     .map((market) => ({
       name: market.underlyingSymbol,
       percent: (market.reserves / totalReservesUSD) * 100,
+      usd: market.reserves,
       id: market.id,
     }))
     .sort((a, b) => b.percent - a.percent);
@@ -76,48 +80,25 @@ export default function ReservesBreakdown() {
         </p>
       </div>
 
-      {showTop && (
-        <>
-          {data.slice(0, 6).map((d, i) => (
-            <div
-              className="flex mt-2 cursor-pointer"
-              key={d.name}
-              onClick={async () => await router.push(`/market/${d.id}`)}
-            >
-              <div className={`rounded-full h-2 w-2 mr-1 mt-0.5 bg-bar-${i}`} />
-              <p className="flex-col">
-                <div className="font-sans-semibold">{d.name}</div>
-                {d.percent.toFixed(2)}%
-              </p>
-            </div>
-          ))}
-        </>
-      )}
-
-      {!showTop && (
-        <>
-          <div className="flex mt-2">
-            <div className="rounded-full h-2 w-2 mr-1 mt-0.5 bg-bar-6" />
-            <p className="flex-col pb-2 border-b border-border-primary">
-              <div className="font-sans-semibold">Other</div>
-              {otherPercent.toFixed(2)}%
-            </p>
+      {(showTop ? data.slice(0, 6) : data.slice(6)).map((d, i) => (
+        <div
+          className="flex mt-2 cursor-pointer"
+          key={d.name}
+          onClick={async () => await router.push(`/market/${d.id}`)}
+        >
+          <span className="flex">
+            {showTop && <span className={`rounded-full h-2 w-2 mr-1 mt-0.5 bg-bar-${i}`} />}
+            <span className="text-body">{d.name}</span>
+          </span>
+          <div className="border-b border-border-secondary w-full self-center mx-2" />
+          <span className="text-body">{d.percent.toFixed(2)}%</span>
+          <div className="border-b border-border-secondary w-full self-center mx-2" />
+          <span className="text-body">{formatAbbrUSD(d.usd || 0)}</span>
+          <div className="flex relative items-center ml-2" style={{ width: 30 }}>
+            <Image src="/images/RightCarat.png" layout="fill" objectFit="contain" alt="go" />
           </div>
-          {data.slice(6, 10).map((d) => (
-            <div
-              className="flex mt-2 pl-3 cursor-pointer"
-              key={d.name}
-              onClick={async () => await router.push(`/market/${d.id}`)}
-            >
-              <p className="flex-col">
-                <div className="font-sans-semibold">{d.name}</div>
-                {d.percent.toFixed(2)}%
-              </p>
-            </div>
-          ))}
-          <p className="pt-2 pl-3">+ {data.length - 10} more</p>
-        </>
-      )}
+        </div>
+      ))}
     </div>
   );
 }
