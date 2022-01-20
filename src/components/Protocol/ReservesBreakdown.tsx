@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { PieChart, Pie, Cell } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { useMarketContext } from '../../contexts/MarketContext';
 import Image from 'next/image';
 import { formatAbbrUSD } from '../../utils/Market';
@@ -46,13 +46,15 @@ export default function ReservesBreakdown() {
 
   return (
     <div className="flex flex-col">
-      <PieChart width={300} height={300}>
-        <Pie data={chartData} dataKey="percent">
-          {chartData.map((_entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index]} />
-          ))}
-        </Pie>
-      </PieChart>
+      <ResponsiveContainer width="100%">
+        <PieChart width={300} height={300}>
+          <Pie data={chartData} dataKey="percent">
+            {chartData.map((_entry, index) => (
+              <Cell key={`cell-${index}`} fill={COLORS[index]} />
+            ))}
+          </Pie>
+        </PieChart>
+      </ResponsiveContainer>
 
       <div className="flex text-center mb-4">
         <p
