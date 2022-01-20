@@ -44,13 +44,13 @@ export default function Account() {
       <AccountHeader account={account} />
 
       <h3 className="pt-10 pb-4">Account overview</h3>
-      <div className="flex text-center mb-4 cursor-pointer">
+      <div className="flex text-center mb-4">
         <p
           className={`${
             overviewType === 'supplied'
               ? 'border-b-2 border-border-active font-sans-semibold'
               : 'border-b border-border-primary'
-          }  w-half pb-3`}
+          }  w-half pb-3 cursor-pointer`}
           onClick={() => setOverviewType('supplied')}
         >
           Supply
@@ -60,7 +60,7 @@ export default function Account() {
             overviewType === 'borrowed'
               ? 'border-b-2 border-border-active font-sans-semibold'
               : 'border-b border-border-primary'
-          }  w-half pb-3`}
+          }  w-half pb-3 cursor-pointer`}
           onClick={() => setOverviewType('borrowed')}
         >
           Borrow
