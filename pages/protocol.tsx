@@ -6,12 +6,12 @@ import { useMarketContext } from '../src/contexts/MarketContext';
 
 // TODO: shareable with tailwind.config?
 const COLORS = [
-  '#89DFDB',
-  '#F4BBD1',
-  '#F7C893',
-  '#F1DC75',
-  '#CBC6FB',
-  '#12ADA6',
+  '#00FFFF',
+  '#FF0F6C',
+  '#A20BFF',
+  '#6CFFBD',
+  '#FF26B2',
+  '#FF9900',
   '#4F4F50', // 'other' color
 ];
 
@@ -56,7 +56,15 @@ export default function ProtocolOverview() {
         </div>
         <div className="flex flex-col p-4 bg-darkGray shadow-3xl">
           <h3 className="pb-3 mb-3 border-b border-border-secondary">Reserves Breakdown</h3>
-          <div className="flex justify-between">
+          <div className="flex flex-col">
+            <PieChart width={300} height={300}>
+              <Pie data={chartData} dataKey="percent">
+                {chartData.map((_entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index]} />
+                ))}
+              </Pie>
+            </PieChart>
+
             <div className="flex flex-col">
               {data.slice(0, 6).map((d, i) => (
                 <div
@@ -72,16 +80,6 @@ export default function ProtocolOverview() {
                 </div>
               ))}
             </div>
-
-            <ResponsiveContainer width={215} height={215}>
-              <PieChart>
-                <Pie cy={100} data={chartData} dataKey="percent">
-                  {chartData.map((_entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index]} />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
 
             <div className="flex flex-col">
               <div className="flex mt-2">
