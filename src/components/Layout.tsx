@@ -132,7 +132,7 @@ export default function Layout({ children, home, className }: Props) {
       <main className={`flex flex-col md:px-40 ${className} ${showMenu && 'fixed'}`}>
         {children}
       </main>
-      <footer className="flex pt-40 pb-20 justify-center">scream</footer>
+      <footer className="flex pt-40 pb-20 justify-center" />
     </>
   );
 }
