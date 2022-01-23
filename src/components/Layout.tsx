@@ -19,7 +19,7 @@ export default function Layout({ children, home, className }: Props) {
       <Head>
         <title>SCREAM Analytics</title>
         <meta name="description" content="SCREAM Analytics" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/scream-blue-pink.png" />
       </Head>
 
       <header className="flex justify-between p-5">
