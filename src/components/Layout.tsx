@@ -17,8 +17,8 @@ export default function Layout({ children, home, className }: Props) {
   return (
     <>
       <Head>
-        <title>SCREAM Analytics</title>
-        <meta name="description" content="SCREAM Analytics" />
+        <title>Scream Analytics</title>
+        <meta name="description" content="Scream Analytics" />
         <link rel="icon" href="/scream-blue-pink.png" />
       </Head>
 
