@@ -11,7 +11,7 @@ export default function ProtocolOverview() {
           className="flex flex-col p-4 bg-darkGray shadow-3xl w-full mb-5"
           style={{ height: 500 }}
         >
-          <h3 className="pb-3 mb-3 border-b border-border-secondary">Scream Price</h3>
+          <h3 className="pb-3 mb-3 border-b border-border-secondary">SCREAM Price</h3>
           <iframe
             loading="lazy"
             width="100%"
@@ -26,7 +26,6 @@ export default function ProtocolOverview() {
             <h3 className="pb-3 mb-3 border-b border-border-secondary">SCREAM Buybacks</h3>
           </div>
           <div className="flex flex-col p-4 bg-darkGray shadow-3xl">
-            <h3 className="pb-3 mb-3 border-b border-border-secondary">Reserves Breakdown</h3>
             <ReservesBreakdown />
           </div>
         </div>

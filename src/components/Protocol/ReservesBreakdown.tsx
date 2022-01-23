@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { useMarketContext } from '../../contexts/MarketContext';
 import Image from 'next/image';
-import { formatAbbrUSD } from '../../utils/Market';
+import { formatAbbrUSD, usdFormatter } from '../../utils/Market';
 
 // TODO: shareable with tailwind.config?
 const COLORS = [
@@ -45,62 +45,68 @@ export default function ReservesBreakdown() {
   });
 
   return (
-    <div className="flex flex-col">
-      <ResponsiveContainer width="100%" height={300}>
-        <PieChart>
-          <Pie data={chartData} dataKey="percent">
-            {chartData.map((_entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index]} />
-            ))}
-          </Pie>
-        </PieChart>
-      </ResponsiveContainer>
-
-      <div className="flex text-center mb-4">
-        <p
-          className={`${
-            showTop
-              ? 'border-b-2 border-border-active font-sans-semibold'
-              : 'border-b border-border-primary'
-          }  w-half pb-3 cursor-pointer`}
-          onClick={() => setShowTop(true)}
-        >
-          Top 6
-        </p>
-        <p
-          className={`${
-            !showTop
-              ? 'border-b-2 border-border-active font-sans-semibold'
-              : 'border-b border-border-primary'
-          }  w-half pb-3 cursor-pointer flex justify-center`}
-          onClick={() => setShowTop(false)}
-        >
-          <span className="flex items-center">
-            <div className="rounded-full h-2 w-2 mr-2 mt-0.5 bg-bar-6" />
-            Other
-          </span>
-        </p>
+    <>
+      <div className="flex justify-between pb-3 mb-3 border-b border-border-secondary">
+        <h3>Protocol Reserves</h3>
+        <h2 className="text-title">{usdFormatter.format(totalReservesUSD)}</h2>
       </div>
+      <div className="flex flex-col">
+        <ResponsiveContainer width="100%" height={300}>
+          <PieChart>
+            <Pie data={chartData} dataKey="percent">
+              {chartData.map((_entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index]} />
+              ))}
+            </Pie>
+          </PieChart>
+        </ResponsiveContainer>
 
-      {(showTop ? data.slice(0, 6) : data.slice(6)).map((d, i) => (
-        <div
-          className="flex mt-2 cursor-pointer"
-          key={d.name}
-          onClick={async () => await router.push(`/market/${d.id}`)}
-        >
-          <span className="flex">
-            {showTop && <span className={`rounded-full h-2 w-2 mr-1 mt-0.5 bg-bar-${i}`} />}
-            <span className="text-body">{d.name}</span>
-          </span>
-          <div className="border-b border-border-secondary w-full self-center mx-2" />
-          <span className="text-body">{d.percent.toFixed(2)}%</span>
-          <div className="border-b border-border-secondary w-full self-center mx-2" />
-          <span className="text-body">{formatAbbrUSD(d.usd || 0)}</span>
-          <div className="flex relative items-center ml-2" style={{ width: 30 }}>
-            <Image src="/images/RightCarat.png" layout="fill" objectFit="contain" alt="go" />
-          </div>
+        <div className="flex text-center mb-4">
+          <p
+            className={`${
+              showTop
+                ? 'border-b-2 border-border-active font-sans-semibold'
+                : 'border-b border-border-primary'
+            }  w-half pb-3 cursor-pointer`}
+            onClick={() => setShowTop(true)}
+          >
+            Top 6
+          </p>
+          <p
+            className={`${
+              !showTop
+                ? 'border-b-2 border-border-active font-sans-semibold'
+                : 'border-b border-border-primary'
+            }  w-half pb-3 cursor-pointer flex justify-center`}
+            onClick={() => setShowTop(false)}
+          >
+            <span className="flex items-center">
+              <div className="rounded-full h-2 w-2 mr-2 mt-0.5 bg-bar-6" />
+              Other
+            </span>
+          </p>
         </div>
-      ))}
-    </div>
+
+        {(showTop ? data.slice(0, 6) : data.slice(6)).map((d, i) => (
+          <div
+            className="flex mt-2 cursor-pointer"
+            key={d.name}
+            onClick={async () => await router.push(`/market/${d.id}`)}
+          >
+            <span className="flex">
+              {showTop && <span className={`rounded-full h-2 w-2 mr-1 mt-0.5 bg-bar-${i}`} />}
+              <span className="text-body">{d.name}</span>
+            </span>
+            <div className="border-b border-border-secondary w-full self-center mx-2" />
+            <span className="text-body">{d.percent.toFixed(2)}%</span>
+            <div className="border-b border-border-secondary w-full self-center mx-2" />
+            <span className="text-body">{formatAbbrUSD(d.usd || 0)}</span>
+            <div className="flex relative items-center ml-2" style={{ width: 30 }}>
+              <Image src="/images/RightCarat.png" layout="fill" objectFit="contain" alt="go" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
   );
 }
