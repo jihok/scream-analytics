@@ -25,9 +25,8 @@ export default function ProtocolOverview() {
           <div className="flex flex-col p-4 bg-darkGray shadow-3xl mb-6">
             <h3 className="pb-3 mb-3 border-b border-border-secondary">SCREAM Buybacks</h3>
           </div>
-          <div className="flex flex-col p-4 bg-darkGray shadow-3xl">
-            <ReservesBreakdown />
-          </div>
+
+          <ReservesBreakdown />
         </div>
       </div>
     </Layout>

@@ -45,7 +45,7 @@ export default function ReservesBreakdown() {
   });
 
   return (
-    <>
+    <div className="flex flex-col p-4 bg-darkGray shadow-3xl">
       <div className="flex justify-between pb-3 mb-3 border-b border-border-secondary">
         <h3>Protocol Reserves</h3>
         <h2 className="text-title">{usdFormatter.format(totalReservesUSD)}</h2>
@@ -107,6 +107,6 @@ export default function ReservesBreakdown() {
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 }
