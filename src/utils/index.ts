@@ -41,3 +41,31 @@ export const getScreamPrice = async (): Promise<number> => {
 
   return 0;
 };
+
+const getTransactionHashes = async (): Promise<any> => {
+  try {
+    // NOTE: addresses must be lower case!
+    const xScreamAddress = '0xe0654c8e6fd4d733349ac7e09f6f23da256bf475';
+    const fromAddress = '0x70f8892b9aed192b3e794f9398b62d50cf2fbbf8';
+    const res = await fetch(
+      `https://api.ftmscan.com/api?module=account&action=txlist&address=${fromAddress}&startblock=0&endblock=99999999&sort=asc&apikey=${process.env.FTMSCAN_API_KEY}`
+    );
+    const { result } = await res.json();
+
+    return result.filter((tx: any) => tx.from === fromAddress && tx.to === xScreamAddress);
+  } catch (e) {
+    console.error(e);
+  }
+
+  return 0;
+};
+
+export const getTransactions = async (): Promise<any> => {
+  try {
+    return await getTransactionHashes();
+  } catch (e) {
+    console.error(e);
+  }
+
+  return 0;
+};
