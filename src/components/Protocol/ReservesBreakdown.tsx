@@ -49,35 +49,6 @@ export default function ReservesBreakdown({
     percent: otherPercent,
   });
 
-  const renderData = (d: ChartData, i: number) => {
-    const marketPrice = +(todayMarkets.find((market) => market.id === d.id)?.underlyingPrice ?? 0);
-    const reservesDiff =
-      +(todayMarkets.find((market) => market.id === d.id)?.reserves ?? 0) -
-      +(lastBuybackMarkets.find((market) => market.id === d.id)?.reserves ?? 0);
-
-    return (
-      <div
-        className="flex mt-2 cursor-pointer"
-        key={d.name}
-        onClick={async () => await router.push(`/market/${d.id}`)}
-      >
-        <span className="flex">
-          {i < 6 && <span className={`rounded-full h-2 w-2 mr-1 mt-0.5 bg-bar-${i}`} />}
-          <span className="text-body">{d.name}</span>
-        </span>
-        <div className="border-b border-border-secondary w-full self-center mx-2" />
-        <span className="text-body">{showCurrent ? `${d.percent.toFixed(2)}%` : reservesDiff}</span>
-        <div className="border-b border-border-secondary w-full self-center mx-2" />
-        <span className="text-body">
-          {formatAbbrUSD(showCurrent ? d.usd || 0 : reservesDiff * marketPrice)}
-        </span>
-        <div className="flex relative items-center ml-2" style={{ width: 30 }}>
-          <Image src="/images/RightCarat.png" layout="fill" objectFit="contain" alt="go" />
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div className="flex flex-col">
       <h2 className="absolute">{usdFormatter.format(totalReservesUSD)}</h2>
@@ -110,11 +81,49 @@ export default function ReservesBreakdown({
           }  w-half pb-3 cursor-pointer`}
           onClick={() => setShowCurrent(false)}
         >
-          Accrued Since Buyback
+          Accrued Since
+          <br />
+          Last Buyback
         </p>
       </div>
 
-      {currentData.map(renderData)}
+      {currentData.map((d, i) => {
+        const getValues = () => {
+          if (showCurrent) {
+            return [`${d.percent.toFixed(2)}%`, d.usd || 0];
+          }
+          const marketPrice = +(
+            todayMarkets.find((market) => market.id === d.id)?.underlyingPrice ?? 0
+          );
+          const reservesDiff =
+            +(todayMarkets.find((market) => market.id === d.id)?.reserves ?? 0) -
+            +(lastBuybackMarkets.find((market) => market.id === d.id)?.reserves ?? 0);
+          return [
+            reservesDiff < 10 ? reservesDiff.toFixed(4) : reservesDiff.toFixed(2),
+            reservesDiff * marketPrice,
+          ];
+        };
+
+        return (
+          <div
+            className="flex mt-2 cursor-pointer"
+            key={d.name}
+            onClick={async () => await router.push(`/market/${d.id}`)}
+          >
+            <span className="flex">
+              {i < 6 && <span className={`rounded-full h-2 w-2 mr-1 mt-0.5 bg-bar-${i}`} />}
+              <span className="text-body">{d.name}</span>
+            </span>
+            <div className="border-b border-border-secondary w-full self-center mx-2" />
+            <span className="text-body">{getValues()[0]}</span>
+            <div className="border-b border-border-secondary w-full self-center mx-2" />
+            <span className="text-body">{formatAbbrUSD(getValues()[1] as number)}</span>
+            <div className="flex relative items-center ml-2" style={{ width: 30 }}>
+              <Image src="/images/RightCarat.png" layout="fill" objectFit="contain" alt="go" />
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }
