@@ -60,8 +60,9 @@ const getTokenTransfers = async (): Promise<any> => {
   return undefined;
 };
 
-interface Buyback {
+export interface Buyback {
   blockNumber: number;
+  blockTimestamp: number;
   amount: number;
 }
 
@@ -76,6 +77,7 @@ export const getBuybacks = async (): Promise<Buyback[]> => {
       .map((tx: any) => ({
         data: screamInterface.decodeFunctionData('transfer', tx.input),
         blockNumber: tx.blockNumber,
+        blockTimestamp: tx.timeStamp,
       }))
       .filter(
         (decodedWithBlock: any) =>
@@ -83,6 +85,7 @@ export const getBuybacks = async (): Promise<Buyback[]> => {
       )
       .map((decodedWithBlock: any) => ({
         blockNumber: decodedWithBlock.blockNumber,
+        blockTimestamp: decodedWithBlock.blockTimestamp,
         amount: +ethers.utils.formatEther(decodedWithBlock.data.rawAmount),
       }));
 
