@@ -51,7 +51,7 @@ export default function ReservesBreakdown() {
         <h2 className="text-title">{usdFormatter.format(totalReservesUSD)}</h2>
       </div>
       <div className="flex flex-col">
-        <ResponsiveContainer width="100%" height={300}>
+        <ResponsiveContainer width="100%" height={200}>
           <PieChart>
             <Pie data={chartData} dataKey="percent">
               {chartData.map((_entry, index) => (

@@ -17,7 +17,7 @@ export default function ProtocolOverview() {
       <div className="flex flex-col justify-between lg:flex-row">
         <div
           className="flex flex-col p-4 bg-darkGray shadow-3xl w-full mb-5"
-          style={{ height: 500 }}
+          style={{ height: 550 }}
         >
           <h3 className="pb-3 mb-3 border-b border-border-secondary">SCREAM Price</h3>
           <iframe
@@ -32,8 +32,8 @@ export default function ProtocolOverview() {
         <div className="flex flex-col lg:ml-5 lg:w-1/2">
           <div className="flex flex-col p-4 bg-darkGray shadow-3xl mb-6">
             <h3 className="pb-3 mb-3 border-b border-border-secondary">SCREAM Buybacks</h3>
-            <ResponsiveContainer width="100%" height={400}>
-              <BarChart width={500} height={300} data={buybacks}>
+            <ResponsiveContainer width="100%" height={200}>
+              <BarChart data={buybacks}>
                 <YAxis hide />
                 <Tooltip />
                 <Bar dataKey="amount" fill="#8884d8" />
