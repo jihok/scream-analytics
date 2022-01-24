@@ -2,13 +2,29 @@ import React, { useEffect, useState } from 'react';
 import Layout from '../src/components/Layout';
 import BuybackChart from '../src/components/Protocol/BuybackChart';
 import ReservesBreakdown from '../src/components/Protocol/ReservesBreakdown';
+import { MARKETS_BY_BLOCK_QUERY } from '../src/queries';
 import { Buyback, getBuybacks } from '../src/utils';
+import { Market, RawMarket, transformMarketData } from '../src/utils/Market';
+import { screamClient } from './_app';
 
 export default function ProtocolOverview() {
   const [buybacks, setBuybacks] = useState<Buyback[]>([]);
+  const [asdf, setasdf] = useState<Market[]>();
+
+  console.log(asdf);
 
   useEffect(() => {
-    getBuybacks().then((res) => setBuybacks(res));
+    getBuybacks().then((res) => {
+      setBuybacks(res);
+      screamClient
+        .query<{ markets: RawMarket[] }>({
+          query: MARKETS_BY_BLOCK_QUERY,
+          variables: {
+            blockNumber: +res[res.length - 1].blockNumber,
+          },
+        })
+        .then((query) => setasdf(transformMarketData(query.data.markets)));
+    });
   }, []);
 
   return (
@@ -38,9 +54,7 @@ export default function ProtocolOverview() {
             <div className="flex justify-between pb-3 mb-3 border-b border-border-secondary">
               <h3>Protocol Reserves</h3>
             </div>
-            {!!buybacks.length && (
-              <ReservesBreakdown lastBuybackBlock={buybacks[buybacks.length - 1].blockNumber} />
-            )}
+            {!!buybacks.length && <ReservesBreakdown />}
           </div>
         </div>
       </div>

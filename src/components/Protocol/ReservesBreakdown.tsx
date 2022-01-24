@@ -3,9 +3,7 @@ import { useState } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { useMarketContext } from '../../contexts/MarketContext';
 import Image from 'next/image';
-import { formatAbbrUSD, RawMarket, usdFormatter } from '../../utils/Market';
-import { useQuery } from '@apollo/client';
-import { MARKETS_BY_BLOCK_QUERY } from '../../queries';
+import { formatAbbrUSD, usdFormatter } from '../../utils/Market';
 
 // TODO: shareable with tailwind.config?
 const COLORS = [
@@ -25,15 +23,10 @@ interface ChartData {
   id?: string;
 }
 
-export default function ReservesBreakdown({ lastBuybackBlock }: { lastBuybackBlock: number }) {
+export default function ReservesBreakdown() {
   const { todayMarkets } = useMarketContext();
   const [showCurrent, setShowCurrent] = useState(true);
   const router = useRouter();
-
-  const { loading, error, data } = useQuery<{ markets: RawMarket[] }>(MARKETS_BY_BLOCK_QUERY, {
-    variables: { blockNumber: lastBuybackBlock },
-  });
-  console.log(data);
 
   // aggregate minority assets into Other for pie chart
   const totalReservesUSD = todayMarkets.reduce((prev, curr) => prev + curr.reserves, 0);
