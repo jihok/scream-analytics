@@ -30,7 +30,7 @@ export default function ReservesBreakdown() {
 
   // aggregate minority assets into Other for pie chart
   const totalReservesUSD = todayMarkets.reduce((prev, curr) => prev + curr.reserves, 0);
-  const tempdata: ChartData[] = todayMarkets
+  const currentData: ChartData[] = todayMarkets
     .map((market) => ({
       name: market.underlyingSymbol,
       percent: (market.reserves / totalReservesUSD) * 100,
@@ -38,14 +38,14 @@ export default function ReservesBreakdown() {
       id: market.id,
     }))
     .sort((a, b) => b.percent - a.percent);
-  const chartData: ChartData[] = tempdata.slice(0, 6);
+  const chartData: ChartData[] = currentData.slice(0, 6);
   const otherPercent = 100 - chartData.reduce((prev, curr) => prev + curr.percent, 0);
   chartData.push({
     name: 'Other',
     percent: otherPercent,
   });
 
-  const renderCurrentData = (d: ChartData, i: number) => (
+  const renderData = (d: ChartData, i: number) => (
     <div
       className="flex mt-2 cursor-pointer"
       key={d.name}
@@ -101,7 +101,7 @@ export default function ReservesBreakdown() {
         </p>
       </div>
 
-      {tempdata.map(renderCurrentData)}
+      {currentData.map(renderData)}
     </div>
   );
 }

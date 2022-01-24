@@ -9,9 +9,9 @@ import { screamClient } from './_app';
 
 export default function ProtocolOverview() {
   const [buybacks, setBuybacks] = useState<Buyback[]>([]);
-  const [asdf, setasdf] = useState<Market[]>();
+  const [lastBuybackMarkets, setLastBuybackMarkets] = useState<Market[]>();
 
-  console.log(asdf);
+  console.log(lastBuybackMarkets);
 
   useEffect(() => {
     getBuybacks().then((res) => {
@@ -23,7 +23,7 @@ export default function ProtocolOverview() {
             blockNumber: +res[res.length - 1].blockNumber,
           },
         })
-        .then((query) => setasdf(transformMarketData(query.data.markets)));
+        .then((query) => setLastBuybackMarkets(transformMarketData(query.data.markets)));
     });
   }, []);
 
