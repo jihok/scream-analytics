@@ -1,5 +1,9 @@
 Analytics for Scream protocol.
 
+`env` vars that should be set up in Vercel:
+
+- `FTMSCAN_API_KEY`
+
 Mocks:
 useful if working offline, subgraph is down, or if needed for testing.
 
@@ -13,6 +17,8 @@ Contexts:
 Utils:
 
 - index
-  currently used for fetching any external data
+  currently used for fetching any external data (gecko, ftmscan)
 - Market
-  here you'll find utility functions for market data (formatting, transforming) and types related to markets -- we have an interface for each Market query to ensure full type safety.
+  utility functions for market data (formatting, transforming) and types related to markets -- we have an interface for each Market query to ensure full type safety.
+- Account
+  utility functions for Account data (transforms, health score comput) and types related to Account
