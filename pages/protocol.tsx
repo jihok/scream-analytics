@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import Layout from '../src/components/Layout';
 import ReservesBreakdown from '../src/components/Protocol/ReservesBreakdown';
-import { getTransactions } from '../src/utils';
+import { getBuybacks } from '../src/utils';
 
 export default function ProtocolOverview() {
   useEffect(() => {
-    getTransactions().then((a) => console.log('transactions', a));
+    getBuybacks().then((a) => console.log('transactions', a));
   }, []);
+
   return (
     <Layout home="protocol">
       <h1 className="pb-6 border-border-primary border-b mb-6 lg:hidden">Protocol Overview</h1>
