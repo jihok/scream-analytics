@@ -138,7 +138,7 @@ export default function UtilizationChart({ data, isLoading }: Props) {
           <div className="pb-1" style={{ color: RESERVE_COLOR }}>
             Reserves
           </div>
-          <p>{focusedBar !== undefined ? formatAbbrUSD(data[focusedBar]?.reserves) : '--'}</p>
+          <p>{focusedBar !== undefined ? formatAbbrUSD(data[focusedBar]?.reservesUSD) : '--'}</p>
         </div>
         <div className="px-5 py-3 border-l border-border-secondary">
           <div className="pb-1 text-secondary">Liquidity</div>
