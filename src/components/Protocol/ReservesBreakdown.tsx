@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { useMarketContext } from '../../contexts/MarketContext';
 import Image from 'next/image';
-import { formatAbbrUSD, usdFormatter } from '../../utils/Market';
+import { formatAbbrUSD, Market, usdFormatter } from '../../utils/Market';
 
 // TODO: shareable with tailwind.config?
 const COLORS = [
@@ -23,18 +23,22 @@ interface ChartData {
   id?: string;
 }
 
-export default function ReservesBreakdown() {
+export default function ReservesBreakdown({
+  lastBuybackMarkets,
+}: {
+  lastBuybackMarkets: Market[];
+}) {
   const { todayMarkets } = useMarketContext();
   const [showCurrent, setShowCurrent] = useState(true);
   const router = useRouter();
 
   // aggregate minority assets into Other for pie chart
-  const totalReservesUSD = todayMarkets.reduce((prev, curr) => prev + curr.reserves, 0);
+  const totalReservesUSD = todayMarkets.reduce((prev, curr) => prev + curr.reservesUSD, 0);
   const currentData: ChartData[] = todayMarkets
     .map((market) => ({
       name: market.underlyingSymbol,
-      percent: (market.reserves / totalReservesUSD) * 100,
-      usd: market.reserves,
+      percent: (market.reservesUSD / totalReservesUSD) * 100,
+      usd: market.reservesUSD,
       id: market.id,
     }))
     .sort((a, b) => b.percent - a.percent);
@@ -45,25 +49,34 @@ export default function ReservesBreakdown() {
     percent: otherPercent,
   });
 
-  const renderData = (d: ChartData, i: number) => (
-    <div
-      className="flex mt-2 cursor-pointer"
-      key={d.name}
-      onClick={async () => await router.push(`/market/${d.id}`)}
-    >
-      <span className="flex">
-        {i < 6 && <span className={`rounded-full h-2 w-2 mr-1 mt-0.5 bg-bar-${i}`} />}
-        <span className="text-body">{d.name}</span>
-      </span>
-      <div className="border-b border-border-secondary w-full self-center mx-2" />
-      <span className="text-body">{showCurrent ? `${d.percent.toFixed(2)}%` : 'asdf'}</span>
-      <div className="border-b border-border-secondary w-full self-center mx-2" />
-      <span className="text-body">{formatAbbrUSD(d.usd || 0)}</span>
-      <div className="flex relative items-center ml-2" style={{ width: 30 }}>
-        <Image src="/images/RightCarat.png" layout="fill" objectFit="contain" alt="go" />
+  const renderData = (d: ChartData, i: number) => {
+    const marketPrice = +(todayMarkets.find((market) => market.id === d.id)?.underlyingPrice ?? 0);
+    const reservesDiff =
+      +(todayMarkets.find((market) => market.id === d.id)?.reserves ?? 0) -
+      +(lastBuybackMarkets.find((market) => market.id === d.id)?.reserves ?? 0);
+
+    return (
+      <div
+        className="flex mt-2 cursor-pointer"
+        key={d.name}
+        onClick={async () => await router.push(`/market/${d.id}`)}
+      >
+        <span className="flex">
+          {i < 6 && <span className={`rounded-full h-2 w-2 mr-1 mt-0.5 bg-bar-${i}`} />}
+          <span className="text-body">{d.name}</span>
+        </span>
+        <div className="border-b border-border-secondary w-full self-center mx-2" />
+        <span className="text-body">{showCurrent ? `${d.percent.toFixed(2)}%` : reservesDiff}</span>
+        <div className="border-b border-border-secondary w-full self-center mx-2" />
+        <span className="text-body">
+          {formatAbbrUSD(showCurrent ? d.usd || 0 : reservesDiff * marketPrice)}
+        </span>
+        <div className="flex relative items-center ml-2" style={{ width: 30 }}>
+          <Image src="/images/RightCarat.png" layout="fill" objectFit="contain" alt="go" />
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="flex flex-col">

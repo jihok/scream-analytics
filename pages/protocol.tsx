@@ -9,11 +9,12 @@ import { screamClient } from './_app';
 
 export default function ProtocolOverview() {
   const [buybacks, setBuybacks] = useState<Buyback[]>([]);
-  const [lastBuybackMarkets, setLastBuybackMarkets] = useState<Market[]>();
+  const [lastBuybackMarkets, setLastBuybackMarkets] = useState<Market[]>([]);
 
   useEffect(() => {
     getBuybacks().then((res) => {
       setBuybacks(res);
+
       screamClient
         .query<{ markets: RawMarket[] }>({
           query: MARKETS_BY_BLOCK_QUERY,
