@@ -34,7 +34,14 @@ export default function ProtocolOverview() {
             <h3 className="pb-3 mb-3 border-b border-border-secondary">SCREAM Buybacks</h3>
             {!!buybacks.length && <BuybackChart data={buybacks} />}
           </div>
-          <ReservesBreakdown />
+          <div className="flex flex-col p-4 bg-darkGray shadow-3xl">
+            <div className="flex justify-between pb-3 mb-3 border-b border-border-secondary">
+              <h3>Protocol Reserves</h3>
+            </div>
+            {!!buybacks.length && (
+              <ReservesBreakdown lastBuybackBlock={buybacks[buybacks.length - 1].blockNumber} />
+            )}
+          </div>
         </div>
       </div>
     </Layout>
