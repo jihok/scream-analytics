@@ -28,6 +28,7 @@ export default function ReservesBreakdown() {
   const [showTop, setShowTop] = useState(true);
   const router = useRouter();
 
+  // aggregate minority assets into Other for pie chart
   const totalReservesUSD = todayMarkets.reduce((prev, curr) => prev + curr.reserves, 0);
   const data: ChartData[] = todayMarkets
     .map((market) => ({
@@ -43,6 +44,26 @@ export default function ReservesBreakdown() {
     name: 'Other',
     percent: otherPercent,
   });
+
+  const renderData = (d: ChartData, i: number) => (
+    <div
+      className="flex mt-2 cursor-pointer"
+      key={d.name}
+      onClick={async () => await router.push(`/market/${d.id}`)}
+    >
+      <span className="flex">
+        {i < 6 && <span className={`rounded-full h-2 w-2 mr-1 mt-0.5 bg-bar-${i}`} />}
+        <span className="text-body">{d.name}</span>
+      </span>
+      <div className="border-b border-border-secondary w-full self-center mx-2" />
+      <span className="text-body">{d.percent.toFixed(2)}%</span>
+      <div className="border-b border-border-secondary w-full self-center mx-2" />
+      <span className="text-body">{formatAbbrUSD(d.usd || 0)}</span>
+      <div className="flex relative items-center ml-2" style={{ width: 30 }}>
+        <Image src="/images/RightCarat.png" layout="fill" objectFit="contain" alt="go" />
+      </div>
+    </div>
+  );
 
   return (
     <div className="flex flex-col p-4 bg-darkGray shadow-3xl">
@@ -67,45 +88,24 @@ export default function ReservesBreakdown() {
               showTop
                 ? 'border-b-2 border-border-active font-sans-semibold'
                 : 'border-b border-border-primary'
-            }  w-half pb-3 cursor-pointer`}
+            }  w-half pt-2 pb-3 cursor-pointer`}
             onClick={() => setShowTop(true)}
           >
-            Top 6
+            Current
           </p>
           <p
             className={`${
               !showTop
                 ? 'border-b-2 border-border-active font-sans-semibold'
                 : 'border-b border-border-primary'
-            }  w-half pb-3 cursor-pointer flex justify-center`}
+            }  w-half pb-3 cursor-pointer`}
             onClick={() => setShowTop(false)}
           >
-            <span className="flex items-center">
-              <div className="rounded-full h-2 w-2 mr-2 mt-0.5 bg-bar-6" />
-              Other
-            </span>
+            Accrued Since Buyback
           </p>
         </div>
 
-        {(showTop ? data.slice(0, 6) : data.slice(6)).map((d, i) => (
-          <div
-            className="flex mt-2 cursor-pointer"
-            key={d.name}
-            onClick={async () => await router.push(`/market/${d.id}`)}
-          >
-            <span className="flex">
-              {showTop && <span className={`rounded-full h-2 w-2 mr-1 mt-0.5 bg-bar-${i}`} />}
-              <span className="text-body">{d.name}</span>
-            </span>
-            <div className="border-b border-border-secondary w-full self-center mx-2" />
-            <span className="text-body">{d.percent.toFixed(2)}%</span>
-            <div className="border-b border-border-secondary w-full self-center mx-2" />
-            <span className="text-body">{formatAbbrUSD(d.usd || 0)}</span>
-            <div className="flex relative items-center ml-2" style={{ width: 30 }}>
-              <Image src="/images/RightCarat.png" layout="fill" objectFit="contain" alt="go" />
-            </div>
-          </div>
-        ))}
+        {data.map(renderData)}
       </div>
     </div>
   );
