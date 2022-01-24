@@ -14,14 +14,14 @@ export interface RawMarket {
   reserves: string;
 }
 
-export interface Market extends Omit<RawMarket, 'underlyingPrice' | 'exchangeRate' | 'reserves'> {
+export interface Market extends Omit<RawMarket, 'underlyingPrice' | 'exchangeRate'> {
   totalSupplyUSD: number;
   totalBorrowsUSD: number;
   underlyingPrice: number;
   exchangeRate: number;
   borrowAPY: number;
   supplyAPY: number;
-  reserves: number;
+  reservesUSD: number;
 }
 
 export interface RawMarketDetails extends RawMarket {
@@ -48,7 +48,7 @@ export function transformMarketData(rawMarkets: any): any {
     exchangeRate: +rawMarket.exchangeRate,
     borrowAPY: +rawMarket.borrowRate * 100,
     supplyAPY: +rawMarket.supplyRate * 100,
-    reserves: +rawMarket.reserves * +rawMarket.underlyingPrice,
+    reservesUSD: +rawMarket.reserves * +rawMarket.underlyingPrice,
 
     // MarketDetails
     totalInterestAccumulated: +rawMarket.totalInterestAccumulated,
