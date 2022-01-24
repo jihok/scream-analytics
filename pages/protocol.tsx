@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Bar, BarChart, ResponsiveContainer, Tooltip, YAxis } from 'recharts';
 import Layout from '../src/components/Layout';
+import BuybackChart from '../src/components/Protocol/BuybackChart';
 import ReservesBreakdown from '../src/components/Protocol/ReservesBreakdown';
 import { Buyback, getBuybacks } from '../src/utils';
 
@@ -30,17 +30,7 @@ export default function ProtocolOverview() {
         </div>
 
         <div className="flex flex-col lg:ml-5 lg:w-1/2">
-          <div className="flex flex-col p-4 bg-darkGray shadow-3xl mb-6">
-            <h3 className="pb-3 mb-3 border-b border-border-secondary">SCREAM Buybacks</h3>
-            <ResponsiveContainer width="100%" height={200}>
-              <BarChart data={buybacks}>
-                <YAxis hide />
-                <Tooltip />
-                <Bar dataKey="amount" fill="#8884d8" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-
+          <BuybackChart data={buybacks} />
           <ReservesBreakdown />
         </div>
       </div>
