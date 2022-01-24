@@ -115,19 +115,19 @@ export default function UtilizationChart({ data, isLoading }: Props) {
         )}
       </ResponsiveContainer>
       <div className="flex w-fit items-center bg-darkGray shadow-3xl mt-3 caption-label">
-        <div className="px-5">
+        <div className="label-body px-5">
           {focusedBar !== undefined
             ? format(subDays(Date.now(), data.length - 1 - focusedBar), 'MMM d')
             : '--'}
         </div>
         <div className="px-5 py-3 border-l border-border-secondary">
-          <div className="pb-1" style={{ color: SUPPLY_COLOR }}>
+          <div className="label-body pb-1" style={{ color: SUPPLY_COLOR }}>
             Total supplied
           </div>
           <p>{focusedBar !== undefined ? formatAbbrUSD(data[focusedBar]?.totalSupplyUSD) : '--'}</p>
         </div>
         <div className="px-5 py-3 border-l border-border-secondary">
-          <div className="pb-1" style={{ color: BORROW_COLOR }}>
+          <div className="label-body pb-1" style={{ color: BORROW_COLOR }}>
             Total borrowed
           </div>
           <p>
@@ -135,13 +135,13 @@ export default function UtilizationChart({ data, isLoading }: Props) {
           </p>
         </div>
         <div className="px-5 py-3 border-l border-border-secondary">
-          <div className="pb-1" style={{ color: RESERVE_COLOR }}>
+          <div className="label-body pb-1" style={{ color: RESERVE_COLOR }}>
             Reserves
           </div>
           <p>{focusedBar !== undefined ? formatAbbrUSD(data[focusedBar]?.reservesUSD) : '--'}</p>
         </div>
         <div className="px-5 py-3 border-l border-border-secondary">
-          <div className="pb-1 text-secondary">Liquidity</div>
+          <div className="label-body pb-1 text-secondary">Liquidity</div>
           <p>
             {focusedBar !== undefined
               ? formatAbbrUSD(+data[focusedBar]?.cash * data[focusedBar]?.underlyingPrice)

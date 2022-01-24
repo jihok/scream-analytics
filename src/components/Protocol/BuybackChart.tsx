@@ -29,17 +29,17 @@ export default function BuybackChart({ data }: Props) {
         </BarChart>
       </ResponsiveContainer>
       <div className="flex w-fit items-center bg-darkGray shadow-3xl mt-3 caption-label">
-        <div className="px-5">
+        <div className="px-5 label-body">
           {focusedBar !== undefined
             ? format(new Date(data[focusedBar].blockTimestamp * 1000), 'MMM d')
             : '--'}
         </div>
         <div className="px-5 py-3 border-l border-border-secondary">
-          <div className="pb-1">SCREAM</div>
+          <div className="pb-1 label-body">SCREAM</div>
           <p>{focusedBar !== undefined ? data[focusedBar].amount.toFixed(2) : '--'}</p>
         </div>
         <div className="px-5 py-3 border-l border-border-secondary">
-          <div className="pb-1">USD</div>
+          <div className="pb-1 label-body">USD</div>
           <p>
             {focusedBar !== undefined
               ? usdFormatter.format(data[focusedBar].amount * screamPrice)
