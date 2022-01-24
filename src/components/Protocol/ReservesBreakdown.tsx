@@ -25,7 +25,7 @@ interface ChartData {
 
 export default function ReservesBreakdown() {
   const { todayMarkets } = useMarketContext();
-  const [showTop, setShowTop] = useState(true);
+  const [showCurrent, setShowCurrent] = useState(true);
   const router = useRouter();
 
   // aggregate minority assets into Other for pie chart
@@ -45,7 +45,7 @@ export default function ReservesBreakdown() {
     percent: otherPercent,
   });
 
-  const renderData = (d: ChartData, i: number) => (
+  const renderCurrentData = (d: ChartData, i: number) => (
     <div
       className="flex mt-2 cursor-pointer"
       key={d.name}
@@ -56,7 +56,7 @@ export default function ReservesBreakdown() {
         <span className="text-body">{d.name}</span>
       </span>
       <div className="border-b border-border-secondary w-full self-center mx-2" />
-      <span className="text-body">{d.percent.toFixed(2)}%</span>
+      <span className="text-body">{showCurrent ? `${d.percent.toFixed(2)}%` : 'asdf'}</span>
       <div className="border-b border-border-secondary w-full self-center mx-2" />
       <span className="text-body">{formatAbbrUSD(d.usd || 0)}</span>
       <div className="flex relative items-center ml-2" style={{ width: 30 }}>
@@ -74,7 +74,7 @@ export default function ReservesBreakdown() {
       <div className="flex flex-col">
         <ResponsiveContainer width="100%" height={200}>
           <PieChart>
-            <Pie data={chartData} dataKey="percent">
+            <Pie data={chartData} dataKey="percent" stroke="none">
               {chartData.map((_entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index]} />
               ))}
@@ -85,27 +85,27 @@ export default function ReservesBreakdown() {
         <div className="flex text-center mb-4">
           <p
             className={`${
-              showTop
+              showCurrent
                 ? 'border-b-2 border-border-active font-sans-semibold'
                 : 'border-b border-border-primary'
             }  w-half pt-2 pb-3 cursor-pointer`}
-            onClick={() => setShowTop(true)}
+            onClick={() => setShowCurrent(true)}
           >
             Current
           </p>
           <p
             className={`${
-              !showTop
+              !showCurrent
                 ? 'border-b-2 border-border-active font-sans-semibold'
                 : 'border-b border-border-primary'
             }  w-half pb-3 cursor-pointer`}
-            onClick={() => setShowTop(false)}
+            onClick={() => setShowCurrent(false)}
           >
             Accrued Since Buyback
           </p>
         </div>
 
-        {data.map(renderData)}
+        {data.map(renderCurrentData)}
       </div>
     </div>
   );
