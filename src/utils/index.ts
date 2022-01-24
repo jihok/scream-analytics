@@ -1,4 +1,4 @@
-import { BigNumber, ethers } from 'ethers';
+import { ethers } from 'ethers';
 
 const PROVIDER = new ethers.providers.JsonRpcProvider('https://rpc.ftm.tools/', {
   name: 'Fantom Opera',
@@ -60,23 +60,33 @@ const getTokenTransfers = async (): Promise<any> => {
   return undefined;
 };
 
-export const getBuybacks = async (): Promise<number[]> => {
+interface Buyback {
+  blockNumber: number;
+  amount: number;
+}
+
+export const getBuybacks = async (): Promise<Buyback[]> => {
   try {
     const xScreamAddress = '0xe3d17c7e840ec140a7a51aca351a482231760824';
     const screamAbi = ['function transfer(address dst, uint rawAmount) external returns (bool)'];
     const screamInterface = new ethers.utils.Interface(screamAbi);
     const tokenTransfers = await getTokenTransfers();
 
-    // decode transactions with block, filter for transfers to the xScream contract, and map as amounts of SCREAM
-    const buybackAmounts: BigNumber[] = tokenTransfers
-      .map((tx: any) => screamInterface.decodeFunctionData('transfer', tx.input))
-      .filter((tx: any) => (tx[0] as string).toLowerCase() === xScreamAddress)
-      .map((buyback: any) => buyback.rawAmount);
-    console.log(
-      tokenTransfers,
-      tokenTransfers.map((tx: any) => screamInterface.decodeFunctionData('transfer', tx.input))
-    );
-    return buybackAmounts.map((amount) => +ethers.utils.formatEther(amount));
+    const buybackAmounts = tokenTransfers
+      .map((tx: any) => ({
+        data: screamInterface.decodeFunctionData('transfer', tx.input),
+        blockNumber: tx.blockNumber,
+      }))
+      .filter(
+        (decodedWithBlock: any) =>
+          (decodedWithBlock.data[0] as string).toLowerCase() === xScreamAddress
+      )
+      .map((decodedWithBlock: any) => ({
+        blockNumber: decodedWithBlock.blockNumber,
+        amount: +ethers.utils.formatEther(decodedWithBlock.data.rawAmount),
+      }));
+
+    return buybackAmounts;
   } catch (e) {
     console.error(e);
   }
