@@ -82,16 +82,16 @@ export default function MarketState({ yesterday, market }: MarketPageProps) {
         </table>
 
         <div className="flex whitespace-nowrap mb-3">
-          <p>Estimated daily interest</p>
+          <span className="text-body">Estimated daily interest</span>
           <div className="border-b border-border-secondary w-full self-center mx-2" />
-          <p className="font-sans-semibold">
+          <span className="text-body font-sans-semibold">
             {/*
               this is just an approximation since the subgraph's `borrowRate` is the compounded APY.
               to truly get the rate for a given day, we should either take the APY^(1/365)
               or fetch the per block rate from the scToken contract
             */}
             {usdFormatter.format((market.borrowAPY / 100 / 365) * market.totalBorrowsUSD)}
-          </p>
+          </span>
         </div>
         <div className="flex whitespace-nowrap mb-3">
           <span className="text-body">Total interest accumulated</span>
