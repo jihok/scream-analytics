@@ -30,7 +30,10 @@ export default function ProtocolOverview() {
         </div>
 
         <div className="flex flex-col lg:ml-5 lg:w-1/2">
-          <BuybackChart data={buybacks} />
+          <div className="flex flex-col p-4 bg-darkGray shadow-3xl mb-6">
+            <h3 className="pb-3 mb-3 border-b border-border-secondary">SCREAM Buybacks</h3>
+            {!!buybacks.length && <BuybackChart data={buybacks} />}
+          </div>
           <ReservesBreakdown />
         </div>
       </div>
