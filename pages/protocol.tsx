@@ -11,8 +11,6 @@ export default function ProtocolOverview() {
   const [buybacks, setBuybacks] = useState<Buyback[]>([]);
   const [lastBuybackMarkets, setLastBuybackMarkets] = useState<Market[]>();
 
-  console.log(lastBuybackMarkets);
-
   useEffect(() => {
     getBuybacks().then((res) => {
       setBuybacks(res);
@@ -54,7 +52,9 @@ export default function ProtocolOverview() {
             <div className="flex justify-between pb-3 mb-3 border-b border-border-secondary">
               <h3>Protocol Reserves</h3>
             </div>
-            {!!buybacks.length && <ReservesBreakdown />}
+            {!!buybacks.length && lastBuybackMarkets && (
+              <ReservesBreakdown lastBuybackMarkets={lastBuybackMarkets} />
+            )}
           </div>
         </div>
       </div>
