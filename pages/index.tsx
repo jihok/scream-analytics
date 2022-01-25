@@ -7,7 +7,7 @@ const Home: NextPage = () => {
   return (
     <Layout home="markets">
       <div className="px-5 lg:px-10">
-        <h1 className="pb-6 lg:hidden">Market analytics</h1>
+        <h1 className="pb-6 lg:hidden">Market Analytics</h1>
         <Overview />
       </div>
       <Table />

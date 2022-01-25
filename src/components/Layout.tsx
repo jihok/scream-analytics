@@ -11,8 +11,6 @@ interface Props {
   className?: string;
 }
 
-const ICON_HEIGHT = 24;
-
 export default function Layout({ children, home, className }: Props) {
   const [showMenu, setShowMenu] = useState(false);
   const router = useRouter();
@@ -25,14 +23,20 @@ export default function Layout({ children, home, className }: Props) {
         <link rel="icon" href="/scream-blue-pink.png" />
       </Head>
 
-      <header className="flex justify-between p-5">
-        <a style={{ cursor: 'pointer' }} onClick={() => router.back()}>
-          {home ? (
-            <div>{/** TODO */}</div>
-          ) : (
-            <Image src="/images/Back.png" alt="home" width={20} height={15} />
-          )}
-        </a>
+      <header className="flex justify-end lg:justify-between p-5">
+        {home ? (
+          <div className="hidden lg:block">
+            <Link href="/">
+              <a>
+                <Image src="/images/ScreamLogotrans.png" alt="logo" width={450} height={100} />
+              </a>
+            </Link>
+          </div>
+        ) : (
+          <a style={{ cursor: 'pointer' }} onClick={() => router.back()}>
+            <Image src="/images/Back.png" alt="back" width={20} height={15} />
+          </a>
+        )}
 
         <div className="flex items-center">
           {home && (
@@ -63,7 +67,7 @@ export default function Layout({ children, home, className }: Props) {
           </div>
           <div className="block lg:hidden cursor-pointer">
             {showMenu ? (
-              <div style={{ width: 20, height: ICON_HEIGHT, position: 'relative' }}>
+              <div style={{ width: 18, height: 24, position: 'relative' }}>
                 <Image
                   src="/images/Cancel.png"
                   alt="cancel"
@@ -73,13 +77,15 @@ export default function Layout({ children, home, className }: Props) {
                 />
               </div>
             ) : (
-              <Image
-                src="/images/Menu.png"
-                alt="menu"
-                width={ICON_HEIGHT}
-                height={16}
-                onClick={() => setShowMenu(true)}
-              />
+              <div style={{ width: 30, height: 30, position: 'relative' }}>
+                <Image
+                  src="/images/Menu.png"
+                  alt="menu"
+                  layout="fill"
+                  objectFit="contain"
+                  onClick={() => setShowMenu(true)}
+                />
+              </div>
             )}
             {showMenu && (
               <div
