@@ -1,20 +1,18 @@
-Analytics for Scream protocol.
+# Analytics for Scream protocol.
 
-`env` vars that should be set up in Vercel:
+## Notes
 
-- `FTMSCAN_API_KEY`
+- `FTMSCAN_API_KEY` is a required env var
+- buybacks are currently hardcoded to a specific `from` address
 
-Mocks:
-useful if working offline, subgraph is down, or if needed for testing.
-
-Contexts:
+## Contexts:
 
 - GlobalContext
   for things that all pages on the app should have access to
 - MarketContext
   for providing snapshots of the markets currently and yesterday. Snapshot of yesterday is necessary to provide the percent changes we see across the app
 
-Utils:
+## Utils:
 
 - index
   currently used for fetching any external data (gecko, ftmscan)
@@ -22,3 +20,7 @@ Utils:
   utility functions for market data (formatting, transforming) and types related to markets -- we have an interface for each Market query to ensure full type safety.
 - Account
   utility functions for Account data (transforms, health score comput) and types related to Account
+
+## Mocks:
+
+useful if working offline, subgraph is down, or if needed for testing.
