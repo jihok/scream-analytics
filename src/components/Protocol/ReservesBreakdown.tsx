@@ -33,14 +33,17 @@ export default function ReservesBreakdown({
   const [chartData, setChartData] = useState<ChartData[]>([]);
   const [sortedData, setSortedData] = useState<ChartData[]>([]);
   const router = useRouter();
-  const totalReservesUSD = todayMarkets.reduce((prev, curr) => prev + curr.reservesUSD, 0);
+  const totalReservesUSD = sortedData.reduce((prev, curr) => prev + (curr.usd ?? 0), 0);
 
   useEffect(() => {
     if (showCurrent) {
       const sorted: ChartData[] = todayMarkets
         .map((market) => ({
           name: market.underlyingSymbol,
-          percent: (market.reservesUSD / totalReservesUSD) * 100,
+          percent:
+            (market.reservesUSD /
+              todayMarkets.reduce((prev, curr) => prev + (curr.reservesUSD ?? 0), 0)) *
+            100,
           usd: market.reservesUSD,
           id: market.id,
         }))
@@ -63,7 +66,7 @@ export default function ReservesBreakdown({
           const marketPrice = +(todayMarkets.find((m) => market.id === m.id)?.underlyingPrice ?? 0);
           return {
             name: market.underlyingSymbol,
-            percent: (market.reservesUSD / totalReservesUSD) * 100,
+            percent: reservesDiff,
             usd: reservesDiff * marketPrice,
             id: market.id,
           };
@@ -72,10 +75,12 @@ export default function ReservesBreakdown({
       setSortedData(sorted);
 
       const data = sorted.slice(0, 6);
-      const otherPercent = 100 - data.reduce((prev, curr) => prev + curr.percent, 0);
+      const other =
+        sorted.reduce((prev, curr) => prev + (curr.usd ?? 0), 0) -
+        data.reduce((prev, curr) => prev + (curr.usd ?? 0), 0);
       data.push({
         name: 'Other',
-        percent: otherPercent,
+        percent: other,
       });
       setChartData(data);
     }
