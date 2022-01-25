@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { useMarketContext } from '../../contexts/MarketContext';
 import Image from 'next/image';
@@ -30,24 +30,35 @@ export default function ReservesBreakdown({
 }) {
   const { todayMarkets } = useMarketContext();
   const [showCurrent, setShowCurrent] = useState(true);
+  const [chartData, setChartData] = useState<ChartData[]>([]);
+  const [sortedData, setSortedData] = useState<ChartData[]>([]);
   const router = useRouter();
-
-  // aggregate minority assets into Other for pie chart
   const totalReservesUSD = todayMarkets.reduce((prev, curr) => prev + curr.reservesUSD, 0);
-  const currentData: ChartData[] = todayMarkets
-    .map((market) => ({
-      name: market.underlyingSymbol,
-      percent: (market.reservesUSD / totalReservesUSD) * 100,
-      usd: market.reservesUSD,
-      id: market.id,
-    }))
-    .sort((a, b) => b.percent - a.percent);
-  const chartData: ChartData[] = currentData.slice(0, 6);
-  const otherPercent = 100 - chartData.reduce((prev, curr) => prev + curr.percent, 0);
-  chartData.push({
-    name: 'Other',
-    percent: otherPercent,
-  });
+
+  useEffect(() => {
+    if (showCurrent) {
+      const sorted: ChartData[] = todayMarkets
+        .map((market) => ({
+          name: market.underlyingSymbol,
+          percent: (market.reservesUSD / totalReservesUSD) * 100,
+          usd: market.reservesUSD,
+          id: market.id,
+        }))
+        .sort((a, b) => b.percent - a.percent);
+      setSortedData(sorted);
+
+      const data = sorted.slice(0, 6);
+      const otherPercent = 100 - data.reduce((prev, curr) => prev + curr.percent, 0);
+      data.push({
+        name: 'Other',
+        percent: otherPercent,
+      });
+      setChartData(data);
+    } else {
+      setSortedData([]);
+      setChartData([]);
+    }
+  }, [showCurrent, todayMarkets, totalReservesUSD]);
 
   return (
     <div className="flex flex-col">
@@ -87,7 +98,7 @@ export default function ReservesBreakdown({
         </p>
       </div>
 
-      {currentData.map((d, i) => {
+      {sortedData.map((d, i) => {
         const getValues = () => {
           if (showCurrent) {
             return [`${d.percent.toFixed(2)}%`, d.usd || 0];
