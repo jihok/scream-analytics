@@ -14,17 +14,21 @@ export default function ProtocolOverview() {
   useEffect(() => {
     getBuybacks().then((res) => {
       setBuybacks(res);
+    });
+  }, []);
 
+  useEffect(() => {
+    if (buybacks.length) {
       screamClient
         .query<{ markets: RawMarket[] }>({
           query: MARKETS_BY_BLOCK_QUERY,
           variables: {
-            blockNumber: +res[res.length - 1].blockNumber,
+            blockNumber: +buybacks[buybacks.length - 1].blockNumber,
           },
         })
         .then((query) => setLastBuybackMarkets(transformMarketData(query.data.markets)));
-    });
-  }, []);
+    }
+  }, [buybacks]);
 
   return (
     <Layout home="protocol">
