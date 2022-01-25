@@ -36,8 +36,8 @@ const CustomCell = ({ colId, val }: CellParams) => {
           />
         </div>
         <span className="ml-1 lg:ml-5">
-          <p className="label-body">{val.underlyingSymbol}</p>
-          <p className="label-body font-sans-semibold">{val.underlyingName}</p>
+          <p>{val.underlyingSymbol}</p>
+          <p className="font-sans-semibold">{val.underlyingName}</p>
         </span>
       </div>
     );

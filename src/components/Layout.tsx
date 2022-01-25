@@ -40,7 +40,7 @@ export default function Layout({ children, home, className }: Props) {
               <Link href="/">
                 <a
                   className={`${
-                    home === 'markets' ? 'font-sans-bold border-b border-border-primary' : ''
+                    home === 'markets' ? 'font-sans-semibold border-b border-border-primary' : ''
                   } text-title mr-10 pb-2`}
                 >
                   Market Analytics
@@ -49,7 +49,7 @@ export default function Layout({ children, home, className }: Props) {
               <Link href="/protocol">
                 <a
                   className={`${
-                    home === 'protocol' ? 'font-sans-bold border-b border-border-primary' : ''
+                    home === 'protocol' ? 'font-sans-semibold border-b border-border-primary' : ''
                   } text-title mr-16 pb-2`}
                 >
                   Protocol Overview

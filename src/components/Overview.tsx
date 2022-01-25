@@ -95,7 +95,7 @@ const MarketRatioBar = (props: { marketRatios: MarketRatio[] }) => (
         />
         <div className="flex mt-2">
           <div className={`rounded-full h-2 w-2 mr-1 mt-0.5 bg-bar-${colorIndex}`} />
-          <div className="flex-col text-caption">
+          <div className="flex-col label-body">
             <div className="font-sans-semibold">{underlyingSymbol}</div>
             {percentage.toFixed(2)}%
           </div>
