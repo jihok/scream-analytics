@@ -12,9 +12,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={screamClient}>
       <GlobalProvider>
-        {/* <MarketProvider> */}
         <Component {...pageProps} />
-        {/* </MarketProvider> */}
       </GlobalProvider>
     </ApolloProvider>
   );

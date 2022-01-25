@@ -26,7 +26,7 @@ export interface MarketPageProps {
 }
 
 export default function MarketPage() {
-  const { latestSyncedBlock, yesterdayMarkets } = useGlobalContext();
+  const { latestSyncedBlock, yesterdayMarkets, showLoading, setShowLoading } = useGlobalContext();
 
   const {
     query: { id },
@@ -36,12 +36,12 @@ export default function MarketPage() {
   });
   const [historicalData, setHistoricalData] = useState<Market[]>([]);
   const [daysToFetch, setDaysToFetch] = useState(7);
-  const [isLoading, setIsloading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // get data for chart
     const getHistoricalData = async () => {
-      setIsloading(true);
+      setIsLoading(true);
       const blocksToQuery = [...Array(daysToFetch)].map(
         (_, i) => latestSyncedBlock - BLOCKS_IN_A_DAY * i
       );
@@ -65,13 +65,24 @@ export default function MarketPage() {
           .map((raw) => transformMarketData(raw.data.markets)[0])
           .filter((data) => !!data)
       );
-      setIsloading(false);
+      setIsLoading(false);
     };
 
     getHistoricalData();
   }, [latestSyncedBlock, id, daysToFetch]);
 
-  if (loading || !data) return <Loading />;
+  useEffect(() => {
+    if (loading && !data) {
+      setShowLoading(true);
+    } else {
+      setShowLoading(false);
+    }
+  }, [data, loading, setShowLoading]);
+
+  if (showLoading || !data) {
+    return null;
+  }
+
   if (error) return <p>Error :(</p>;
 
   const market = transformMarketData(data.markets)[0];
