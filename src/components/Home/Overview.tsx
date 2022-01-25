@@ -1,6 +1,6 @@
-import { useGlobalContext } from '../contexts/GlobalContext';
-import { usdFormatter, Market } from '../utils/Market';
-import PercentChange from './PercentChange';
+import { useGlobalContext } from '../../contexts/GlobalContext';
+import { usdFormatter, Market } from '../../utils/Market';
+import PercentChange from '../PercentChange';
 
 interface MarketRatio extends Market {
   percentage: number;

@@ -1,10 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { formatAbbrUSD } from '../utils/Market';
+import { formatAbbrUSD } from '../../utils/Market';
 import { useTable, Column, useSortBy, Row, usePagination, useGlobalFilter } from 'react-table';
-import PercentChange, { MutableData } from './PercentChange';
-import { useGlobalContext } from '../contexts/GlobalContext';
+import PercentChange, { MutableData } from '../PercentChange';
+import { useGlobalContext } from '../../contexts/GlobalContext';
 
 interface TableData {
   asset: { underlyingName: string; underlyingSymbol: string };

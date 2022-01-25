@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
-import Overview from '../src/components/Overview';
-import Table from '../src/components/Table';
+import Overview from '../src/components/Home/Overview';
+import Table from '../src/components/Home/Table';
 import Layout from '../src/components/Layout';
 
 const Home: NextPage = () => {
