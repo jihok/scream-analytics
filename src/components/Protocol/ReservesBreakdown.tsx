@@ -147,11 +147,13 @@ export default function ReservesBreakdown({
             key={d.name}
             onClick={async () => await router.push(`/market/${d.id}`)}
           >
-            <span className="flex">
-              {i < 6 && <span className={`rounded-full h-2 w-2 mr-1 mt-0.5 bg-bar-${i}`} />}
-              <span className="text-body">{d.name}</span>
+            <span className="flex" style={{ minWidth: '40%', maxWidth: '40%' }}>
+              <span className="flex">
+                {i < 6 && <span className={`rounded-full h-2 w-2 mr-1 mt-0.5 bg-bar-${i}`} />}
+                <span className="text-body">{d.name}</span>
+              </span>
+              <div className="border-b border-border-secondary w-full self-center mx-2" />
             </span>
-            <div className="border-b border-border-secondary w-full self-center mx-2" />
             <span className="text-body">{getValues()[0]}</span>
             <div className="border-b border-border-secondary w-full self-center mx-2" />
             <span className="text-body">{formatAbbrUSD(getValues()[1] as number)}</span>
