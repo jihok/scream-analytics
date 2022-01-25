@@ -2,14 +2,12 @@ import React, { useEffect, useState } from 'react';
 import Layout from '../src/components/Layout';
 import BuybackChart from '../src/components/Protocol/BuybackChart';
 import ReservesBreakdown from '../src/components/Protocol/ReservesBreakdown';
-import { useGlobalContext } from '../src/contexts/GlobalContext';
 import { MARKETS_BY_BLOCK_QUERY } from '../src/queries';
 import { Buyback, getBuybacks } from '../src/utils';
 import { Market, RawMarket, transformMarketData } from '../src/utils/Market';
 import { screamClient } from './_app';
 
 export default function ProtocolOverview() {
-  const { setShowLoading, showLoading } = useGlobalContext();
   const [buybacks, setBuybacks] = useState<Buyback[]>([]);
   const [lastBuybackMarkets, setLastBuybackMarkets] = useState<Market[]>([]);
 
@@ -31,18 +29,6 @@ export default function ProtocolOverview() {
         .then((query) => setLastBuybackMarkets(transformMarketData(query.data.markets)));
     }
   }, [buybacks]);
-
-  useEffect(() => {
-    if (!buybacks.length || !lastBuybackMarkets.length) {
-      setShowLoading(true);
-    } else {
-      setShowLoading(false);
-    }
-  }, [showLoading, setShowLoading, buybacks.length, lastBuybackMarkets.length]);
-
-  if (showLoading) {
-    return null;
-  }
 
   return (
     <Layout home="protocol">
