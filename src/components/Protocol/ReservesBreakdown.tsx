@@ -44,7 +44,7 @@ export default function ReservesBreakdown({
           usd: market.reservesUSD,
           id: market.id,
         }))
-        .sort((a, b) => b.percent - a.percent);
+        .sort((a, b) => b.usd - a.usd);
       setSortedData(sorted);
 
       const data = sorted.slice(0, 6);
@@ -55,10 +55,31 @@ export default function ReservesBreakdown({
       });
       setChartData(data);
     } else {
-      setSortedData([]);
-      setChartData([]);
+      const sorted: ChartData[] = todayMarkets
+        .map((market) => {
+          const reservesDiff =
+            +(todayMarkets.find((m) => market.id === m.id)?.reserves ?? 0) -
+            +(lastBuybackMarkets.find((m) => market.id === m.id)?.reserves ?? 0);
+          const marketPrice = +(todayMarkets.find((m) => market.id === m.id)?.underlyingPrice ?? 0);
+          return {
+            name: market.underlyingSymbol,
+            percent: (market.reservesUSD / totalReservesUSD) * 100,
+            usd: reservesDiff * marketPrice,
+            id: market.id,
+          };
+        })
+        .sort((a, b) => b.usd - a.usd);
+      setSortedData(sorted);
+
+      const data = sorted.slice(0, 6);
+      const otherPercent = 100 - data.reduce((prev, curr) => prev + curr.percent, 0);
+      data.push({
+        name: 'Other',
+        percent: otherPercent,
+      });
+      setChartData(data);
     }
-  }, [showCurrent, todayMarkets, totalReservesUSD]);
+  }, [lastBuybackMarkets, showCurrent, todayMarkets, totalReservesUSD]);
 
   return (
     <div className="flex flex-col">
