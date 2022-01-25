@@ -120,9 +120,7 @@ export default function Account() {
                       <>
                         <p className="text-caption font-sans-semibold pt-2">Repaid</p>
                         <p className="text-label">
-                          {usdFormatter.format(
-                            token.totalUnderlyingRepaid * token.market.underlyingPrice
-                          )}
+                          {usdFormatter(token.totalUnderlyingRepaid * token.market.underlyingPrice)}
                         </p>
                       </>
                     )}

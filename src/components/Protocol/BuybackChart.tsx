@@ -41,9 +41,7 @@ export default function BuybackChart({ data }: Props) {
         <div className="px-5 py-3 border-l border-border-secondary">
           <div className="pb-1 label-body">USD (current)</div>
           <p>
-            {focusedBar !== undefined
-              ? usdFormatter.format(data[focusedBar].amount * screamPrice)
-              : '--'}
+            {focusedBar !== undefined ? usdFormatter(data[focusedBar].amount * screamPrice) : '--'}
           </p>
         </div>
       </div>

@@ -25,11 +25,11 @@ export default function MarketHeader({ yesterday, market }: MarketPageProps) {
               <p className="font-sans-semibold text-title">{market.underlyingName}</p>
             </span>
             <h1 className="font-sans-light hidden lg:block">
-              {usdFormatter.format(market.underlyingPrice)}
+              {usdFormatter(market.underlyingPrice)}
             </h1>
           </div>
         </div>
-        <h1 className="font-sans-light lg:hidden">{usdFormatter.format(market.underlyingPrice)}</h1>
+        <h1 className="font-sans-light lg:hidden">{usdFormatter(market.underlyingPrice)}</h1>
       </div>
 
       {/* mutable asset metrics */}

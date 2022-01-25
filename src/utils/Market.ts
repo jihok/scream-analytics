@@ -59,12 +59,19 @@ export function transformMarketData(rawMarkets: any): any {
   }));
 }
 
-export const usdFormatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-});
+export const usdFormatter = (value: number) => {
+  if (value < 1) {
+    return `$${value.toFixed(value < 0.1 ? 4 : 3)}`;
+  }
+
+  const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  });
+  return formatter.format(value);
+};
 
 export const formatAbbrUSD = (value: number) =>
   Math.floor(value / 1_000_000) > 0
-    ? `${usdFormatter.format(value / 1_000_000)}M`
-    : `${usdFormatter.format(value / 1_000)}K`;
+    ? `${usdFormatter(value / 1_000_000)}M`
+    : `${usdFormatter(value / 1_000)}K`;

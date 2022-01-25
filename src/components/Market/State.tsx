@@ -90,14 +90,14 @@ export default function MarketState({ yesterday, market }: MarketPageProps) {
               to truly get the rate for a given day, we should either take the APY^(1/365)
               or fetch the per block rate from the scToken contract
             */}
-            {usdFormatter.format((market.borrowAPY / 100 / 365) * market.totalBorrowsUSD)}
+            {usdFormatter((market.borrowAPY / 100 / 365) * market.totalBorrowsUSD)}
           </span>
         </div>
         <div className="flex whitespace-nowrap mb-3">
           <span className="text-body">Total interest accumulated</span>
           <div className="border-b border-border-secondary w-full self-center mx-2" />
           <span className="text-body font-sans-semibold">
-            {usdFormatter.format(market.totalInterestAccumulated * market.underlyingPrice)}
+            {usdFormatter(market.totalInterestAccumulated * market.underlyingPrice)}
           </span>
         </div>
         <div className="flex whitespace-nowrap mb-3">

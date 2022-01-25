@@ -112,7 +112,7 @@ export default function HealthSimulator({ account }: { account: Account }) {
             <div className="flex justify-between pt-10 pb-3 border-b border-border-primary">
               <h3>Supply</h3>
               <p className="text-title">
-                {usdFormatter.format(
+                {usdFormatter(
                   tokens.reduce(
                     (prev, curr) => prev + curr.supplyQuantity * curr.underlyingPrice,
                     0
@@ -174,7 +174,7 @@ export default function HealthSimulator({ account }: { account: Account }) {
                       </span>
                       <span>
                         <p className="pb-5">Total USD</p>
-                        <h2>{usdFormatter.format(token.supplyQuantity * token.underlyingPrice)}</h2>
+                        <h2>{usdFormatter(token.supplyQuantity * token.underlyingPrice)}</h2>
                       </span>
                     </div>
                   </div>
@@ -184,7 +184,7 @@ export default function HealthSimulator({ account }: { account: Account }) {
             <div className="flex justify-between pt-10 pb-3 border-b border-border-primary">
               <h3>Borrow</h3>
               <p className="text-title">
-                {usdFormatter.format(
+                {usdFormatter(
                   tokens.reduce(
                     (prev, curr) => prev + curr.storedBorrowBalance * curr.underlyingPrice,
                     0
@@ -246,9 +246,7 @@ export default function HealthSimulator({ account }: { account: Account }) {
                       </span>
                       <span>
                         <p className="pb-5">Total USD</p>
-                        <h2>
-                          {usdFormatter.format(token.storedBorrowBalance * token.underlyingPrice)}
-                        </h2>
+                        <h2>{usdFormatter(token.storedBorrowBalance * token.underlyingPrice)}</h2>
                       </span>
                     </div>
                   </div>
