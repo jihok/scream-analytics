@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import SearchBar from './SearchBar';
 
@@ -14,6 +15,8 @@ const ICON_HEIGHT = 24;
 
 export default function Layout({ children, home, className }: Props) {
   const [showMenu, setShowMenu] = useState(false);
+  const router = useRouter();
+
   return (
     <>
       <Head>
@@ -23,15 +26,13 @@ export default function Layout({ children, home, className }: Props) {
       </Head>
 
       <header className="flex justify-between p-5">
-        <Link href="/">
-          <a>
-            {home ? (
-              <div>{/** TODO */}</div>
-            ) : (
-              <Image src="/images/Back.png" alt="home" width={20} height={15} />
-            )}
-          </a>
-        </Link>
+        <a style={{ cursor: 'pointer' }} onClick={() => router.back()}>
+          {home ? (
+            <div>{/** TODO */}</div>
+          ) : (
+            <Image src="/images/Back.png" alt="home" width={20} height={15} />
+          )}
+        </a>
 
         <div className="flex items-center">
           {home && (
