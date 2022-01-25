@@ -18,7 +18,7 @@ const COLORS = [
 
 interface ChartData {
   name: string;
-  percent: number;
+  sliceValue: number;
   usd?: number;
   id?: string;
 }
@@ -40,7 +40,7 @@ export default function ReservesBreakdown({
       const sorted: ChartData[] = todayMarkets
         .map((market) => ({
           name: market.underlyingSymbol,
-          percent:
+          sliceValue:
             (market.reservesUSD /
               todayMarkets.reduce((prev, curr) => prev + (curr.reservesUSD ?? 0), 0)) *
             100,
@@ -51,10 +51,10 @@ export default function ReservesBreakdown({
       setSortedData(sorted);
 
       const data = sorted.slice(0, 6);
-      const otherPercent = 100 - data.reduce((prev, curr) => prev + curr.percent, 0);
+      const otherSliceValue = 100 - data.reduce((prev, curr) => prev + curr.sliceValue, 0);
       data.push({
         name: 'Other',
-        percent: otherPercent,
+        sliceValue: otherSliceValue,
       });
       setChartData(data);
     } else {
@@ -66,7 +66,7 @@ export default function ReservesBreakdown({
           const marketPrice = +(todayMarkets.find((m) => market.id === m.id)?.underlyingPrice ?? 0);
           return {
             name: market.underlyingSymbol,
-            percent: reservesDiff,
+            sliceValue: reservesDiff * marketPrice,
             usd: reservesDiff * marketPrice,
             id: market.id,
           };
@@ -80,7 +80,7 @@ export default function ReservesBreakdown({
         data.reduce((prev, curr) => prev + (curr.usd ?? 0), 0);
       data.push({
         name: 'Other',
-        percent: other,
+        sliceValue: other,
       });
       setChartData(data);
     }
@@ -91,7 +91,7 @@ export default function ReservesBreakdown({
       <h2 className="absolute">{usdFormatter.format(totalReservesUSD)}</h2>
       <ResponsiveContainer width="100%" height={200}>
         <PieChart>
-          <Pie data={chartData} dataKey="percent" stroke="none">
+          <Pie data={chartData} dataKey="sliceValue" stroke="none">
             {chartData.map((_entry, index) => (
               <Cell key={`cell-${index}`} fill={COLORS[index]} />
             ))}
@@ -127,7 +127,7 @@ export default function ReservesBreakdown({
       {sortedData.map((d, i) => {
         const getValues = () => {
           if (showCurrent) {
-            return [`${d.percent.toFixed(2)}%`, d.usd || 0];
+            return [`${d.sliceValue.toFixed(2)}%`, d.usd || 0];
           }
           const marketPrice = +(
             todayMarkets.find((market) => market.id === d.id)?.underlyingPrice ?? 0
