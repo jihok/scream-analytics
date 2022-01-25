@@ -7,10 +7,10 @@
 
 ## Contexts:
 
-- GlobalContext
-  for things that all pages on the app should have access to
-- MarketContext
-  for providing snapshots of the markets currently and yesterday. Snapshot of yesterday is necessary to provide the percent changes we see across the app
+GlobalContext
+
+- for things that all pages on the app should have access to
+- for providing snapshots of the markets currently and yesterday. Snapshot of yesterday is necessary to provide the percent changes we see across the app
 
 ## Utils:
 

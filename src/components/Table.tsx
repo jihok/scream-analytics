@@ -3,8 +3,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { formatAbbrUSD } from '../utils/Market';
 import { useTable, Column, useSortBy, Row, usePagination, useGlobalFilter } from 'react-table';
-import { useMarketContext } from '../contexts/MarketContext';
 import PercentChange, { MutableData } from './PercentChange';
+import { useGlobalContext } from '../contexts/GlobalContext';
 
 interface TableData {
   asset: { underlyingName: string; underlyingSymbol: string };
@@ -69,7 +69,7 @@ const CustomCell = ({ colId, val }: CellParams) => {
 };
 
 export default function Table() {
-  const { yesterdayMarkets, todayMarkets } = useMarketContext();
+  const { yesterdayMarkets, todayMarkets } = useGlobalContext();
 
   const columns = useMemo<Column<TableData>[]>(
     () => [

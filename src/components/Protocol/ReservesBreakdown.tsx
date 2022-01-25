@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
-import { useMarketContext } from '../../contexts/MarketContext';
 import Image from 'next/image';
 import { formatAbbrUSD, Market, usdFormatter } from '../../utils/Market';
+import { useGlobalContext } from '../../contexts/GlobalContext';
 
 // TODO: shareable with tailwind.config?
 const COLORS = [
@@ -28,7 +28,7 @@ export default function ReservesBreakdown({
 }: {
   lastBuybackMarkets: Market[];
 }) {
-  const { todayMarkets } = useMarketContext();
+  const { todayMarkets } = useGlobalContext();
   const [showCurrent, setShowCurrent] = useState(true);
   const [chartData, setChartData] = useState<ChartData[]>([]);
   const [sortedData, setSortedData] = useState<ChartData[]>([]);

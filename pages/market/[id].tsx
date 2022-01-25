@@ -3,8 +3,7 @@ import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/dist/client/router';
 import Layout from '../../src/components/Layout';
 import UtilizationChart from '../../src/components/Market/UtilizationChart';
-import { useGlobalContext } from '../../src/contexts/GlobalContext';
-import { BLOCKS_IN_A_DAY, useMarketContext } from '../../src/contexts/MarketContext';
+import { useGlobalContext, BLOCKS_IN_A_DAY } from '../../src/contexts/GlobalContext';
 import { MARKET_BASE_BY_BLOCK_QUERY, MARKET_DETAILS_QUERY } from '../../src/queries';
 import {
   Market,
@@ -27,8 +26,8 @@ export interface MarketPageProps {
 }
 
 export default function MarketPage() {
-  const { latestSyncedBlock } = useGlobalContext();
-  const { yesterdayMarkets } = useMarketContext();
+  const { latestSyncedBlock, yesterdayMarkets } = useGlobalContext();
+
   const {
     query: { id },
   } = useRouter();

@@ -1,4 +1,4 @@
-import { useMarketContext } from '../contexts/MarketContext';
+import { useGlobalContext } from '../contexts/GlobalContext';
 import { usdFormatter, Market } from '../utils/Market';
 import PercentChange from './PercentChange';
 
@@ -8,7 +8,7 @@ interface MarketRatio extends Market {
 }
 
 export default function MarketsOverview() {
-  const { yesterdayMarkets, todayMarkets } = useMarketContext();
+  const { yesterdayMarkets, todayMarkets } = useGlobalContext();
   const yesterdaySupplyUSD = yesterdayMarkets.reduce((prev, curr) => curr.totalSupplyUSD + prev, 0);
   const yesterdayBorrowUSD = yesterdayMarkets.reduce(
     (prev, curr) => curr.totalBorrowsUSD + prev,

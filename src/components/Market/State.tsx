@@ -1,8 +1,7 @@
 import BigNumber from 'bignumber.js';
 import React, { useEffect, useState } from 'react';
 import { MarketPageProps } from '../../../pages/market/[id]';
-import { useGlobalContext } from '../../contexts/GlobalContext';
-import { BLOCKS_IN_A_DAY } from '../../contexts/MarketContext';
+import { useGlobalContext, BLOCKS_IN_A_DAY } from '../../contexts/GlobalContext';
 import { getCompSpeeds } from '../../utils';
 import { usdFormatter } from '../../utils/Market';
 import PercentChange from '../PercentChange';
