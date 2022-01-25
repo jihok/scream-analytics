@@ -28,7 +28,7 @@ export default function Layout({ children, home, className }: Props) {
           <div className="hidden lg:block">
             <Link href="/">
               <a>
-                <Image src="/images/ScreamLogotrans.png" alt="logo" width={450} height={100} />
+                <Image src="/images/ScreamLogotrans.png" alt="logo" width={180} height={40} />
               </a>
             </Link>
           </div>
