@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import { useState } from 'react';
 import { useGlobalContext } from '../../contexts/GlobalContext';
-import { ResponsiveContainer, BarChart, YAxis, Bar } from 'recharts';
+import { ResponsiveContainer, BarChart, YAxis, Bar, Cell } from 'recharts';
 import { CategoricalChartState } from 'recharts/types/chart/generateCategoricalChart';
 import { Buyback } from '../../utils';
 import { SUPPLY_COLOR } from '../Market/UtilizationChart';
@@ -25,7 +25,14 @@ export default function BuybackChart({ data }: Props) {
           }}
         >
           <YAxis hide />
-          <Bar dataKey="amount" fill={SUPPLY_COLOR} radius={[2, 2, 0, 0]} />
+          <Bar dataKey="amount" fill={SUPPLY_COLOR} radius={[2, 2, 0, 0]}>
+            {data.map((entry, i) => (
+              <Cell
+                key={`${entry.blockNumber}`}
+                fill={focusedBar === i || focusedBar === undefined ? SUPPLY_COLOR : '#31333799'}
+              />
+            ))}
+          </Bar>
         </BarChart>
       </ResponsiveContainer>
       <div className="flex w-fit items-center bg-darkGray shadow-3xl mt-3 caption-label">
