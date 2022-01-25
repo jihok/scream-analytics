@@ -130,7 +130,7 @@ export default function Layout({ children, home, className }: Props) {
         It's not ideal due to the following edge case: a desktop window could be small, open the menu,
         then resized to large, which would disable scrolling but hide the menu.
       */}
-      <main className={`flex flex-col md:px-40 ${className} ${showMenu && 'fixed'}`}>
+      <main className={`flex flex-col pt-10 md:px-40 ${className} ${showMenu && 'fixed'}`}>
         {children}
       </main>
       <footer className="flex pt-40 pb-20 justify-center" />
