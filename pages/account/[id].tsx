@@ -8,6 +8,7 @@ import { RawAccount, transformAccountData } from '../../src/utils/Account';
 import AccountHeader from '../../src/components/Account/Header';
 import { BORROW_COLOR, SUPPLY_COLOR } from '../../src/components/Market/UtilizationChart';
 import { usdFormatter } from '../../src/utils/Market';
+import Loading from '../../src/components/Loading';
 
 const REPAID_COLOR = '#89DFDB'; // also equal to bg-bar-0
 
@@ -20,7 +21,7 @@ export default function Account() {
   });
   const [overviewType, setOverviewType] = useState<'supplied' | 'borrowed'>('supplied');
 
-  if (loading || !data) return <p>Loading</p>;
+  if (loading || !data) return <Loading />;
   if (error) return <p>Error :(</p>;
 
   if (!data.accounts.length) {

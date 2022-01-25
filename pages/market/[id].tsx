@@ -16,6 +16,7 @@ import {
 import { screamClient } from '../_app';
 import MarketHeader from '../../src/components/Market/Header';
 import MarketState from '../../src/components/Market/State';
+import Loading from '../../src/components/Loading';
 
 /**
  * props passed down to the child components of this page
@@ -71,7 +72,7 @@ export default function MarketPage() {
     getHistoricalData();
   }, [latestSyncedBlock, id, daysToFetch]);
 
-  if (loading || !data) return <p>Loading</p>;
+  if (loading || !data) return <Loading />;
   if (error) return <p>Error :(</p>;
 
   const market = transformMarketData(data.markets)[0];

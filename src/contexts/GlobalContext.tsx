@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client';
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import Loading from '../components/Loading';
 import { LatestBlockQuery, LATEST_BLOCK_QUERY } from '../queries';
 import { getScreamPrice } from '../utils';
 
@@ -21,7 +22,7 @@ export default function GlobalProvider(props: { children: React.ReactNode }) {
     fetchScreamPrice();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loading />;
   if (error) return <p>Error :( - global</p>;
 
   return (

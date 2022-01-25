@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { screamClient } from '../../pages/_app';
+import Loading from '../components/Loading';
 import { MARKETS_BY_BLOCK_QUERY } from '../queries';
 import { Market, RawMarket, transformMarketData } from '../utils/Market';
 import { useGlobalContext } from './GlobalContext';
@@ -49,11 +50,7 @@ export default function MarketProvider(props: { children: React.ReactNode }) {
 
   return (
     <MarketContext.Provider value={{ yesterdayMarkets, todayMarkets }}>
-      {!todayMarkets.length || !yesterdayMarkets.length ? (
-        <div>{/** TODO: LOADING */}</div>
-      ) : (
-        props.children
-      )}
+      {!todayMarkets.length || !yesterdayMarkets.length ? <Loading /> : props.children}
     </MarketContext.Provider>
   );
 }
