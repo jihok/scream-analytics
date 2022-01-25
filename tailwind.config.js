@@ -8,6 +8,7 @@ module.exports = {
       darkGray: '#0E0F1080',
       modalOverlay: '#000000E5',
       bar: {
+        // NOTE: if these colors are changed, also change the colors on the account page and ReservesBreakdown
         0: '#00FFFF',
         1: '#FF0F6C',
         2: '#A20BFF',
