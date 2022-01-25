@@ -8,7 +8,6 @@ import { RawAccount, transformAccountData } from '../../src/utils/Account';
 import AccountHeader from '../../src/components/Account/Header';
 import { BORROW_COLOR, SUPPLY_COLOR } from '../../src/components/Market/UtilizationChart';
 import { usdFormatter } from '../../src/utils/Market';
-import Loading from '../../src/components/Loading';
 import { useGlobalContext } from '../../src/contexts/GlobalContext';
 
 const REPAID_COLOR = '#89DFDB'; // also equal to bg-bar-0
@@ -25,22 +24,18 @@ export default function Account() {
 
   useEffect(() => {
     if (loading && !data) {
-      console.log('setloading');
       setShowLoading(true);
     } else {
-      console.log('unsetloading');
       setShowLoading(false);
     }
   }, [data, loading, setShowLoading]);
   if (error) return <p>Error :(</p>;
 
   if (showLoading || !data) {
-    console.log('null');
     return null;
   }
 
   if (!data.accounts.length) {
-    console.log('no accounts');
     return (
       <Layout className="p-5 lg:px-80">
         <div className="flex flex-col items-center justify-center">
