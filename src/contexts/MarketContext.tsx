@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { screamClient } from '../../pages/_app';
-import Loading from '../components/Loading';
 import { MARKETS_BY_BLOCK_QUERY } from '../queries';
 import { Market, RawMarket, transformMarketData } from '../utils/Market';
 import { useGlobalContext } from './GlobalContext';
@@ -16,7 +15,7 @@ const BLOCK_TIME = 1000; // we assume blocks are 1s
 export const BLOCKS_IN_A_DAY = (24 * 60 * 60 * 1000) / BLOCK_TIME;
 
 export default function MarketProvider(props: { children: React.ReactNode }) {
-  const { latestSyncedBlock } = useGlobalContext();
+  const { latestSyncedBlock, setShowLoading } = useGlobalContext();
   const [yesterdayMarkets, setYesterdayMarkets] = useState<Market[]>([]);
   const [todayMarkets, setTodayMarkets] = useState<Market[]>([]);
 
@@ -48,9 +47,13 @@ export default function MarketProvider(props: { children: React.ReactNode }) {
     })();
   }, [latestSyncedBlock]);
 
+  useEffect(() => {
+    setShowLoading(!todayMarkets.length || !yesterdayMarkets.length);
+  }, [setShowLoading, todayMarkets.length, yesterdayMarkets.length]);
+
   return (
     <MarketContext.Provider value={{ yesterdayMarkets, todayMarkets }}>
-      {!todayMarkets.length || !yesterdayMarkets.length ? <Loading /> : props.children}
+      {props.children}
     </MarketContext.Provider>
   );
 }
