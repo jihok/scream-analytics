@@ -1,9 +1,9 @@
-import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import Image from 'next/image';
 import { formatAbbrUSD, Market, usdFormatter } from '../../utils/Market';
 import { useGlobalContext } from '../../contexts/GlobalContext';
+import Link from 'next/link';
 
 // TODO: shareable with tailwind.config?
 const COLORS = [
@@ -32,7 +32,6 @@ export default function ReservesBreakdown({
   const [showCurrent, setShowCurrent] = useState(true);
   const [chartData, setChartData] = useState<ChartData[]>([]);
   const [sortedData, setSortedData] = useState<ChartData[]>([]);
-  const router = useRouter();
   const totalReservesUSD = sortedData.reduce((prev, curr) => prev + (curr.usd ?? 0), 0);
 
   useEffect(() => {
@@ -129,12 +128,14 @@ export default function ReservesBreakdown({
           if (showCurrent) {
             return [`${d.sliceValue.toFixed(2)}%`, d.usd || 0];
           }
+
           const marketPrice = +(
             todayMarkets.find((market) => market.id === d.id)?.underlyingPrice ?? 0
           );
           const reservesDiff =
             +(todayMarkets.find((market) => market.id === d.id)?.reserves ?? 0) -
             +(lastBuybackMarkets.find((market) => market.id === d.id)?.reserves ?? 0);
+
           return [
             reservesDiff < 10 ? reservesDiff.toFixed(4) : reservesDiff.toFixed(2),
             reservesDiff * marketPrice,
@@ -142,25 +143,23 @@ export default function ReservesBreakdown({
         };
 
         return (
-          <div
-            className="flex mt-2 cursor-pointer"
-            key={d.name}
-            onClick={async () => await router.push(`/market/${d.id}`)}
-          >
-            <span className="flex" style={{ minWidth: '40%', maxWidth: '40%' }}>
-              <span className="flex">
-                {i < 6 && <span className={`rounded-full h-2 w-2 mr-1 mt-0.5 bg-bar-${i}`} />}
-                <span className="text-body">{d.name}</span>
+          <Link href={`/market/${d.id}`} key={d.name}>
+            <a className="flex mt-2">
+              <span className="flex" style={{ minWidth: '40%', maxWidth: '40%' }}>
+                <span className="flex">
+                  {i < 6 && <span className={`rounded-full h-2 w-2 mr-1 mt-0.5 bg-bar-${i}`} />}
+                  <span className="text-body">{d.name}</span>
+                </span>
+                <div className="border-b border-border-secondary w-full self-center mx-2" />
               </span>
+              <span className="text-body">{getValues()[0]}</span>
               <div className="border-b border-border-secondary w-full self-center mx-2" />
-            </span>
-            <span className="text-body">{getValues()[0]}</span>
-            <div className="border-b border-border-secondary w-full self-center mx-2" />
-            <span className="text-body">{formatAbbrUSD(getValues()[1] as number)}</span>
-            <div className="flex relative items-center ml-2" style={{ width: 30 }}>
-              <Image src="/images/RightCarat.png" layout="fill" objectFit="contain" alt="go" />
-            </div>
-          </div>
+              <span className="text-body">{formatAbbrUSD(getValues()[1] as number)}</span>
+              <div className="flex relative items-center ml-2" style={{ width: 30 }}>
+                <Image src="/images/RightCarat.png" layout="fill" objectFit="contain" alt="go" />
+              </div>
+            </a>
+          </Link>
         );
       })}
     </div>

@@ -60,7 +60,7 @@ export function transformMarketData(rawMarkets: any): any {
 }
 
 export const usdFormatter = (value: number) => {
-  if (value < 1) {
+  if (value > 0 && value < 1) {
     return `$${value.toFixed(value < 0.1 ? 4 : 3)}`;
   }
 
@@ -71,7 +71,12 @@ export const usdFormatter = (value: number) => {
   return formatter.format(value);
 };
 
-export const formatAbbrUSD = (value: number) =>
-  Math.floor(value / 1_000_000) > 0
-    ? `${usdFormatter(value / 1_000_000)}M`
-    : `${usdFormatter(value / 1_000)}K`;
+export const formatAbbrUSD = (value: number) => {
+  if (value > 1_000_000_000) {
+    return `${usdFormatter(value / 1_000_000_000)}B`;
+  }
+  if (value > 1_000_000) {
+    return `${usdFormatter(value / 1_000_000)}M`;
+  }
+  return `${usdFormatter(value / 1_000)}K`;
+};

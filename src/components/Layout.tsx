@@ -23,17 +23,18 @@ export default function Layout({ children, home, className }: Props) {
         <link rel="icon" href="/images/scream-black-white.png" />
       </Head>
 
-      <header className="flex justify-end lg:justify-between p-5">
+      <header className="flex justify-between p-5">
         {home ? (
-          <div className="hidden lg:block">
-            <Link href="/">
-              <a>
-                <Image src="/images/ScreamLogotrans.png" alt="logo" width={180} height={40} />
-              </a>
-            </Link>
-          </div>
+          <Link href="/">
+            <a className="hidden lg:block">
+              <Image src="/images/ScreamLogotrans.png" alt="logo" width={180} height={40} />
+            </a>
+          </Link>
         ) : (
-          <a style={{ cursor: 'pointer' }} onClick={() => router.back()}>
+          <a
+            style={{ cursor: 'pointer', marginTop: !home ? 6.5 : 0 }}
+            onClick={() => router.back()}
+          >
             <Image src="/images/Back.png" alt="back" width={20} height={15} />
           </a>
         )}
@@ -62,7 +63,7 @@ export default function Layout({ children, home, className }: Props) {
             </div>
           )}
 
-          <div className="hidden lg:flex w-80">
+          <div className="hidden lg:flex w-80" style={{ marginTop: !home ? 6.5 : 0 }}>
             <SearchBar />
           </div>
           <div className="block lg:hidden cursor-pointer">

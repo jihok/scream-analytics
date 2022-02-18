@@ -59,13 +59,14 @@ module.exports = {
       width: {
         fit: 'fit-content',
         half: '50%',
+        inputSm: 80,
       },
       minWidth: {
         fit: 'fit-content',
       },
       maxWidth: {
         inputSm: 80,
-        inputMd: 100,
+        inputMd: 120,
       },
     },
   },

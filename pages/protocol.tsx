@@ -42,7 +42,7 @@ export default function ProtocolOverview() {
                 loading="lazy"
                 width="100%"
                 height="90%"
-                src="https://kek.tools/t/0xe0654c8e6fd4d733349ac7e09f6f23da256bf475/chart?pair=0x30872e4fc4edbfd7a352bfc2463eb4fae9c09086&currencyType=native&accent=off"
+                src="https://kek.tools/t/0xe0654c8e6fd4d733349ac7e09f6f23da256bf475/chart?pair=0x30872e4fc4edbfd7a352bfc2463eb4fae9c09086&currencyType=stable&accent=off"
                 scrolling="no"
               ></iframe>
             </div>

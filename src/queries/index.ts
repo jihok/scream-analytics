@@ -23,6 +23,7 @@ const MARKET_BASE_VARS = `
 borrowRate
 cash
 exchangeRate
+id
 reserves
 supplyRate
 totalBorrows
@@ -41,7 +42,6 @@ export const MARKETS_BY_BLOCK_QUERY = gql`
       ${MARKET_BASE_VARS}
       underlyingSymbol
       underlyingName
-      id
     }
   }
 `;
@@ -67,7 +67,6 @@ export const MARKET_DETAILS_QUERY = gql`
   query MarketDetails($id: String!) {
     markets(where: { id: $id }) {
       ${MARKET_BASE_VARS}
-      id
       totalInterestAccumulated
       reserveFactor
       collateralFactor
@@ -99,10 +98,9 @@ export const ACCOUNT_QUERY = gql`
         storedBorrowBalance
         accountBorrowIndex
         market {
+          ${MARKET_BASE_VARS}
           collateralFactor
-          underlyingPrice
           borrowIndex
-          exchangeRate
           underlyingSymbol
           underlyingName
         }

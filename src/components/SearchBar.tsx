@@ -13,8 +13,13 @@ export default function SearchBar() {
         className="w-full"
         placeholder="Search for an account..."
         value={searchTerm}
-        onChange={(val) => {
-          setSearchTerm(val.target.value);
+        onChange={(event) => {
+          setSearchTerm(event.target.value);
+        }}
+        onKeyUp={async (event) => {
+          if (event.key === 'Enter') {
+            await router.push(`/account/${searchTerm}`);
+          }
         }}
       />
       <button className="pl-2" type="submit" disabled={!searchTerm}>

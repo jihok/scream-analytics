@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Account, getHealth } from '../../utils/Account';
-import { usdFormatter } from '../../utils/Market';
+import { formatAbbrUSD, usdFormatter } from '../../utils/Market';
 
 interface SimToken {
   collateralFactor: number;
@@ -63,7 +63,7 @@ export default function HealthSimulator({ account }: { account: Account }) {
           onClick={() => setShowModal(false)}
         >
           <div
-            className="flex flex-col px-5 pt-8 pb-12 overflow-scroll simulator"
+            className="flex flex-col px-5 pt-8 pb-12 overflow-scroll max-w-md z-20 simulator"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between pb-4">
@@ -89,19 +89,19 @@ export default function HealthSimulator({ account }: { account: Account }) {
                 <h2 className="py-1">{health.toFixed(2)}</h2>
               </div>
               <div className="w-full pl-5">
-                <div
-                  className={`flex justify-end rounded-full h-5 bg-gradient-to-r from-health-bad via-health-ok to-health-good ${
-                    health < 1.02 && 'rounded-l-full' // kinda hacky, but something of an edge case
-                  }`}
-                >
-                  <div
-                    className="rounded-r-full h-5 bg-bar-6"
-                    style={{
-                      width: `${(2 - health) * 100}%`,
-                      marginRight: -2, // hack otherwise a tiny sliver of the parent gradient peeks through
-                    }}
-                  />
-                </div>
+                {health < 1.02 ? (
+                  <div className="flex justify-end rounded-full h-5 bg-bar-6 rounded-l-full" />
+                ) : (
+                  <div className="flex justify-end rounded-full h-5 bg-gradient-to-r from-health-bad via-health-ok to-health-good">
+                    <div
+                      className="rounded-r-full h-5 bg-bar-6"
+                      style={{
+                        width: `${(2 - health) * 100}%`,
+                        marginRight: -2, // hack otherwise a tiny sliver of the parent gradient peeks through
+                      }}
+                    />
+                  </div>
+                )}
                 <div className="flex justify-between pt-3">
                   <p>1.00</p>
                   <p>2.00</p>
@@ -111,7 +111,13 @@ export default function HealthSimulator({ account }: { account: Account }) {
 
             <div className="flex justify-between pt-10 pb-3 border-b border-border-primary">
               <h3>Supply</h3>
-              <p className="text-title">
+              <p
+                className="text-title whitespace-nowrap overflow-hidden"
+                style={{
+                  textOverflow: 'ellipsis',
+                  maxWidth: '60%',
+                }}
+              >
                 {usdFormatter(
                   tokens.reduce(
                     (prev, curr) => prev + curr.supplyQuantity * curr.underlyingPrice,
@@ -150,6 +156,7 @@ export default function HealthSimulator({ account }: { account: Account }) {
                         </label>
                         <input
                           type="number"
+                          className="max-w-inputSm lg:max-w-inputMd"
                           value={tokens[i].underlyingPrice}
                           onChange={({ target: { value } }) => {
                             const temp = [...tokens];
@@ -164,6 +171,7 @@ export default function HealthSimulator({ account }: { account: Account }) {
                         </label>
                         <input
                           type="number"
+                          className="max-w-inputSm lg:max-w-inputMd"
                           value={tokens[i].supplyQuantity}
                           onChange={({ target: { value } }) => {
                             const temp = [...tokens];
@@ -172,9 +180,18 @@ export default function HealthSimulator({ account }: { account: Account }) {
                           }}
                         />
                       </span>
-                      <span>
+                      <span className="flex flex-col items-end">
                         <p className="pb-5">Total USD</p>
-                        <h2>{usdFormatter(token.supplyQuantity * token.underlyingPrice)}</h2>
+                        <h2
+                          className="whitespace-nowrap overflow-hidden w-inputSm text-right"
+                          style={{
+                            textOverflow: 'ellipsis',
+                          }}
+                        >
+                          {token.supplyQuantity * token.underlyingPrice > 10_000
+                            ? formatAbbrUSD(token.supplyQuantity * token.underlyingPrice)
+                            : usdFormatter(token.supplyQuantity * token.underlyingPrice)}
+                        </h2>
                       </span>
                     </div>
                   </div>
@@ -183,7 +200,13 @@ export default function HealthSimulator({ account }: { account: Account }) {
 
             <div className="flex justify-between pt-10 pb-3 border-b border-border-primary">
               <h3>Borrow</h3>
-              <p className="text-title">
+              <p
+                className="text-title whitespace-nowrap overflow-hidden"
+                style={{
+                  textOverflow: 'ellipsis',
+                  maxWidth: '60%',
+                }}
+              >
                 {usdFormatter(
                   tokens.reduce(
                     (prev, curr) => prev + curr.storedBorrowBalance * curr.underlyingPrice,
@@ -222,6 +245,7 @@ export default function HealthSimulator({ account }: { account: Account }) {
                         </label>
                         <input
                           type="number"
+                          className="max-w-inputSm lg:max-w-inputMd"
                           value={tokens[i].underlyingPrice}
                           onChange={({ target: { value } }) => {
                             const temp = [...tokens];
@@ -236,6 +260,7 @@ export default function HealthSimulator({ account }: { account: Account }) {
                         </label>
                         <input
                           type="number"
+                          className="max-w-inputSm lg:max-w-inputMd"
                           value={tokens[i].storedBorrowBalance}
                           onChange={({ target: { value } }) => {
                             const temp = [...tokens];
@@ -244,9 +269,18 @@ export default function HealthSimulator({ account }: { account: Account }) {
                           }}
                         />
                       </span>
-                      <span>
+                      <span className="flex flex-col items-end">
                         <p className="pb-5">Total USD</p>
-                        <h2>{usdFormatter(token.storedBorrowBalance * token.underlyingPrice)}</h2>
+                        <h2
+                          className="whitespace-nowrap overflow-hidden w-inputSm text-right"
+                          style={{
+                            textOverflow: 'ellipsis',
+                          }}
+                        >
+                          {token.storedBorrowBalance * token.underlyingPrice > 10_000
+                            ? formatAbbrUSD(token.storedBorrowBalance * token.underlyingPrice)
+                            : usdFormatter(token.storedBorrowBalance * token.underlyingPrice)}
+                        </h2>
                       </span>
                     </div>
                   </div>

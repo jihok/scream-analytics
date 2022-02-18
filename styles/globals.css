@@ -41,13 +41,6 @@
   .simulator {
     @apply bg-no-repeat bg-gradient-to-t from-gradientFrom to-gradientTo text-primary;
   }
-  .simulator {
-    max-width: 320px;
-    z-index: 10;
-  }
-  .simulator input {
-    @apply max-w-inputSm;
-  }
   h1 {
     @apply text-header font-sans-semibold;
   }

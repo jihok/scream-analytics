@@ -5,7 +5,13 @@ import GlobalProvider from '../src/contexts/GlobalContext';
 
 export const screamClient = new ApolloClient({
   uri: 'https://api.thegraph.com/subgraphs/name/screamsh/scream-v1',
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      Market: {
+        keyFields: ['id', 'reserves'],
+      },
+    },
+  }),
 });
 
 export default function MyApp({ Component, pageProps }: AppProps) {

@@ -7,7 +7,7 @@ import { ACCOUNT_QUERY } from '../../src/queries';
 import { RawAccount, transformAccountData } from '../../src/utils/Account';
 import AccountHeader from '../../src/components/Account/Header';
 import { BORROW_COLOR, SUPPLY_COLOR } from '../../src/components/Market/UtilizationChart';
-import { usdFormatter } from '../../src/utils/Market';
+import { formatAbbrUSD, usdFormatter } from '../../src/utils/Market';
 import { useGlobalContext } from '../../src/contexts/GlobalContext';
 
 const REPAID_COLOR = '#89DFDB'; // also equal to bg-bar-0
@@ -89,16 +89,15 @@ export default function Account() {
               : token.storedBorrowBalance * token.market.underlyingPrice;
 
           const repaid =
-            ((token.totalUnderlyingRepaid * token.market.underlyingPrice) /
-              account.totalBorrowedUSD) *
+            (token.totalUnderlyingRepaid /
+              (token.storedBorrowBalance + token.totalUnderlyingRepaid)) *
             100;
           const barWidthPercent =
             overviewType === 'supplied'
               ? (valueUSD / account.totalSuppliedUSD) * 100
               : ((token.totalUnderlyingBorrowed * token.market.underlyingPrice) /
                   account.totalBorrowedUSD) *
-                  100 -
-                repaid;
+                100;
 
           return (
             <div className="flex flex-row items-center" key={token.symbol}>
@@ -111,15 +110,6 @@ export default function Account() {
               </div>
               <div className="border-border-primary border-l py-4 w-full">
                 <div className="flex">
-                  {overviewType === 'borrowed' && (
-                    <div
-                      style={{
-                        width: `${repaid}%`,
-                        backgroundColor: REPAID_COLOR,
-                        height: 24,
-                      }}
-                    />
-                  )}
                   <div style={{ width: `${barWidthPercent}%` }}>
                     <div
                       style={{
@@ -127,14 +117,33 @@ export default function Account() {
                         borderRadius: '0px 3px 3px 0px',
                         height: 24,
                       }}
-                    />
+                    >
+                      {overviewType === 'borrowed' && (
+                        <div
+                          style={{
+                            width: `${repaid}%`,
+                            backgroundColor: REPAID_COLOR,
+                            height: 24,
+                          }}
+                        />
+                      )}
+                    </div>
                     {overviewType === 'borrowed' && (
-                      <>
-                        <p className="text-caption font-sans-semibold pt-2">Repaid</p>
-                        <p className="text-label">
-                          {usdFormatter(token.totalUnderlyingRepaid * token.market.underlyingPrice)}
-                        </p>
-                      </>
+                      <div className="flex">
+                        <div style={{ width: `${repaid}%` }} />
+                        <div className="pl-1">
+                          <p className="text-caption font-sans-semibold pt-2">Repaid</p>
+                          <p className="text-label">
+                            {token.totalUnderlyingRepaid * token.market.underlyingPrice > 10_000
+                              ? formatAbbrUSD(
+                                  token.totalUnderlyingRepaid * token.market.underlyingPrice
+                                )
+                              : usdFormatter(
+                                  token.totalUnderlyingRepaid * token.market.underlyingPrice
+                                )}
+                          </p>
+                        </div>
+                      </div>
                     )}
                   </div>
                   <div
@@ -142,7 +151,7 @@ export default function Account() {
                       backgroundColor: '#31333799',
                       borderRadius: '0px 3px 3px 0px',
                       height: 24,
-                      width: `${100 - barWidthPercent - repaid}%`,
+                      width: `${100 - barWidthPercent}%`,
                     }}
                   />
                 </div>
@@ -154,7 +163,9 @@ export default function Account() {
                 {overviewType === 'borrowed' && (
                   <p className="text-caption font-sans-semibold pt-2 text-right">Remaining</p>
                 )}
-                <p className="label-body">${valueUSD.toFixed(2)}</p>
+                <p className="label-body">
+                  {valueUSD > 10_000 ? formatAbbrUSD(valueUSD) : `$${valueUSD.toFixed(2)}`}
+                </p>
               </div>
             </div>
           );
